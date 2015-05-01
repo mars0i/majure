@@ -3,6 +3,11 @@ majure
 
 ## Clojure + MASON agent-based modeling library: experiments 
 
+MASON can be found at
+[http://cs.gmu.edu/~eclab/projects/mason](http://cs.gmu.edu/~eclab/projects/mason).
+
+Clojure can be found at [http://clojure.org](http://clojure.org)
+
 These examples follow the tutorial in chapter 2 of the Mason manual v.
 18.
 
