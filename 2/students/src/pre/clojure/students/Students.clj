@@ -19,22 +19,17 @@
            )
   (:gen-class
     :name students.Students
-    :extends sim.engine.SimState    ; includes signature for the start method
+    :extends sim.engine.SimState    ; includes signature for the start() method
     ;:constructors {[long] [long]}
-    :methods [[main [String] void] ; apart from the name, symbols must be void or class names
-              ;[yard [] sim.field.continuous.Continuous2D]
-              [numStudents [] int]
-              [forceToSchoolMultiplier [] double]
-              [randomMultiplier [] double]
-              [buddies [] sim.field.network.Network]]
-    ;:main true
-    ;:exposes 
-    ;:state state  ; returns instance data
-    ;:init init
-    :state yard
-    :init init-yard
-    ;:state buddies
-    ;:init init-buddies
+    :methods [[getYard [] sim.field.continuous.Continuous2D]
+              [getBuddies [] sim.field.network.Network]
+              [getNumStudents [] int]
+              [getForceToSchoolMultiplier [] double]
+              [getRandomMultiplier [] double]]
+    :main true
+    :exposes-methods [start super-start]
+    :state state
+    :init init
     )) 
 
 ; re constructors: maybe I don't need to do anything?
@@ -42,30 +37,37 @@
 ;; see also:
 ;http://stackoverflow.com/questions/18780071/clojure-multiple-constructors-using-gen-class
 
-(defn -init-yard [] [[] (Continuous2D. 1.0 100 100)])
+;(defn -init-yard [] [[] (Continuous2D. 1.0 100 100)])
 ;(defn -init-buddies [] [[] (Network. false)])
 
+(defn -init
+  []
+  [[] {:yard (Continuous2D. 1.0 100 100)
+       :buddies (Network. false)
+       :num-students (atom 50)
+       :force-to-school-multiplier (atom 0.01)
+       :random-multiplier (atom 0.1)}])
 
-;(defn -init
-;  []
-;  [[] {:yard (Continuous2D. 1.0 100 100)
-;       :num-students 50
-;       :force-to-school-multiplier 0.01
-;       :random-multiplier 0.1
-;       :buddies (Network. false)}])
-;
-;;; I don't think this will work.  I'm trying to replace instance vars
-;;; with functions, but StudentsWithUI expects public vars.
-;(defn -yard [this] (:yard (.state this)))
-;(defn -numStudents [this] (:num-students (.state this)))
-;(defn -forceToSchoolMultiplier [this] (:force-to-school-multiplier (.state this)))
-;(defn -randomMultiplier [this] (:random-multiplier (.state this)))
-;(defn -buddies [this] (:buddies (.state this)))
+;; I don't think Clojure can handle multiple instance vars.
+;; Have to rewrite using classes to use accessors instead.  Also allows setting.
+(defn -getYard [this] (:yard (.state this)))
+(defn -getBuddies [this] (:buddies (.state this)))
+(defn -getNumStudents [this] @(:num-students (.state this)))
+(defn -getForceToSchoolMultiplier [this] @(:force-to-school-multiplier (.state this)))
+(defn -getRandomMultiplier [this] @(:random-multiplier (.state this)))
 
 (defn -start
-  []
-  )
+  [this]
+  ;(super-start) ; TODO not working
+  (let [yard (.yard this)
+        buddies (.buddies this)]
+  ))
+
 
 (defn -main 
   [args]
-  )
+  ;(.doLoop Students.class args) ; TODO how the heck can I do *this* in Clojure??
+                                 ; Students.class doesn't exist until this file is compiled!
+                                 ; Note there is another version of doLoop that takes a
+                                 ; MakeSimState (an interface, though) instead of a class.
+  (.exit System 0))

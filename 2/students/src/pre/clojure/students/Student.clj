@@ -35,8 +35,7 @@
 (defn -getAgitation
   "Returns sum of agitation values from instance state."
   [this]
-  (let [state (.state this)]
-    @(:agitation state)))
+  @(:agitation (.state this)))
 
 (defn -step
   "Clojure version of step function required by interface Steppable,
