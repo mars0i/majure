@@ -122,17 +122,14 @@
         buddy-loc (.getObjectLocation yard (.getOtherNode edge me)) ; buddy = him in java
         forceVector (MutableDouble2D. (* buddiness (- (.-x buddy-loc) (.-x my-loc)))     ; inside the if/else in Java version
                                       (* buddiness (- (.-y buddy-loc) (.-y my-loc))))
-        length (.length forceVector)
+        length (.length forceVector)]
         ;; Modify a forceVector to scale vector coords if necessary, and return value indicating which branch we took:
-        friend?  (if (>= buddiness 0)
-                   (do
-                     (when (> length +max-force+) (.resize forceVector +max-force+)) ; the further I am from her the more I want to go to her
-                     true)
-                   (do 
+        (if (>= buddiness 0)
+                     (when (> length +max-force+) ; the further I am from her the more I want to go to her
+		     (.resize forceVector +max-force+))
                      (if (> length +max-force+) ; the nearer I am to her the more I want to get away from her, up to a limit
                        (.resize forceVector 0.0)
-                       (when (> length 0) (.resize forceVector (- +max-force+ length))))
-                     false)) ]
+                       (when (> length 0) (.resize forceVector (- +max-force+ length)))))
     ;; We're done using forceVector to resize vector; return a Clojure data structure:
     [ (+ acc-x (.-x forceVector)) ; x component of vector
       (+ acc-y (.-y forceVector)) ; y component of vector
