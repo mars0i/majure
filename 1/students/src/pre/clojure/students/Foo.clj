@@ -1,8 +1,8 @@
 (ns students.Foo
   (:gen-class
     :name students.Foo
-    :state baz
-    ;:state bar
+    :state bar
+    ; :state baz
     :init init))
 
 (defn -init
