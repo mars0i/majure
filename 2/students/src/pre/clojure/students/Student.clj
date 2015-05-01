@@ -35,7 +35,8 @@
 (defn -getAgitation
   "Returns sum of agitation values from instance state."
   [this]
-  @(:agitation (.state this)))
+  (let [state (.state this)]
+    @(:agitation state)))
 
 (defn -step
   "Clojure version of step function required by interface Steppable,
@@ -93,46 +94,50 @@
 
 
 (defn collect-buddy-forces
-  "Returns summed forces in x and y dimensions due to attraction/repulsion
-  toward other students.  students is the SimState object for this simulation.
-  This function uses its reference to the Network buddies.  me is the current
-  Student.
-  (See 'Go through my buddies and determine how much I want to be near them':
-  for-loop, p. 27 middle.)"
+  "Returns summed forces in x and y dimensions, and summed vector lengths of
+ to attraction/repulsion vectors toward other students.  students is the 
+  SimState object for this simulation.  me is the current Student.
+  (In the MASON manual v. 18, see 'Go through my buddies and determine how much
+  I want to be near them': for-loop, p. 27 middle.)"
   [students me]
   (reduce (partial buddy-force-add (.-yard students) me)
-          [0.0 0.0 0.0]
+          [0.0 0.0 0.0]   ; initial sums of x and y components, length
           (.. students buddies (getEdges me nil)))) ; getEdges returns a Bag--a Collection--which can be treated as Clojure seq
 
 
+;; I explored separating out the reduce-oriented summing aspect of this function
+;; into a separate wrapper, but it made the code more difficult to understand.
+;; Note this imperatively modifies the MutableDouble2D forceVector, but it's
+;; a fresh instance and doesn't leave this function.  Thus from the point
+;; of view of functions using this one, this is purely functional, and we
+;; don't need to worry about laziness gotchas.
 (defn buddy-force-add
   "Adds the force in x and y dimension between me and the student at the
   other end of edge to the forces from other students that have been
-  summed so far.  yard is a Continuous2D from the SimState students.
-  me is the current Student.  [acc-x, acc-y] contain the summed results of
+  summed so far.  Also adds values for agitation (formerly: friendsClose, 
+  enemiesCloser).  yard is a Continuous2D from the SimState students.
+  me is the current Student.  [acc-x, acc-y, acc-agit] contain the summed results of
   forces between me and other students calculated so far.  edge is the edge
   representing the force (to another student) that we are adding in this time.
-  Also returns values to be added for agitation (formerly: friendsClose, enemiesCloser).
-  (See 'Go through my buddies and determine how much I want to be near them':
-  for-loop, p. 27 middle.)"
+  (In the MASON manual v. 18, see 'Go through my buddies and determine how much
+  I want to be near them': for-loop, p. 27 middle.)"
   [yard me [acc-x acc-y acc-agit] edge]
   (let [buddiness (.info edge)
         my-loc (.getObjectLocation yard me)
         buddy-loc (.getObjectLocation yard (.getOtherNode edge me)) ; buddy = him in java
         forceVector (MutableDouble2D. (* buddiness (- (.-x buddy-loc) (.-x my-loc)))     ; inside the if/else in Java version
                                       (* buddiness (- (.-y buddy-loc) (.-y my-loc))))
-        length (.length forceVector)
-        ;; Modify a forceVector to scale vector coords if necessary, and return value indicating which branch we took:
-        friend?  (if (>= buddiness 0)
-                   (do
-                     (when (> length +max-force+) (.resize forceVector +max-force+)) ; the further I am from her the more I want to go to her
-                     true)
-                   (do 
-                     (if (> length +max-force+) ; the nearer I am to her the more I want to get away from her, up to a limit
-                       (.resize forceVector 0.0)
-                       (when (> length 0) (.resize forceVector (- +max-force+ length))))
-                     false)) ]
+        length (.length forceVector)]
+    ;; Modify a forceVector to scale vector coords if necessary:
+    (if (>= buddiness 0)
+      (when (> length +max-force+) ; the further I am from her the more I want to go to her
+        (.resize forceVector +max-force+))
+      (if (> length +max-force+) ; the nearer I am to her the more I want to get away from her, up to a limit
+        (.resize forceVector 0.0)
+        (when (> length 0)
+          (.resize forceVector (- +max-force+ length)))))
     ;; We're done using forceVector to resize vector; return a Clojure data structure:
-    [ (+ acc-x (.-x forceVector)) ; x component of vector
-      (+ acc-y (.-y forceVector)) ; y component of vector
-      (+ acc-agit (.length forceVector)) ] )) ; recompute length after possible resize (p. 31, friendsClose, enemiesCloser)
+    ;; We add resized vector data to what's been accumulated so far by reduce.
+    [(+ acc-x (.-x forceVector)) ; x component of vector
+     (+ acc-y (.-y forceVector)) ; y component of vector
+     (+ acc-agit (.length forceVector))])) ; recompute length after possible resize (p. 31, friendsClose, enemiesCloser)
