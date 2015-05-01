@@ -2,6 +2,7 @@ majure
 ====
 
 ## Clojure + MASON agent-based modeling library: experiments 
+Marshall Abrams
 
 MASON can be found at
 [http://cs.gmu.edu/~eclab/projects/mason](http://cs.gmu.edu/~eclab/projects/mason).
