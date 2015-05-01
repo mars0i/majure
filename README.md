@@ -3,13 +3,12 @@ majure
 
 ## Clojure + MASON agent-based modeling library: experiments 
 
-All Clojure source is copyright by Marshall Abrams, and is
+Clojure source code here is copyright 2015 by Marshall Abrams, and is
+distributed under the Gnu General Public License version 3.0 as
+specified in the file LICENSE, except where noted.  
 
-This software is copyright 2015 by Marshall Abrams, and is distributed
-under the Gnu General Public License version 3.0 as specified in the
-file LICENSE, except where noted.  (Among other things, the java source
-code here is copied from the the MASON manual v. 18, and is by Sean
-Luke.  See the MASON manual for its license.)
+The java source code is copied from the the MASON manual v. 18, and is
+by Sean Luke.  See the MASON manual for its license.
 
 MASON can be found at
 [http://cs.gmu.edu/~eclab/projects/mason](http://cs.gmu.edu/~eclab/projects/mason).
