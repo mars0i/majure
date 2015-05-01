@@ -19,6 +19,6 @@ still written in Java.
 
 ### 2:
 
-Starting from *1*, replaces Students.java with Students.clj, i.e. both
-`Student` and `Students` are written in Clojure.  `StudentsWithUI`
-remains in java.
+Starting from experiment **1**, replaces Students.java with
+Students.clj, i.e. both `Student` and `Students` are written in Clojure.
+`StudentsWithUI` remains in java.
