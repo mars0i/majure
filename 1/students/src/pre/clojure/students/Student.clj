@@ -107,6 +107,10 @@
 
 ;; I explored separating out the reduce-oriented summing aspect of this function
 ;; into a separate wrapper, but it made the code more difficult to understand.
+;; Note this imperatively modifies the MutableDouble2D forceVector, but it's
+;; a fresh instance and doesn't leave this function.  Thus from the point
+;; of view of functions using this one, this is purely functional, and we
+;; don't need to worry about laziness gotchas.
 (defn buddy-force-add
   "Adds the force in x and y dimension between me and the student at the
   other end of edge to the forces from other students that have been
