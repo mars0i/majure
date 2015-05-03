@@ -20,7 +20,7 @@
     :name students.Students
     :extends sim.engine.SimState  ; includes signature for the start() method
     :exposes {random {:get getRandom}, schedule {:get getSchedule}}  ; make accessors for fields in superclass
-    :exposes-methods {start super-start} ; alias method start() in superclass
+    :exposes-methods {start superStart} ; alias method start() in superclass. (Don't name it 'super-start'. Use a Java name.)
     :methods [[getYard [] sim.field.continuous.Continuous2D]
               [getBuddies [] sim.field.network.Network]
               [getNumStudents [] int]
@@ -67,21 +67,21 @@
 (defn add-random-edge!
   [buddies random students multiplier student]
   (let [studentB (find-other-student random students student)
-        buddiness (.nextdouble random)]
+        buddiness (.nextDouble random)]
     (.addEdge buddies student studentB (Double. (* buddiness multiplier)))))
 
 
 (defn -start
   [this]
-  (.super-start this)
+  (.superStart this)
 
-  (let [yard (.yard this)
+  (let [yard (.getYard this)
         yard-width (.getWidth yard)
         yard-height (.getHeight yard)
-        buddies (.buddies this)
+        buddies (.getBuddies this)
         random (.getRandom this)
         schedule (.getSchedule this)
-        students (take (.getNumStudents this) (repeatedly (Student.)))]
+        students (repeatedly (.getNumStudents this) #(Student.))]
 
     (.clear yard)
     (.clear buddies)
