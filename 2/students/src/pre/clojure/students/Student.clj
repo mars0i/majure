@@ -47,7 +47,7 @@
   is an instance of students.Students, which extends sim.engine.SimState."
   [this students]
   ;; Note that this code is functional until the last step.
-  (let [yard (.-yard students)                  ; dimensions of the yard. a Continuous2D
+  (let [yard (.getYard students)                  ; dimensions of the yard. a Continuous2D
         curr-loc (.getObjectLocation yard this) ; my location in the yard. a Double2D (Luke says might be more efficient to also store loc in agent)
         curr-x (.-x curr-loc)
         curr-y (.-y curr-loc)
@@ -79,7 +79,7 @@
   strength of tendency toward center.
   (See 'add in a vector to the \"teacher\"', p. 18 top, p. 27 bottom.)"
   [coord yard-dim students]
-  (* (.-forceToSchoolMultiplier students)
+  (* (.getForceToSchoolMultiplier students)
      (- (* 0.5 yard-dim) coord)))
 
 (defn wander-force-coord
@@ -88,8 +88,8 @@
   strength of tendency to wander.
   (See 'add a bit of randomness', p. 18 top, p. 27 bottom.)"
   [students]
-  (* (.-randomMultiplier students)
-     (- (.. students random (nextDouble)) 0.5)))
+  (* (.getRandomMultiplier students)
+     (- (.. students random (nextDouble)) 0.5))) ; random is from superclass of Students
 
 
 (defn collect-buddy-forces
@@ -99,9 +99,9 @@
   (In the MASON manual v. 18, see 'Go through my buddies and determine how much
   I want to be near them': for-loop, p. 27 middle.)"
   [students me]
-  (reduce (partial buddy-force-add (.-yard students) me)
+  (reduce (partial buddy-force-add (.getYard students) me)
           [0.0 0.0 0.0]   ; initial sums of x and y components, length
-          (.. students buddies (getEdges me nil)))) ; getEdges returns a Bag--a Collection--which can be treated as Clojure seq
+          (.. students getBuddies (getEdges me nil)))) ; getEdges returns a Bag--a Collection--which can be treated as Clojure seq
 
 
 ;; I explored separating out the reduce-oriented summing aspect of this function
