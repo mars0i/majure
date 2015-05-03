@@ -36,13 +36,15 @@
 ;; is public Students(long seed) {super(seed);} auto-generated?
 ;; cf http://stackoverflow.com/questions/18780071/clojure-multiple-constructors-using-gen-class
 
+
 (defn -init
-  []
-  [[] {:yard (Continuous2D. 1.0 100 100)
-       :buddies (Network. false)
-       :num-students (atom 50)
-       :force-to-school-multiplier (atom 0.01)
-       :random-multiplier (atom 0.1)}])
+  [seed]
+  [[seed] {:yard (Continuous2D. 1.0 100 100)
+           :buddies (Network. false)
+           :num-students (atom 50)
+           :force-to-school-multiplier (atom 0.01)
+           :random-multiplier (atom 0.1)}])
+
 
 ;; I don't think Clojure can handle multiple instance vars.
 (defn -getYard [this] (:yard (.state this)))
@@ -50,6 +52,24 @@
 (defn -getNumStudents [this] @(:num-students (.state this)))
 (defn -getForceToSchoolMultiplier [this] @(:force-to-school-multiplier (.state this)))
 (defn -getRandomMultiplier [this] @(:random-multiplier (.state this)))
+
+;; Is there a simpler method?
+(defn find-other-student
+  "Returns a random student, not identical? to student, from students."
+  [random students student]
+  (let [num-students (count students)
+        other-student (fn []
+                        (let [other (nth students (.nextInt random num-students))]
+                          (when (not (identical? student other))
+                            other)))]
+    (some identity (repeatedly other-student))))
+
+(defn add-random-edge!
+  [buddies random students multiplier student]
+  (let [studentB (find-other-student random students student)
+        buddiness (.nextdouble random)]
+    (.addEdge buddies student studentB (Double. (* buddiness multiplier)))))
+
 
 (defn -start
   [this]
@@ -60,35 +80,25 @@
         yard-height (.getHeight yard)
         buddies (.buddies this)
         random (.getRandom this)
-        schedule (.getSchedule this)]
+        schedule (.getSchedule this)
+        students (take (.getNumStudents this) (repeatedly (Student.)))]
 
     (.clear yard)
     (.clear buddies)
 
-    ;; first for-loop in Students.java
-    (dotimes [i (.getNumStudents this)]
-      (let [student (Student.)
-            x-loc (+ (* 0.5 yard-width)  (.nextDouble random) -0.5)
-            y-loc (+ (* 0.5 yard-height) (.nextDouble random) -0.5)]
+    ;; first for-loop in Students.java--create students:
+    (doseq [student students
+            :let[x-loc (+ (* 0.5 yard-width)  (.nextDouble random) -0.5)
+                 y-loc (+ (* 0.5 yard-height) (.nextDouble random) -0.5)]]
+      (.setObjectLocation yard student (Double2D. x-loc y-loc))
+      (.addNode buddies student)
+      (.scheduleRepeating schedule student))
 
-        (.setObjectLocation yard student (Double2D. x-loc y-loc))
-        (.addNode buddies student)
-        (.scheduleRepeating schedule student)))
+    ;; second for-loop in Students.java--create links between students:
+    (doseq [student students]
+      (add-random-edge! buddies random students  1.0 student)
+      (add-random-edge! buddies random students -1.0 student))))
 
-    (let [students (.getAllNodes buddies) ; returns a Bag, which is a Collection
-          num-students (count students)]
-
-      ;; second for-loop in Students.java
-      ;; first choose a different student
-      (doseq [student students
-              :let [randint (.nextInt random num-students)]
-              :when 
-
-      (let [studentB (nth students 
-
-      )))
-
-  ))
 
 ;; Re MAIN
 ;; main() as written in Students.java can't be duplicated in Clojure
@@ -107,3 +117,15 @@
 ;                                 ; Note there is another version of doLoop that takes a
 ;                                 ; MakeSimState (an interface, though) instead of a class.
 ;  (.exit System 0))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; old version of first for-loop in start:
+;    (dotimes [_ (.getNumStudents this)]
+;      (let [student (Student.)
+;            x-loc (+ (* 0.5 yard-width)  (.nextDouble random) -0.5)
+;            y-loc (+ (* 0.5 yard-height) (.nextDouble random) -0.5)]
+;        (.setObjectLocation yard student (Double2D. x-loc y-loc))
+;        (.addNode buddies student)
+;        (.scheduleRepeating schedule student)))
+;    (let [students (.getAllNodes buddies)] ; returns a Bag, which is a Collection
