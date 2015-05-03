@@ -12,33 +12,29 @@
 ;;; called from other classes.
 
 (ns students.Students
-  (:import ;[sim.engine SimState]
-           ;[sim.util ]
+  (:import [students Student]
            [sim.field.continuous Continuous2D]
            [sim.field.network Network]
-           )
+           [sim.util Double2D])
   (:gen-class
     :name students.Students
-    :extends sim.engine.SimState    ; includes signature for the start() method
-    ;:constructors {[long] [long]}
+    :extends sim.engine.SimState  ; includes signature for the start() method
+    :exposes {random {:get getRandom}, schedule {:get getSchedule}}  ; make accessors for fields in superclass
+    :exposes-methods {start super-start} ; alias method start() in superclass
     :methods [[getYard [] sim.field.continuous.Continuous2D]
               [getBuddies [] sim.field.network.Network]
               [getNumStudents [] int]
               [getForceToSchoolMultiplier [] double]
               [getRandomMultiplier [] double]]
-    :main true
-    :exposes-methods [start super-start]
     :state state
     :init init
     )) 
+    ;:main true
+    ;:constructors {[long] [long]}
 
-; re constructors: maybe I don't need to do anything?
+;; re constructors: maybe I don't need to do anything?
 ;; is public Students(long seed) {super(seed);} auto-generated?
-;; see also:
-;http://stackoverflow.com/questions/18780071/clojure-multiple-constructors-using-gen-class
-
-;(defn -init-yard [] [[] (Continuous2D. 1.0 100 100)])
-;(defn -init-buddies [] [[] (Network. false)])
+;; cf http://stackoverflow.com/questions/18780071/clojure-multiple-constructors-using-gen-class
 
 (defn -init
   []
@@ -49,7 +45,6 @@
        :random-multiplier (atom 0.1)}])
 
 ;; I don't think Clojure can handle multiple instance vars.
-;; Have to rewrite using classes to use accessors instead.  Also allows setting.
 (defn -getYard [this] (:yard (.state this)))
 (defn -getBuddies [this] (:buddies (.state this)))
 (defn -getNumStudents [this] @(:num-students (.state this)))
@@ -58,16 +53,57 @@
 
 (defn -start
   [this]
-  ;(super-start) ; TODO not working
+  (.super-start this)
+
   (let [yard (.yard this)
-        buddies (.buddies this)]
+        yard-width (.getWidth yard)
+        yard-height (.getHeight yard)
+        buddies (.buddies this)
+        random (.getRandom this)
+        schedule (.getSchedule this)]
+
+    (.clear yard)
+    (.clear buddies)
+
+    ;; first for-loop in Students.java
+    (dotimes [i (.getNumStudents this)]
+      (let [student (Student.)
+            x-loc (+ (* 0.5 yard-width)  (.nextDouble random) -0.5)
+            y-loc (+ (* 0.5 yard-height) (.nextDouble random) -0.5)]
+
+        (.setObjectLocation yard student (Double2D. x-loc y-loc))
+        (.addNode buddies student)
+        (.scheduleRepeating schedule student)))
+
+    (let [students (.getAllNodes buddies) ; returns a Bag, which is a Collection
+          num-students (count students)]
+
+      ;; second for-loop in Students.java
+      ;; first choose a different student
+      (doseq [student students
+              :let [randint (.nextInt random num-students)]
+              :when 
+
+      (let [studentB (nth students 
+
+      )))
+
   ))
 
-
-(defn -main 
-  [args]
-  ;(.doLoop Students.class args) ; TODO how the heck can I do *this* in Clojure??
-                                 ; Students.class doesn't exist until this file is compiled!
-                                 ; Note there is another version of doLoop that takes a
-                                 ; MakeSimState (an interface, though) instead of a class.
-  (.exit System 0))
+;; Re MAIN
+;; main() as written in Students.java can't be duplicated in Clojure
+;; because that would require a two-pass compiler.
+;; 
+;; I may be able to def main using the MakeSimState version of doLoop, but
+;; that requires implementing interface MakeSimState.  Or maybe put doLoop
+;; in a separate class from this one, which must implement SimState as well.
+;; Or write my own loop?  But I'll put this off, since this main() is only
+;; needed in order to run headless.
+;;
+;(defn -main 
+;  [args]
+;  ;(.doLoop Students.class args) ; TODO how the heck can I do *this* in Clojure??
+;                                 ; Students.class doesn't exist until this file is compiled!
+;                                 ; Note there is another version of doLoop that takes a
+;                                 ; MakeSimState (an interface, though) instead of a class.
+;  (.exit System 0))
