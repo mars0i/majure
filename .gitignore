@@ -3,3 +3,5 @@ target
 .*.swp
 .lein-repl-history
 .nrepl-port
+classdocs.html
+manual.pdf
