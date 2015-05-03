@@ -97,7 +97,8 @@
     ;; second for-loop in Students.java--create links between students:
     (doseq [student students]
       (add-random-edge! buddies random students  1.0 student)
-      (add-random-edge! buddies random students -1.0 student))))
+      (add-random-edge! buddies random students -1.0 student)
+     )))
 
 
 ;; Re MAIN
@@ -109,6 +110,8 @@
 ;; in a separate class from this one, which must implement SimState as well.
 ;; Or write my own loop?  But I'll put this off, since this main() is only
 ;; needed in order to run headless.
+;; 
+;; Maybe just instantiate SimState in core.clj.
 ;;
 ;(defn -main 
 ;  [args]
