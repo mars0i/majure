@@ -11,7 +11,7 @@ Clojure source code here is copyright 2015 by Marshall Abrams, and is
 distributed under the Gnu General Public License version 3.0 as
 specified in the file LICENSE, except where noted.  
 
-The java source code is copied from the the MASON manual v. 18, and is
+The Java source code is copied from the the MASON manual v. 18, and is
 by Sean Luke.  See the MASON manual for its license.
 
 MASON can be found at
@@ -56,7 +56,7 @@ still written in Java.
 
 Starting from experiment 1, replaces Students.java with
 Students.clj, i.e. both `Student` and `Students` are written in Clojure.
-`StudentsWithUI` remains in java.
+`StudentsWithUI` remains in Java.
 
 -------------------------
 
