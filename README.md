@@ -89,12 +89,13 @@ Students.clj, i.e. both `Student` and `Students` are written in Clojure.
   choosing the right Clojure type definition
   form](http://cemerick.com/2011/07/05/flowchart-for-choosing-the-right-clojure-type-definition-form).)
 
-* There are a few online sources that explain the basics of
-  `gen-class` (you'll find them easily enough with a web search), but
+* There are (e.g. online) sources that explain the basics of
+  `gen-class` (you'll find many of them easily enough with a web search), but
   I've found nothing that covers all of the ideas I needed.  The most
   thorough documentation on `gen-class` that I've found is in [*The Joy
   of Clojure*](http://www.manning.com/fogus2) by Michael Fogus and Chris
-  Houser, and in the standard docstring for `gen-class`.  Unfortunately,
+  Houser, and in the standard docstring for `gen-class`.  Neither is fully
+  adequate.  Unfortunately,
   the [online version of the
   docstring](https://clojuredocs.org/clojure.core/gen-class) messes up
   its formatting, making it difficult to read.  If you have Clojure
