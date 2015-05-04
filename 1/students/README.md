@@ -1,4 +1,4 @@
-MASON tutorial: Replacing Java with Clojure, version 1
+MASON tutorial: Replacing Java with Clojure, v. 1
 ====
 
 **See README.md in the root of this git repository for a general overview
