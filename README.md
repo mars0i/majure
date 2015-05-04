@@ -49,17 +49,6 @@ Students.clj, i.e. both `Student` and `Students` are written in Clojure.
 
 ## Tips
 
-* In the Clojure source files,  I try to write relatively idiomatic
-  Clojure rather than giving a direct translation of the Java.  However, I
-  didn't give myself complete freedom; much of the methodology from
-  the Java source files remains in the Clojure source.  (The Clojure code
-  that results is a kind of Clojure/Java hybrid, from the point of view of
-  a Clojure programmer.)  I also renamed some variable names, etc.
-  However, the source files contain some pointers that should allow
-  finding corresponding code in the original Java listed in the manual.
-  (Note that I didn't necessarily add comments that are in the manual to
-  the Java source files, but you can read the comments in the manual.)
-
 * This is neither a Clojure tutorial for Java programmers, nor a Java
   tutorial for Clojure programmers.  There are several good books and
   online sources for learning Clojure, as well as innumerable sources
@@ -74,6 +63,17 @@ Students.clj, i.e. both `Student` and `Students` are written in Clojure.
   an experienced programmer, you might be able to get by with a quick
   introduction to Java concepts such as this one:
   [http://www.braveclojure.com/java](http://www.braveclojure.com/java).
+
+* In the Clojure source files,  I try to write relatively idiomatic
+  Clojure rather than giving a direct translation of the Java.  However, I
+  didn't give myself complete freedom; much of the methodology from
+  the Java source files remains in the Clojure source.  (The Clojure code
+  that results is a kind of Clojure/Java hybrid, from the point of view of
+  a Clojure programmer.)  I also renamed some variable names, etc.
+  However, the source files contain some pointers that should allow
+  finding corresponding code in the original Java listed in the manual.
+  (Note that I didn't necessarily add comments that are in the manual to
+  the Java source files, but you can read the comments in the manual.)
 
 * Many Clojure operations are lazy, which means that you have to be
   careful about interactions between laziness and imperative Java
