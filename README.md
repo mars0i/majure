@@ -117,7 +117,7 @@ Students.clj, i.e. both `Student` and `Students` are written in Clojure.
   variables, in Clojure, with `.-`.  (The dash is optional but
   recommended.)  Method calls are prefaced with `.` alone.
 
-* I use `this` as the name of the first function argument for aa
+* I use `this` as the name of the first function argument for a
   function that's meant to be called as a Java method, and `me` when
   I want to pass a class instance to a method that's used only from
   within Clojure.
