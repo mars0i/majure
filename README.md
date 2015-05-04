@@ -7,9 +7,9 @@ These examples follow the tutorial in chapter 2 of the MASON manual v. 18.
 I didn't necessarily complete the tutorial, but the basic elements are
 all here.
 
-Clojure source code here is copyright 2015 by Marshall Abrams, and is
-distributed under the Gnu General Public License version 3.0 as
-specified in the file LICENSE, except where noted.  
+Clojure source code and text here is copyright 2015 by Marshall Abrams,
+and is distributed under the Gnu General Public License version 3.0 as
+specified in the file LICENSE, except where noted.
 
 The Java source code is copied from the the MASON manual v. 18, and is
 by Sean Luke.  See the MASON manual for its license.
