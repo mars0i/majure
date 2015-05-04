@@ -59,9 +59,9 @@ Students.clj, i.e. both `Student` and `Students` are written in Clojure.
   no way to learn MASON without understanding a bit of Java.  The manual
   and class documentation are focused exclusively on Java, and using
   MASON with Clojure would necessarily involve some understanding of
-  Java anyway, because it means using Java classes in Clojure.  If you're
-  an experienced programmer, you might be able to get by with a quick
-  introduction to Java concepts such as this one:
+  Java anyway, because it means using Java classes in Clojure.  If you
+  know Clojure and are an experienced programmer, you might be able to
+  get by with a quick introduction to Java concepts such as this one:
   [http://www.braveclojure.com/java](http://www.braveclojure.com/java).
 
 * In the Clojure source files,  I try to write relatively idiomatic
