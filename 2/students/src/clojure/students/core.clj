@@ -1,7 +1,7 @@
 (ns students.core
-  (:import [students StudentsWithUI])
-  (:gen-class))
+  (:gen-class :main true))
 
 (defn -main
   [& args]
-  (StudentsWithUI/main(make-array String 0)))
+  (sim.engine.SimState/doLoop students.Students (into-array String args))
+  (System/exit 0))
