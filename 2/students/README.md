@@ -9,6 +9,10 @@ Students.java with Students.clj.
 
 ----------
 
+To compile, run the script compile.sh in 2/students.
+
+----------
+
 In version 1, I replaced only Student.java.  Replacing Students.java was
 more difficult, requiring modifications to StudentsWithUI.java and
 Student.clj (or Student.java, if I were using it).

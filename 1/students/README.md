@@ -4,6 +4,12 @@ MASON tutorial: Replacing Java with Clojure, v. 1
 **See README.md in the root of this git repository for a general overview
 of this project.**
 
+----------
+
+To compile, run the script compile.sh in 1/students.
+
+----------
+
 In this version, I replaced Student.java with Student.clj.
 Not replacing the other files shows that, in this case, one can write
 a drop-in replacement for the Java source file, using Clojure.  (See

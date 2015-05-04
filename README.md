@@ -33,6 +33,18 @@ that it looks to Java like a Java class.  (There are other ways to
 generate "Java classes" in Clojure, but none of them seem suitable for
 this application.)
 
+--------------------------------------------
+
+## The experiments
+
+Rather than ultimately replacing all of the Java source with Clojure in
+one version, I preserved early versions.  Experiment 1 shows a case in
+which a single Java source file can be replaced with a Clojure source
+file, without making any changes in the other Java source files.
+Experiment 2 shows a case in which changes had to be made both to the
+remaining Java as well as the Clojure file that had been copied from
+Experiment 2.
+
 ### 1:
 
 Replaces Student.java with Student.clj, i.e. reimplements the `Student`
@@ -41,6 +53,6 @@ still written in Java.
 
 ### 2:
 
-Starting from experiment **1**, replaces Students.java with
+Starting from experiment 1, replaces Students.java with
 Students.clj, i.e. both `Student` and `Students` are written in Clojure.
 `StudentsWithUI` remains in java.
