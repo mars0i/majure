@@ -5,12 +5,6 @@
 ;;; Clojure version of the Student class described in the tutorial in
 ;;; chapter 2 of the Mason Manual v18, by Sean Luke.
 
-;;; Conventions:
-;;; I use 'me' to refer to this instance of Student and generally don't pass
-;;; it as the first argument in functions intended to be used here.  I use
-;;; 'this' and pass it as the first argument only for methods intended to be
-;;; called from other classes.
-
 (ns students.Student
   (:import [sim.util Double2D MutableDouble2D])
   (:gen-class
