@@ -21,7 +21,7 @@ MASON can be found at
 
 Clojure can be found at [http://clojure.org](http://clojure.org)
 
-And Java .... Well, Java is like [Elvis](http://www.mojonixon.com/lyrics/elvisiseverywhere.html).
+And Java ... is like [Elvis](http://www.mojonixon.com/lyrics/elvisiseverywhere.html).
 
 --------------------------------------------
 
