@@ -10,8 +10,9 @@
   :profiles {:comp1 {:source-paths ["src/pre/clojure"]               ; see compile.sh
                         :aot [students.Student students.Students] } 
              :comp2 {:source-paths ["src/clojure"]                   ; see compile.sh
-                       :java-source-paths ["src/java"]
-                       :aot [students.core] }
+                       ;:aot [students.core] 
+                       :java-source-paths ["src/java"]}
 
              :withgui {:main students.StudentsWithUI} ; execute this with 'lein with-profile withgui run'
-             :nogui   {:main students.Students} } )   ; execute this with 'lein with-profile nogui run'
+             :nogui   {:main students.Students}       ; execute this with 'lein with-profile nogui run'
+            })
