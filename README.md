@@ -23,7 +23,7 @@ Clojure can be found at [http://clojure.org](http://clojure.org)
 
 In the Clojure source files,  I try to write relatively idiomatic
 Clojure rather than giving a direct translation of the Java.  However, I
-didn't give myself complete freedom; and much of the methodology from
+didn't give myself complete freedom; much of the methodology from
 the Java source files remains in the Clojure source.  (The Clojure code
 that results is a kind of Clojure/Java hybrid, from the point of view of
 a Clojure programmer.)  I also renamed some variable names, etc.
