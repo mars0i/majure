@@ -21,10 +21,10 @@
               [getForceToSchoolMultiplier [] double]
               [getRandomMultiplier [] double]]
     :state state
-    :init init
+    :init init-state
     :main true)) 
 
-(defn -init
+(defn -init-state
   [seed]
   [[seed] {:yard (Continuous2D. 1.0 100 100)
            :buddies (Network. false)
