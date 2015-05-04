@@ -21,6 +21,8 @@ MASON can be found at
 
 Clojure can be found at [http://clojure.org](http://clojure.org)
 
+And Java .... Well, Java is like [Elvis](http://www.mojonixon.com/lyrics/elvisiseverywhere.html).
+
 --------------------------------------------
 
 ## The experiments
@@ -76,10 +78,22 @@ Students.clj, i.e. both `Student` and `Students` are written in Clojure.
   the manual to the Java source files, but you can read the comments in
   the manual.)
 
-* Many Clojure operations are lazy, which means that you have to be
-  careful about interactions between laziness and imperative Java
-  code.  This is another reason that it helps to have a bit of Clojure
-  experience if you want to use MASON with Clojure.
+* Clojure is usually used with the Leiningen dependencies tool.
+  To run this code using leiningen, change to one of the numbered
+  subdirectories, then execute `./compile.sh` and then one of the
+  following commands:  
+	`lein run`  
+	`lein with-profile withgui run`  
+	`lein with-profile nogui run`  
+  You can also use `lein jar` or `lein uberjar` to make a jar file
+  for use without Leiningen.
+
+* Many convenient Clojure functions return lazy sequences.  Laziness
+  has both advantages and disadvantages.  Among other things, it means
+  that you has to be have to be careful about interactions between
+  laziness and imperative code--including a lot of the Java-style code
+  needed to use MASON.  (This is another reason that it helps to have a
+  bit of Clojure experience if you want to use MASON with Clojure.)
 
 * `ns`'s `:gen-class` directive (which calls Clojure `gen-class`
   function) does much of the work of presenting a Clojure namespace so
