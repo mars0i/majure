@@ -1,36 +1,20 @@
-# students
+MASON tutorial: Replacing Java with Clojure, version 1
+====
 
-FIXME: description
+**See README.md in the root of this git repository for a general overview
+of this project.**
 
-## Installation
+In this version, I replaced Student.java with Student.clj.
+Not replacing the other files shows that, in this case, one can write
+a drop-in replacement for the Java source file, using Clojure.  (See
+the version in directory 2 for a case in which this is not quite
+true.)
 
-Download from http://example.com/FIXME.
+----------
 
-## Usage
+Clojure source code here is copyright 2015 by Marshall Abrams, and is
+distributed under the Gnu General Public License version 3.0 as
+specified in the file LICENSE, except where noted.  
 
-FIXME: explanation
-
-    $ java -jar students-0.1.0-standalone.jar [args]
-
-## Options
-
-FIXME: listing of options this app accepts.
-
-## Examples
-
-...
-
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
-
-## License
-
-Copyright © 2015 FIXME
-
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+The java source code is copied from the the MASON manual v. 18, and is
+by Sean Luke.  See the MASON manual for its license.
