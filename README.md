@@ -16,6 +16,8 @@ MASON can be found at
 Clojure can be found at [http://clojure.org](http://clojure.org)
 
 These examples follow the tutorial in chapter 2 of the MASON manual v. 18. 
+I didn't necessarily complete the tutorial, but the basic elements are
+all here.
 
 Throughout, I tried to write relatively idiomatic Clojure rather than
 giving a direct translation.  However, I didn't take complete freedom; I
