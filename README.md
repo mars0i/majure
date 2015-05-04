@@ -90,21 +90,19 @@ Students.clj, i.e. both `Student` and `Students` are written in Clojure.
   form](http://cemerick.com/2011/07/05/flowchart-for-choosing-the-right-clojure-type-definition-form).)
 
 * There are (e.g. online) sources that explain the basics of
-  `gen-class` (you'll find many of them easily enough with a web search), but
-  I've found nothing that covers all of the ideas I needed.  The most
-  thorough documentation on `gen-class` that I've found is in [*The Joy
-  of Clojure*](http://www.manning.com/fogus2) by Michael Fogus and Chris
-  Houser, and in the standard docstring for `gen-class`.  Neither is
-  *completely* adequate.  
-  In the end I had to piece together
+  `gen-class` (you'll find many of them easily enough with a web
+  search), but I've found nothing that covers all of the ideas I needed.
+  The most thorough documentation on `gen-class` that I've found is in
+  [*The Joy of Clojure*](http://www.manning.com/fogus2) by Michael Fogus
+  and Chris Houser, and in the standard docstring for `gen-class`.
+  Neither is *completely* adequate.  In the end I had to piece together
   the information I needed from other sources as well, including (of
-  course) trial and error.
-  (Note that the [online version of the
+  course) trial and error.  (Note that the [online version of the
   docstring](https://clojuredocs.org/clojure.core/gen-class) messes up
   its formatting, making it difficult to read.  If you have Clojure
   installed, running `(doc gen-class)` at the repl will be more useful,
   or you might want to enter that expression at the prompt at [Try
-  Clojure](http://www.tryclj.com).)  
+  Clojure](http://www.tryclj.com).)
 
 * While it can require a bit of effort to use `gen-class`
   appropriately in different contexts, there are many ways in which
