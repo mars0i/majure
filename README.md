@@ -3,7 +3,9 @@ majure
 
 ## Clojure + MASON agent-based modeling library: experiments 
 
-These examples follow the tutorial in chapter 2 of the MASON manual v. 18. 
+#### Experimental use of MASON from Clojure.
+
+The examples follow the tutorial in chapter 2 of the MASON manual v. 18. 
 I didn't necessarily complete the tutorial, but the basic elements are
 all here.
 
