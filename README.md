@@ -1,7 +1,7 @@
 majure
 ====
 
-## Clojure + MASON agent-based modeling library: experiments 
+## Clojure + MASON agent-based modeling library
 
 #### Experimental use of MASON from Clojure
 
