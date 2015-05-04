@@ -98,11 +98,11 @@ Students.clj, i.e. both `Student` and `Students` are written in Clojure.
   Neither is *completely* adequate.  In the end I had to piece together
   the information I needed from other sources as well, including (of
   course) trial and error.  (Note that the [online version of the
-  docstring](https://clojuredocs.org/clojure.core/gen-class) messes up
-  its formatting, making it difficult to read.  If you have Clojure
-  installed, running `(doc gen-class)` at the repl will be more useful,
-  or you might want to enter that expression at the prompt at [Try
-  Clojure](http://www.tryclj.com).)
+  docstring](https://clojuredocs.org/clojure.core/gen-class) for
+  `gen-class` messes up its formatting, making it difficult to read.  If
+  you have Clojure installed, running `(doc gen-class)` at the repl will
+  be more useful, or you might want to enter that expression at the
+  prompt at [Try Clojure](http://www.tryclj.com).)
 
 * While it can require a bit of effort to use `gen-class`
   appropriately in different contexts, there are many ways in which
