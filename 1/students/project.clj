@@ -6,19 +6,13 @@
   ;:java-source-paths ["src/java"]
   :resource-paths ["resources/mason.18.jar"]
   :dependencies [[org.clojure/clojure "1.6.0"]]
-  ;:aot :all
-  ;:aot [students.Student]
-  ;:main students.core ; 'lein run' will run students/core.clj; 'lein repl' won't
-  ;:main ^:skip-aot students.core  ; I don't think I need or want skip-aot
-  ;:main students.StudentsWithUI ; run the Java code directly without calling it from Clojure
-  :main students.Bar ; run the Java code directly without calling it from Clojure
-  ;:target-path "target/%s"
-  ;:profiles {:uberjar {:aot :all}}
+  :main students.core ; 'lein run' will run students/core.clj; 'lein repl' won't
+  ;:main students.Students
 
   ;; See https://github.com/technomancy/leiningen/blob/master/doc/MIXED_PROJECTS.md
-  :profiles {:precomp {:source-paths ["src/pre/clojure"]
-                        :aot [students.Student students.Foo] } 
-             :midcomp {:source-paths ["src/clojure"]
+  :profiles {:comp1 {:source-paths ["src/pre/clojure"]
+                        :aot [students.Student] } 
+             :comp2 {:source-paths ["src/clojure"]
                        :java-source-paths ["src/java"]
                        :aot [students.core] }} 
 )
