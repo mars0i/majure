@@ -59,15 +59,18 @@
         yard-portrayal (.getYardPortrayal this)
         buddies-portrayal (.getBuddiesPortrayal this)
         display (.getDisplay this)]
+
     (.setField yard-portrayal (.getYard students))
-    ;(.setPortrayalForAll yard-portrayal (OvalPortrayal2D.)) ; simple version
+
     (.setPortrayalForAll yard-portrayal 
-                         (proxy [OvalPortrayal2D] []
+                         (proxy [OvalPortrayal2D] []      ; subclass OvalPortrayal2D
                            (draw [student graphics info]
-                             (let [agitation-shade (min 255 (int (/ (* (.getAgitation student) 255.0) 10.0)))
-                                   color (Color. agitation-shade 0 (- 255 agitation-shade))]
-                               ;; set inherited paint var to color here
+                             (let [agitation-shade (min 255 (int 
+                                                              (* (.getAgitation student) (/ 255 10.0))))]
+                               (set! (.paint this)  ; paint var in superclass; 'this' is auto-captured by proxy
+                                     (Color. agitation-shade 0 (- 255 agitation-shade)))
                                (proxy-super draw student graphics info)))))
+
     (.setField buddies-portrayal (SpatialNetwork2D. (.getYard students) (.getBuddies students)))
     (.setPortrayalForAll buddies-portrayal (SimpleEdgePortrayal2D.))
     (.reset display)
