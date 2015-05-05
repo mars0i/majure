@@ -20,7 +20,7 @@
               [getNumStudents [] int]
               [getForceToSchoolMultiplier [] double]
               [getRandomMultiplier [] double]]
-    :state instance-state
+    :state instanceState
     :init init-instance-state
     :main true)) 
 
@@ -32,11 +32,11 @@
            :force-to-school-multiplier (atom 0.01)
            :random-multiplier (atom 0.1)}])
 
-(defn -getYard [this] (:yard (.state this)))
-(defn -getBuddies [this] (:buddies (.state this)))
-(defn -getNumStudents [this] @(:num-students (.state this)))
-(defn -getForceToSchoolMultiplier [this] @(:force-to-school-multiplier (.state this)))
-(defn -getRandomMultiplier [this] @(:random-multiplier (.state this)))
+(defn -getYard [this] (:yard (.instanceState this)))
+(defn -getBuddies [this] (:buddies (.instanceState this)))
+(defn -getNumStudents [this] @(:num-students (.instanceState this)))
+(defn -getForceToSchoolMultiplier [this] @(:force-to-school-multiplier (.instanceState this)))
+(defn -getRandomMultiplier [this] @(:random-multiplier (.instanceState this)))
 
 
 (declare find-other-student add-random-edge!)
