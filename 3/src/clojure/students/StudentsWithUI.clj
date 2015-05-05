@@ -18,11 +18,11 @@
               [getBuddiesPortrayal [] sim.portrayal.network.NetworkPortrayal2D]
               [setupPortrayals [] void]]
     :state instanceState      ; superclass already has a variable named "state"
-    :init init-instance-state  ; we define a MASON function named "init" below
+    :init init-instance-state))  ; we define a MASON function named "init" below
+
     ;; Supposed to have a no-arg constructor. not sure how this is supposed to work.  TODO ?
     ;:constructors {[]                    [sim.engine.SimState] 
     ;               [sim.engine.SimState] [sim.engine.SimState]}
-    ))
 
 (defn -init-instance-state
   [& args]
@@ -60,7 +60,14 @@
         buddies-portrayal (.getBuddiesPortrayal this)
         display (.getDisplay this)]
     (.setField yard-portrayal (.getYard students))
-    (.setPortrayalForAll yard-portrayal (OvalPortrayal2D.)) ; TODO: write ad-hoc subclass
+    ;(.setPortrayalForAll yard-portrayal (OvalPortrayal2D.)) ; simple version
+    (.setPortrayalForAll yard-portrayal 
+                         (proxy [OvalPortrayal2D] []
+                           (draw [student graphics info]
+                             (let [agitation-shade (min 255 (int (/ (* (.getAgitation student) 255.0) 10.0)))
+                                   color (Color. agitation-shade 0 (- 255 agitation-shade))]
+                               ;; set inherited paint var to color here
+                               (proxy-super draw student graphics info)))))
     (.setField buddies-portrayal (SpatialNetwork2D. (.getYard students) (.getBuddies students)))
     (.setPortrayalForAll buddies-portrayal (SimpleEdgePortrayal2D.))
     (.reset display)
