@@ -27,29 +27,33 @@ And Java ... is like [Elvis](http://www.mojonixon.com/lyrics/elvisiseverywhere.h
 
 ## The experiments
 
-Rather than ultimately replacing all of the Java source with Clojure in
-one version, I preserved early versions.  Experiment 1 shows a case in
-which a single Java source file can be replaced with a Clojure source
-file, without making any changes in the other Java source files.
-Experiment 2 shows a case in which changes had to be made both to the
-remaining Java as well as the Clojure file that had been copied from
-Experiment 2.
+Each experiment replaces one additional Java source file with a Clojure
+source file.  As it turns out, each additional file involved a little
+bit more effort to manage the Clojure-Java interface.
 
 ### 1:
 
 Replaces Student.java with Student.clj, i.e. reimplements the `Student`
 class in Clojure.  The `Students` and `StudentsWithUI` classes are
-still written in Java.
+still written in Java.  Student.clj is a drop-in replacement for
+Student.java.
 
 ### 2:
 
 Starting from experiment 1, replaces Students.java with
 Students.clj, i.e. both `Student` and `Students` are written in Clojure.
-`StudentsWithUI` remains in Java.
+`StudentsWithUI` remains in Java.  I needed to make small
+modifications to StudentsWithUI.java to make this work.
+
+### 3:
+
+Starting from experiment 3, replaces StudentsWithUI.java with
+StudentsWithUI.clj.  This is an all-Clojure version of the students
+app.  In this version, I used `proxy` as well as `gen-class`.
 
 -------------------------
 
-## Tips
+## Notes and tips
 
 * This is neither a Clojure tutorial for Java programmers, nor a Java
   tutorial for Clojure programmers.  There are several good books and
@@ -95,11 +99,11 @@ Students.clj, i.e. both `Student` and `Students` are written in Clojure.
   needed to use MASON.  (This is another reason that it helps to have a
   bit of Clojure experience if you want to use MASON with Clojure.)
 
-* `ns`'s `:gen-class` directive (which calls Clojure `gen-class`
-  function) does much of the work of presenting a Clojure namespace so
-  that it looks to Java like a Java class.  (There are other ways to
-  generate things that act like Java classes, but none of them seem very
-  suitable for use with MASON.  See Chas Emerick's [Flowchart for
+* Most of my code here uses `ns`'s `:gen-class` directive (which calls Clojure `gen-class`
+  function) to do much of the work of presenting a Clojure namespace so
+  that it looks to Java like a Java class.  I also use `proxy` in one
+  case.  (There are other ways to
+  generate things that act like Java classes.  See Chas Emerick's [Flowchart for
   choosing the right Clojure type definition
   form](http://cemerick.com/2011/07/05/flowchart-for-choosing-the-right-clojure-type-definition-form).)
 
@@ -111,12 +115,12 @@ Students.clj, i.e. both `Student` and `Students` are written in Clojure.
   and Chris Houser, and in the standard docstring for `gen-class`.
   Neither is *completely* adequate.  In the end I had to piece together
   the information I needed from other sources as well, including (of
-  course) trial and error.  (Note that the [online version of the
+  course) trial and error.  (Note that the [official online version of the
   docstring](https://clojuredocs.org/clojure.core/gen-class) for
-  `gen-class` messes up its formatting, making it difficult to read.  If
-  you have Clojure installed, running `(doc gen-class)` at the repl will
-  be more useful, or you might want to enter that expression at the
-  prompt at [Try Clojure](http://www.tryclj.com).)
+  `gen-class` messes up its formatting, making it difficult to read.
+  [This
+  version](http://conj.io/store/v1/org.clojure/clojure/1.6.0/clj/clojure.core/gen-class)
+  preserves the formatting.)
 
 * While it can require a bit of effort to use `gen-class`
   appropriately in different contexts, there are many ways in which
