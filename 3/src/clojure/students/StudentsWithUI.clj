@@ -43,7 +43,7 @@
 (defn -main
   [& args]
   (let [vid (students.StudentsWithUI.
-              (students.Students. (System/currentTimeMillis)))] ; can't figure out how to define no-arg constructor, but this works.
+              (students.Students. (System/currentTimeMillis)))] ; don't yet know how to define no-arg constructor; this works.
         (.setVisible (Console. vid) true)))
 
 (defn -getName [this] "Student Schoolyard Cliques") ; override method in super
@@ -67,7 +67,7 @@
                            (draw [student graphics info]
                              (let [agitation-shade (min 255 (int 
                                                               (* (.getAgitation student) (/ 255 10.0))))]
-                               (set! (.paint this)  ; paint var in superclass; 'this' is auto-captured by proxy
+                               (set! (.-paint this)  ; paint var in superclass; 'this' is auto-captured by proxy
                                      (Color. agitation-shade 0 (- 255 agitation-shade)))
                                (proxy-super draw student graphics info)))))
 

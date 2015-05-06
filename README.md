@@ -19,7 +19,10 @@ MASON can be found at
 [http://cs.gmu.edu/~eclab/projects/mason](http://cs.gmu.edu/~eclab/projects/mason).
 Its license is in the file MASONLICENSE.
 
-Clojure can be found at [http://clojure.org](http://clojure.org)
+Clojure can be found at [http://clojure.org](http://clojure.org).  If
+you want to run this code, you'll probably want to use
+[Leiningen](http://leiningen.org).  (If you install Leiningen first, you
+can use it to install Clojure.)
 
 And Java ... is like [Elvis](http://www.mojonixon.com/lyrics/elvisiseverywhere.html).
 
@@ -87,6 +90,12 @@ MASON with Clojure.
 
 ## Notes and tips
 
+* Caveat: I feel pretty comfortable with Clojure, although I'm not an
+  expert.  However, I haven't done much Java programming in a long time,
+  and most of Clojure's Java interop functionality was new to me when I
+  started on this project.  The Clojure code here may reflect various
+  kinds of ignorance on my part.
+
 * This is neither a Clojure tutorial for Java programmers, nor a Java
   tutorial for Clojure programmers.  There are several good books and
   online sources for learning Clojure, as well as innumerable sources
@@ -116,13 +125,8 @@ MASON with Clojure.
 
 * Clojure is usually used with the Leiningen dependencies tool.
   To run this code using leiningen, change to one of the numbered
-  subdirectories, then execute `./compile.sh` and then one of the
-  following commands:  
-	`lein run`  
-	`lein with-profile withgui run`  
-	`lein with-profile nogui run`  
-  You can also use `lein jar` or `lein uberjar` to make a jar file
-  for use without Leiningen.
+  subdirectories, then follow the instructions in the README.md file
+  there.
 
 * Many convenient Clojure functions return lazy sequences.  Laziness
   has both advantages and disadvantages.  Among other things, it means
@@ -173,7 +177,7 @@ MASON with Clojure.
 
 * Note that Clojure implementations of functions that are supposed to
   appear to be Java methods have to have a dash `-` prefixed to their
-  name in the Clojure source, even though they're called with `.<name`
+  name in the Clojure source, even though they're called with `.<name>`
   and no `-`.  These methods also have to be listed with the `:methods`
   keyword in `gen-class`, unless they're implementing methods for an
   interface listed with the `:interface` keyword.
@@ -181,13 +185,13 @@ MASON with Clojure.
 * Using `gen-class`, any instance state has to be stored in a single
   variable specified with the `:state` keyword.  This is pretty flexible
   as long as you can access the state variable using functions.  If you
-  need a true public instance varible, you can have one (the state
+  need a true public instance variable, you can have one (the state
   variable), but that's it.  So if you need more than one data item,
   other classes have to access instance data using accessor functions.
 
-* On the other hand, multiple instance variable that are inherited from
+* On the other hand, multiple instance variables that are inherited from
   a Java class are unproblematic.
 
 * By preference, Clojure uses a one-pass compiler, which means that
-  specific order of compilation is sometimes needed to interleave
+  a specific order of compilation is sometimes needed to interleave
   Clojure and Java source files.
