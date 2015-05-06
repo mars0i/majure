@@ -20,7 +20,10 @@ in 1/ for additional information.
 
 ----------
 
-To compile, run the script compile.sh in 2/students.
+To compile, run the script compile.sh.  This causes Student.clj and
+Students.clj to be compiled before StudentsWithUI.java, so that the
+Clojure-generated classes will be visible to javac during compilation.
+By default Leiningen compiles Java files before Clojure files.
 
 ----------
 

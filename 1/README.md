@@ -22,4 +22,7 @@ information.
 
 ----------
 
-To compile, run the script compile.sh.
+To compile, run the script compile.sh.  This causes Student.clj to be
+compiled before the Java source files, so that the `Student` class will
+be visible to javac during compilation.  By default Leiningen compiles
+Java files before Clojure files.
