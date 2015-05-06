@@ -25,6 +25,10 @@ public class Student implements Steppable {
 
 	public static final double MAX_FORCE = 3.0;
 
+	double friendsClose = 0.0; // initially very close to my friends
+	double enemiesCloser = 10.0; // WAY too close to my enemies
+	public double getAgitation() {return friendsClose + enemiesCloser;}
+
 	public void step(SimState state) {
 		Students students = (Students) state; // I think the cast is to allow the compiler to accept Student member refs
 
@@ -33,26 +37,29 @@ public class Student implements Steppable {
 		Double2D me = students.yard.getObjectLocation(this);
 		MutableDouble2D sumForces = new MutableDouble2D();
 
+		friendsClose = enemiesCloser = 0.0;
+
 		MutableDouble2D forceVector = new MutableDouble2D();
 		Bag out = students.buddies.getEdges(this, null); // second arg is the bag to check; in this case, a new bag of edges to/from this is created
 		int len = out.size();
-
-		System.out.println("Steppin' in Java.");
 
 		for(int buddy = 0 ; buddy < len; buddy++) {
 			Edge e = (Edge)(out.get(buddy));
 			double buddiness = ((Double)(e.info)).doubleValue();
 			Double2D him = students.yard.getObjectLocation(e.getOtherNode(this));
+
 			if (buddiness >= 0) {
 				forceVector.setTo((him.x - me.x) * buddiness, (him.y - me.y) * buddiness);
 				if (forceVector.length() > MAX_FORCE)
 					forceVector.resize(MAX_FORCE);
+				friendsClose += forceVector.length();
 			} else {
 				forceVector.setTo((him.x - me.x) * buddiness, (him.y - me.y) * buddiness);
 				if (forceVector.length() > MAX_FORCE)
 					forceVector.resize(0.0);
 				else if (forceVector.length() > 0)
 					forceVector.resize(MAX_FORCE - forceVector.length());
+				enemiesCloser += forceVector.length();
 			}
 			sumForces.addIn(forceVector);
 		}
