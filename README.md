@@ -170,11 +170,22 @@ to create Java classes.
 ## Some thoughts about these experiments
 
 Though I personally prefer Clojure to Java, the kind of extensive use of
-Java required in this example makes writing Clojure a lot closer to Java
-than what I'm used to.  The resulting code is more verbose than
-usual--perhaps even more verbose than the Java source code it's intended
-to replace.  Furthermore, it's necessary to keep thinking through the
-relationship between Clojure and Java.  So ... if you like Java, and
-only kind of like Clojure, this probably isn't worth the trouble.
-However, over time, I suspect that I'll develop coding patterns that
-streamline the process of writing MASON models in Clojure.
+Java required in this example makes writing Clojure a lot closer to
+writing Java than what I'm used to.  The resulting code is more verbose
+than usual for Clojure--perhaps even more verbose, overall, than the
+Java source code it's intended to replace.  Furthermore, when using
+MASON with Clojure, it's necessary to keep thinking through
+relationships between Clojure and Java.  This dimension would no doubt
+get easier with practice, but it can't be ignored.  Over time, I suspect
+that I'll develop coding patterns that streamline the process of writing
+MASON models in Clojure.  For example, there may be MASON classes that I
+could use but won't, and there may be cases in which I can use `proxy`,
+`reify`, or even `defrecord` instead of `gen-class`.  (Using `gen-class`
+is more involved than using these other macros, but `gen-class` can
+duplicate more of the usual Java class functionality.)
+
+If you like Java and aren't already a huge fan of Clojure, using MASON
+with Clojure rather than Java might not be worth the trouble.  If you
+love Clojure and would like to use it with an agent-based library, the
+experiments here might provide a starting point for exploring the use of
+MASON with Clojure.
