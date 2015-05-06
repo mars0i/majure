@@ -17,7 +17,7 @@
               [getYardPortrayal [] sim.portrayal.continuous.ContinuousPortrayal2D]
               [getBuddiesPortrayal [] sim.portrayal.network.NetworkPortrayal2D]
               [setupPortrayals [] void]]
-    :state instanceState      ; superclass already has a variable named "state"
+    :state instanceState         ; superclass already has a variable named "state"
     :init init-instance-state))  ; we define a MASON function named "init" below
 
 ;; Supposed to have a no-arg constructor. not sure how this is supposed to work.  TODO ?
@@ -62,23 +62,22 @@
         yard-portrayal (.getYardPortrayal this)
         buddies-portrayal (.getBuddiesPortrayal this)
         display (.getDisplay this)]
-
-    (.setField yard-portrayal (.getYard students))
-
-    (.setPortrayalForAll yard-portrayal 
-                         (proxy [OvalPortrayal2D] []      ; subclass OvalPortrayal2D
-                           (draw [student graphics info]
-                             (let [agitation-shade (min 255 (int 
-                                                              (* (.getAgitation student) (/ 255 10.0))))]
-                               (set! (.-paint this)  ; paint var in superclass; 'this' is auto-captured by proxy
-                                     (Color. agitation-shade 0 (- 255 agitation-shade)))
-                               (proxy-super draw student graphics info)))))
-
-    (.setField buddies-portrayal (SpatialNetwork2D. (.getYard students) (.getBuddies students)))
-    (.setPortrayalForAll buddies-portrayal (SimpleEdgePortrayal2D.))
-    (.reset display)
-    (.setBackdrop display Color/white)
-    (.repaint display)))
+    (doto yard-portrayal
+      (.setField (.getYard students))
+      (.setPortrayalForAll (proxy [OvalPortrayal2D] []      ; subclass OvalPortrayal2D
+                             (draw [student graphics info]
+                               (let [agitation-shade (min 255 (int 
+                                                                (* (.getAgitation student) (/ 255 10.0))))]
+                                 (set! (.-paint this)  ; paint var in superclass; 'this' is auto-captured by proxy
+                                       (Color. agitation-shade 0 (- 255 agitation-shade)))
+                                 (proxy-super draw student graphics info))))))
+    (doto buddies-portrayal
+      (.setField (SpatialNetwork2D. (.getYard students) (.getBuddies students)))
+      (.setPortrayalForAll (SimpleEdgePortrayal2D.)))
+    (doto display
+      (.reset )
+      (.setBackdrop Color/white)
+      (.repaint))))
 
 
 ;; Note I reorganized the order of operations in this function
@@ -108,11 +107,12 @@
 
 (defn -quit
   [this]
-  (.superQuit this)
+  (.superQuit this)  ; combine in doto?
   (when-let [display-frame (.getDisplayFrame this)]
     (.dispose display-frame))
-  (.setDisplayFrame this nil)
-  (.setDisplay this nil))
+  (doto this
+    (.setDisplayFrame nil)
+    (.setDisplay nil)))
 
 
 ;; Earlier (working) version with order of operations following original Java code:
