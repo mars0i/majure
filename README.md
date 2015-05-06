@@ -82,6 +82,16 @@ Java source code it's intended to replace.  (At times, I have even felt
 that the original Java source was easier for me to read than my Clojure
 code.  This is a shocking thing for me to say!)  
 
+* On the other hand: It's important to note I wasn't trying to use MASON
+from scratch in whatever way made most sense from a Clojure point of
+view.  I was just trying to loosely translate code that had been written
+in a way that made sense in Java (and that was written that way in part,
+for pedagogical purposes).  Over time, I suspect that I'll develop
+coding patterns that streamline the process of writing MASON models in
+Clojure.  For example, it may be possible to use `proxy` rather than
+`gen-class` when I'm not trying to generate classes that can directly
+interact with Java-defined classes, as in experiments 1 and 2.
+
 * When using MASON with Clojure, it's necessary to keep thinking through
 relationships between Clojure and Java.  This dimension would no doubt
 get easier with practice, but it can't be ignored.
@@ -92,14 +102,6 @@ encountered that kind of opacity a bit more often than usual when
 working through these examples.  This is a result of the layers of
 tricks that Clojure uses to fully emulate Java classes using the
 `gen-class` macro, I think.
-
-* On the other hand: It's important to note I wasn't trying to use MASON
-from scratch in whatever way made most sense from a Clojure point of
-view.  I was just trying to loosely translate code that had been written
-in a way that made sense in Java (and that was written that way in part,
-for pedagogical purposes).  Over time, I suspect that I'll develop
-coding patterns that streamline the process of writing MASON models in
-Clojure.
 
 * Conclusion: If you like Java and aren't a huge fan of Clojure, using
 MASON with Clojure rather than Java might not be worth the trouble.  If
