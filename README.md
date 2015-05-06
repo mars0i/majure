@@ -111,6 +111,16 @@ Clojure.  *Caveat emptor*, though.
 
 ## Notes and tips
 
+* Here's a small note about the common disease *parenthephobia*,
+  prevalent among those who don't use regularly use Lisps, such as
+  Clojure.  Even those who have programmed in Lisp sometimes suffer from
+  this debilitating ailment as a result of computer science instructors
+  who failed to provide the following essential information: As long as
+  you (a) become familiar with proper Lisp code formatting, (b) use an
+  editor that matches parentheses, and (c) use an editor that will
+  automatically reformat Lisp code for you, parentheses are easy to
+  manage.  Don't be afraid of them!
+
 * I feel pretty comfortable with Clojure, although I'm not an
   expert.  However, I haven't done much Java programming in a long time,
   and most of Clojure's Java interop functionality was new to me when I
