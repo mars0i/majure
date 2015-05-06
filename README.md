@@ -61,7 +61,7 @@ to create Java classes.
 
 --------------------------------------------
 
-## Some thoughts:
+## Thoughts:
 
 Though I personally prefer Clojure to Java, the kind of extensive use of
 Java required in this example makes writing Clojure a lot closer to
