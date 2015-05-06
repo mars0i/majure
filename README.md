@@ -177,11 +177,12 @@ relationships between Clojure and Java.  This aspect of the process
 would no doubt get easier with practice, but it can't be ignored. 
 Over time, I suspect that I'll develop coding patterns that streamline
 the process of writing MASON models in Clojure.  For example, there
-may be MASON classes that I could use but won't, and there may be
-cases in which I can use `proxy`, `reify`, or even `defrecord` instead
-of `gen-class`.  (Using `gen-class` is more involved than using these
-other macros, but `gen-class` can duplicate more of the usual Java
-class functionality.)
+may be MASON classes that I could use but won't--because getting the
+functionality I need using pure Clojure is more convenient--and there
+may be cases in which I can use `proxy`, `reify`, or even `defrecord`
+instead of `gen-class`.  (Using `gen-class` is more involved than
+using these other macros, but `gen-class` can duplicate more of the
+usual Java class functionality.)
 
 If you like Java and aren't already a huge fan of Clojure, using MASON
 with Clojure rather than Java might not be worth the trouble.  If you
