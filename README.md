@@ -67,6 +67,9 @@ run this code using Leiningen, change to one of the numbered
 subdirectories, then follow the instructions in the README.md file
 there.
 
+For notes and tips on the source code, see "Notes and tips" below, and
+the README.md files in the numbered subdirectories.
+
 --------------------------------------------
 
 ## Thoughts:
@@ -96,16 +99,12 @@ view.  I was just trying to loosely translate code that had been written
 in a way that made sense in Java (and that was written that way in part,
 for pedagogical purposes).  Over time, I suspect that I'll develop
 coding patterns that streamline the process of writing MASON models in
-Clojure.  For example, there may be MASON classes that I could use but
-won't, and there may be cases in which I can use `proxy`, `reify`, or
-even `deftype` or `defrecord` instead of `gen-class`.  (Using these
-other macros can be simpler than using `gen-class`, but
-`gen-class` can duplicate more of the usual Java class functionality.)
+Clojure.
 
-* Conclusion: If you like Java and aren't a huge fan of Clojure, using MASON with
-Clojure rather than Java might not be worth the trouble.  If you love
-Clojure and would like to use it with an agent-based library, the
-experiments here might provide a starting point for using MASON with
+* Conclusion: If you like Java and aren't a huge fan of Clojure, using
+MASON with Clojure rather than Java might not be worth the trouble.  If
+you love Clojure and would like to use it with an agent-based library,
+the experiments here might provide a starting point for using MASON with
 Clojure.  *Caveat emptor*, though.
 
 -------------------------
