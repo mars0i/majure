@@ -43,7 +43,7 @@
 (defn -main
   [& args]
   (let [vid (students.StudentsWithUI.
-              (students.Students. (System/currentTimeMillis)))] ; can't figure out how to define no-arg constructor, but this works.
+              (students.Students. (System/currentTimeMillis)))] ; don't yet know how to define no-arg constructor; this works.
         (.setVisible (Console. vid) true)))
 
 (defn -getName [this] "Student Schoolyard Cliques") ; override method in super
