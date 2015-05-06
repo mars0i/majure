@@ -67,7 +67,7 @@
                            (draw [student graphics info]
                              (let [agitation-shade (min 255 (int 
                                                               (* (.getAgitation student) (/ 255 10.0))))]
-                               (set! (.paint this)  ; paint var in superclass; 'this' is auto-captured by proxy
+                               (set! (.-paint this)  ; paint var in superclass; 'this' is auto-captured by proxy
                                      (Color. agitation-shade 0 (- 255 agitation-shade)))
                                (proxy-super draw student graphics info)))))
 
