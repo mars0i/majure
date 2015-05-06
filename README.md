@@ -92,13 +92,8 @@ to create Java classes.
 
 * Clojure is usually used with the Leiningen dependencies tool.
   To run this code using leiningen, change to one of the numbered
-  subdirectories, then execute `./compile.sh` and then one of the
-  following commands:  
-	`lein run`  
-	`lein with-profile withgui run`  
-	`lein with-profile nogui run`  
-  You can also use `lein jar` or `lein uberjar` to make a jar file
-  for use without Leiningen.
+  subdirectories, then follow the instructions in the README.md file
+  there.
 
 * Many convenient Clojure functions return lazy sequences.  Laziness
   has both advantages and disadvantages.  Among other things, it means
