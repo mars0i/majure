@@ -20,9 +20,9 @@
     :state instanceState      ; superclass already has a variable named "state"
     :init init-instance-state))  ; we define a MASON function named "init" below
 
-    ;; Supposed to have a no-arg constructor. not sure how this is supposed to work.  TODO ?
-    ;:constructors {[]                    [sim.engine.SimState] 
-    ;               [sim.engine.SimState] [sim.engine.SimState]}
+;; Supposed to have a no-arg constructor. not sure how this is supposed to work.  TODO ?
+;:constructors {[]                    [sim.engine.SimState] 
+;               [sim.engine.SimState] [sim.engine.SimState]}
 
 (defn -init-instance-state
   [& args]
@@ -44,14 +44,17 @@
   [& args]
   (let [vid (students.StudentsWithUI.
               (students.Students. (System/currentTimeMillis)))] ; don't yet know how to define no-arg constructor; this works.
-        (.setVisible (Console. vid) true)))
+    (.setVisible (Console. vid) true)))
+
 
 (defn -getName [this] "Student Schoolyard Cliques") ; override method in super
+
 
 (defn -start
   [this]
   (.superStart this)
   (.setupPortrayals this))
+
 
 (defn -setupPortrayals
   [this]
@@ -78,19 +81,29 @@
     (.repaint display)))
 
 
+;; Note I reorganized the order of operations in this function
+;; to put all of the display ops together, and all of the display-frame 
+;; ops together, after creating both display and display-frame in the same 
+;; let.  This seems to work, and seems to make sense.  e.g. original version
+;; set clipping on display before creating frame.  As far as I can tell 
+;; (e.g. from DisplayFrame2D source), this shouldn't matter.
 (defn -init
   [this controller] ; controller is called c in Java version
   (.superInit this controller)
-  (let [display (Display2D. 600 600 this)]
+  (let [display (Display2D. 600 600 this)
+        display-frame (.createFrame display)]
+    ;; set up display:
     (.setDisplay this display)
-    (.setClipping display false)
-    (let [display-frame (.createFrame display)] ; can this be moved before setClipping?
-      (.setDisplayFrame this display-frame)
-      (.setTitle display-frame "Schoolyard Display")
-      (.registerFrame controller display-frame)
-      (.setVisible display-frame true)
-      (.attach display (.getBuddiesPortrayal this) "Buddies")
-      (.attach display (.getYardPortrayal this) "Yard"))))
+    (doto display
+      (.setClipping false)
+      (.attach (.getBuddiesPortrayal this) "Buddies")
+      (.attach (.getYardPortrayal this) "Yard"))
+    ;; set up display frame:
+    (.setDisplayFrame this display-frame)
+    (.registerFrame controller display-frame)
+    (doto display-frame 
+      (.setTitle "Schoolyard Display")
+      (.setVisible true))))
 
 
 (defn -quit
@@ -100,3 +113,19 @@
     (.dispose display-frame))
   (.setDisplayFrame this nil)
   (.setDisplay this nil))
+
+
+;; Earlier (working) version with order of operations following original Java code:
+;(defn -init
+;  [this controller] ; controller is called c in Java version
+;  (.superInit this controller)
+;  (let [display (Display2D. 600 600 this)]
+;    (.setDisplay this display)
+;    (.setClipping display false)
+;    (let [display-frame (.createFrame display)] ; can this be moved before setClipping?
+;      (.setDisplayFrame this display-frame)
+;      (.setTitle display-frame "Schoolyard Display")
+;      (.registerFrame controller display-frame)
+;      (.setVisible display-frame true)
+;      (.attach display (.getBuddiesPortrayal this) "Buddies")
+;      (.attach display (.getYardPortrayal this) "Yard"))))
