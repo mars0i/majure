@@ -64,7 +64,7 @@
         display (.getDisplay this)]
     (doto yard-portrayal
       (.setField (.getYard students))
-      (.setPortrayalForAll (proxy [OvalPortrayal2D] []      ; subclass OvalPortrayal2D
+      (.setPortrayalForAll (proxy [OvalPortrayal2D] []
                              (draw [student graphics info]
                                (let [agitation-shade (min 255 (int 
                                                                 (* (.getAgitation student) (/ 255 10.0))))]
