@@ -17,6 +17,8 @@ replacing the other files shows that, in this case, one can write a
 drop-in replacement for the Java source file, using Clojure.  (See the
 version in directory 2 for a case in which this is not quite true.)
 
+Student.java can be found in src/disabled.
+
 See README.md in the root of this git repository for additional
 information.
 

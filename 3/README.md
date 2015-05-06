@@ -13,8 +13,11 @@ MASON manual for its license.
 ----------
 
 In this version, I replaced Student.java with Student.clj, Students.java
-with Students.clj, and StudentsWithUI.java with StudentsWithUI.clj.  See
-README.md in the root of this git repository and the README.md files in
+with Students.clj, and StudentsWithUI.java with StudentsWithUI.clj.
+
+The corresponding Java source files can be found in src/disabled.
+
+See README.md in the root of this git repository and the README.md files in
 1/ and 2/ for additional information.
 
 ----------

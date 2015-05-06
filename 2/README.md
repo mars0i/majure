@@ -15,6 +15,8 @@ MASON manual for its license.
 In this version, I replaced Student.java with Student.clj, and
 Students.java with Students.clj.
 
+Student.java and Students.java can be found in src/disabled.
+
 See README.md in the root of this git repository and the README.md file
 in 1/ for additional information.
 
