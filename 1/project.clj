@@ -15,7 +15,16 @@
                    "resources/orsoncharts-1.4-eval-nofx.jar"
                    "resources/orsonpdf-1.6-eval.jar"
                    "resources/servlet.jar"
-                   "resources/swtgraphics2d.jar"]
+                   "resources/swtgraphics2d.jar"
+                   "resources/itext-pdfa-5.5.5-javadoc.jar"
+                   "resources/itext-pdfa-5.5.5-sources.jar"
+                   "resources/itext-pdfa-5.5.5.jar"
+                   "resources/itext-xtra-5.5.5-javadoc.jar"
+                   "resources/itext-xtra-5.5.5-sources.jar"
+                   "resources/itext-xtra-5.5.5.jar"
+                   "resources/itextpdf-5.5.5-javadoc.jar"
+                   "resources/itextpdf-5.5.5-sources.jar"
+                   "resources/itextpdf-5.5.5.jar"]
   :dependencies [[org.clojure/clojure "1.6.0"]]
   :main students.core ; 'lein run' will run students/core.clj; 'lein repl' won't
   ;:main students.Students
