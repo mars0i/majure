@@ -19,7 +19,9 @@ MASON can be found at
 [http://cs.gmu.edu/~eclab/projects/mason](http://cs.gmu.edu/~eclab/projects/mason).
 Its license is in the file MASONLICENSE.
 
-Clojure can be found at [http://clojure.org](http://clojure.org)
+Clojure can be found at [http://clojure.org](http://clojure.org).
+You'll also need [Leiningen](http://leiningen.org).  If you install
+Leiningen first, you can use it to install Clojure.
 
 And Java ... is like [Elvis](http://www.mojonixon.com/lyrics/elvisiseverywhere.html).
 
