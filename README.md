@@ -63,6 +63,11 @@ to create Java classes.
 
 ## Notes and tips
 
+* Caveat: I'm quite comfortable with Clojure, but I don't do a lot of
+  Java programming these days, and most of Clojure's Java interop
+  functionality was new to me when I started on this project.  The
+  Clojure code here may reflect this ignorance.
+
 * This is neither a Clojure tutorial for Java programmers, nor a Java
   tutorial for Clojure programmers.  There are several good books and
   online sources for learning Clojure, as well as innumerable sources
