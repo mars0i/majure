@@ -144,7 +144,7 @@ to create Java classes.
 
 * Note that Clojure implementations of functions that are supposed to
   appear to be Java methods have to have a dash `-` prefixed to their
-  name in the Clojure source, even though they're called with `.<name`
+  name in the Clojure source, even though they're called with `.<name>`
   and no `-`.  These methods also have to be listed with the `:methods`
   keyword in `gen-class`, unless they're implementing methods for an
   interface listed with the `:interface` keyword.
