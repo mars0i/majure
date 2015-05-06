@@ -6,16 +6,18 @@ majure
 #### Experimental use of MASON from Clojure
 
 These examples follow the tutorial in chapter 2 of the MASON manual v.
-18, through section 2.8.
+18 through section 2.8.
 
 Clojure source code and text here is copyright 2015 by Marshall Abrams,
 and is distributed under the Gnu General Public License version 3.0 as
-specified in the file LICENSE, except where noted.  The Java source code
-is copied from the the MASON manual v. 18, and is by Sean Luke.  See the
-MASON manual for its license.
+specified in the file LICENSE, except where noted.  
+
+The Java source code is copied from the the MASON manual v. 18, and is
+by Sean Luke.  See the file MASONmanualLICENSE for its license.
 
 MASON can be found at
 [http://cs.gmu.edu/~eclab/projects/mason](http://cs.gmu.edu/~eclab/projects/mason).
+Its license is in the file MASONLICENSE.
 
 Clojure can be found at [http://clojure.org](http://clojure.org)
 
@@ -26,8 +28,12 @@ And Java ... is like [Elvis](http://www.mojonixon.com/lyrics/elvisiseverywhere.h
 ## The experiments
 
 Each experiment replaces one additional Java source file with a Clojure
-source file.  As it turns out, each additional file involved a little
-bit more effort to manage the Clojure-Java interface.
+source file.  The sequence of experiments follows my sequence of
+exploration, but I kept the old versions because I think it's important
+to see that Clojure source and Java source can coexist--albeit
+*sometimes* with small changes to the Java source.  As it turns out,
+each additional experiment involved additional Clojure-Java interop
+facilities.
 
 ### 1:
 
@@ -46,9 +52,9 @@ to StudentsWithUI.java as well as Student.clj to make this work.
 ### 3:
 
 Starting from experiment 3, replaces StudentsWithUI.java with
-StudentsWithUI.clj.  This is an all-Clojure version of the students
-app.  In this version I used `proxy` as well as `gen-class` to create
-Java classes in Clojure.
+StudentsWithUI.clj.  This is an all-Clojure version of the students app.
+In this version I used Clojure's `proxy` as well as `gen-class` in order
+to create Java classes.
 
 -------------------------
 
