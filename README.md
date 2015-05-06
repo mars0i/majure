@@ -5,16 +5,14 @@ majure
 
 #### Experimental use of MASON from Clojure
 
-These examples follow the tutorial in chapter 2 of the MASON manual v. 18. 
-I didn't necessarily complete the tutorial, but the basic elements are
-all here.
+These examples follow the tutorial in chapter 2 of the MASON manual v.
+18, through section 2.8.
 
 Clojure source code and text here is copyright 2015 by Marshall Abrams,
 and is distributed under the Gnu General Public License version 3.0 as
-specified in the file LICENSE, except where noted.
-
-The Java source code is copied from the the MASON manual v. 18, and is
-by Sean Luke.  See the MASON manual for its license.
+specified in the file LICENSE, except where noted.  The Java source code
+is copied from the the MASON manual v. 18, and is by Sean Luke.  See the
+MASON manual for its license.
 
 MASON can be found at
 [http://cs.gmu.edu/~eclab/projects/mason](http://cs.gmu.edu/~eclab/projects/mason).
@@ -36,20 +34,21 @@ bit more effort to manage the Clojure-Java interface.
 Replaces Student.java with Student.clj, i.e. reimplements the `Student`
 class in Clojure.  The `Students` and `StudentsWithUI` classes are
 still written in Java.  Student.clj is a drop-in replacement for
-Student.java.
+Student.java using Clojure's `gen-class` macro.
 
 ### 2:
 
-Starting from experiment 1, replaces Students.java with
-Students.clj, i.e. both `Student` and `Students` are written in Clojure.
-`StudentsWithUI` remains in Java.  I needed to make small
-modifications to StudentsWithUI.java to make this work.
+Starting from experiment 1, replaces Students.java with Students.clj,
+i.e. both `Student` and `Students` are written in Clojure.
+`StudentsWithUI` remains in Java.  I needed to make small modifications
+to StudentsWithUI.java as well as Student.clj to make this work.
 
 ### 3:
 
 Starting from experiment 3, replaces StudentsWithUI.java with
 StudentsWithUI.clj.  This is an all-Clojure version of the students
-app.  In this version, I used `proxy` as well as `gen-class`.
+app.  In this version I used `proxy` as well as `gen-class` to create
+Java classes in Clojure.
 
 -------------------------
 
@@ -160,3 +159,16 @@ app.  In this version, I used `proxy` as well as `gen-class`.
   specific order of compilation is sometimes needed to interleave
   Clojure and Java source files.
 
+--------------------------------------------
+
+## Some thoughts about these experiments
+
+Though I personally prefer Clojure to Java, the kind of extensive use of
+Java required in this example makes writing Clojure a lot closer to Java
+than what I'm used to.  The resulting code is more verbose than
+usual--perhaps even more verbose than the Java source code it's intended
+to replace.  Furthermore, it's necessary to keep thinking through the
+relationship between Clojure and Java.  So ... if you like Java, and
+only kind of like Clojure, this probably isn't worth the trouble.
+However, over time, I suspect that I'll develop coding patterns that
+streamline the process of writing MASON models in Clojure.
