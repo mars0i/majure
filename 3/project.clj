@@ -3,29 +3,17 @@
   :license {:name "Gnu General Public License version 3.0"
             :url "http://www.gnu.org/copyleft/gpl.html"}
   :resource-paths ["resources/mason.18.jar"
-                   "resources/hamcrest-core-1.3.jar"
-                   "resources/jcommon-1.0.23.jar"
-                   "resources/jfreechart-1.0.19-experimental.jar"
-                   "resources/jfreechart-1.0.19-swt.jar"
-                   "resources/jfreechart-1.0.19.jar"
-                   "resources/jfreesvg-2.0.jar"
-                   "resources/junit-4.11.jar"
-                   "resources/orsoncharts-1.4-eval-nofx.jar"
-                   "resources/orsonpdf-1.6-eval.jar"
-                   "resources/servlet.jar"
-                   "resources/swtgraphics2d.jar"
-                   "resources/itext-pdfa-5.5.5-javadoc.jar"
-                   "resources/itext-pdfa-5.5.5-sources.jar"
-                   "resources/itext-pdfa-5.5.5.jar"
-                   "resources/itext-xtra-5.5.5-javadoc.jar"
-                   "resources/itext-xtra-5.5.5-sources.jar"
-                   "resources/itext-xtra-5.5.5.jar"
-                   "resources/itextpdf-5.5.5-javadoc.jar"
-                   "resources/itextpdf-5.5.5-sources.jar"
-                   "resources/itextpdf-5.5.5.jar"]
+                   "resources/bsh-2.0b4.jar"
+                   "resources/itext-1.2.jar"
+                   "resources/jcommon-1.0.21.jar"
+                   "resources/jfreechart-1.0.17.jar"
+                   "resources/jmf.jar"
+                   "resources/mason.18.jar"
+                   "resources/portfolio.jar"]
   :dependencies [[org.clojure/clojure "1.6.0"]]
   :main students.StudentsWithUI ; default action with 'lein run'
   :source-paths ["src/clojure"]
   :aot [students.Student students.Students students.StudentsWithUI]
   :profiles {:withgui {:main students.StudentsWithUI} ; execute this with 'lein with-profile withgui run'
              :nogui   {:main students.Students} })      ; execute this with 'lein with-profile nogui run'
+
