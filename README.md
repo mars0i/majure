@@ -152,15 +152,15 @@ to create Java classes.
 * Using `gen-class`, any instance state has to be stored in a single
   variable specified with the `:state` keyword.  This is pretty flexible
   as long as you can access the state variable using functions.  If you
-  need a true public instance varible, you can have one (the state
+  need a true public instance variable, you can have one (the state
   variable), but that's it.  So if you need more than one data item,
   other classes have to access instance data using accessor functions.
 
-* On the other hand, multiple instance variable that are inherited from
+* On the other hand, multiple instance variables that are inherited from
   a Java class are unproblematic.
 
 * By preference, Clojure uses a one-pass compiler, which means that
-  specific order of compilation is sometimes needed to interleave
+  a specific order of compilation is sometimes needed to interleave
   Clojure and Java source files.
 
 --------------------------------------------
