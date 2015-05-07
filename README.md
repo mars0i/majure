@@ -72,7 +72,7 @@ the README.md files in the numbered subdirectories.
 
 (A small note about the common ailment *parenthephobia*: Even those who
 learned Lisp in school sometimes suffer from this due to lack of the
-following salutary information; As long as you (a) become familiar
+following salutary information: As long as you (a) become familiar
 with proper Lisp code formatting, (b) use an editor that matches
 parentheses, and (c) use an editor that will automatically reformat
 Lisp code for you, parentheses are easy to manage.  There's no need to
