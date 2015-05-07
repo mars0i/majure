@@ -60,7 +60,7 @@ StudentsWithUI.clj.  This is an all-Clojure version of the students app.
 In this version I used Clojure's `proxy` as well as `gen-class` in order
 to create Java classes.
 
-##### note:
+##### Note:
 
 Clojure is usually used with the Leiningen build/dependencies tool. To
 run this code using Leiningen, change to one of the numbered
@@ -107,21 +107,11 @@ tricks that Clojure uses to fully emulate Java classes using the
 MASON with Clojure rather than Java might not be worth the trouble.  If
 you love Clojure and would like to use it with an agent-based library,
 the experiments here might provide a starting point for using MASON with
-Clojure.  *Caveat emptor*, though.
+Clojure.  *Caveat emptor*.
 
 -------------------------
 
 ## Notes and tips
-
-* Here's a small note about the common disease *parenthephobia*,
-  prevalent among those who don't use regularly use Lisps, such as
-  Clojure.  Even those who have programmed in Lisp sometimes suffer from
-  this debilitating ailment as a result of computer science instructors
-  who failed to provide the following essential information: As long as
-  you (a) become familiar with proper Lisp code formatting, (b) use an
-  editor that matches parentheses, and (c) use an editor that will
-  automatically reformat Lisp code for you, parentheses are easy to
-  manage.  Don't be afraid of them!
 
 * I feel pretty comfortable with Clojure, although I'm not an
   expert.  However, I haven't done much Java programming in a long time,
@@ -223,3 +213,13 @@ Clojure.  *Caveat emptor*, though.
   are needed for the charting functionality introduced in section 2.8.
   These additional jar files come from libraries.tar.gz or libraries.zip,
   available on the MASON site.
+
+* Here's a small note about the common disease *parenthephobia*,
+  prevalent among those who don't use regularly use Lisps, such as
+  Clojure.  Even those who have programmed in Lisp sometimes suffer from
+  this debilitating ailment as a result of instructors
+  who failed to provide the following essential information: As long as
+  you (a) become familiar with proper Lisp code formatting, (b) use an
+  editor that matches parentheses, and (c) use an editor that will
+  automatically reformat Lisp code for you, parentheses are easy to
+  manage.  Don't be afraid of them!
