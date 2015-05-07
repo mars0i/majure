@@ -9,7 +9,7 @@
   (:import [students Student]
            [sim.field.continuous Continuous2D]
            [sim.field.network Network]
-           [sim.util Double2D])
+           [sim.util Double2D Interval])
   (:gen-class
     :name students.Students
     :extends sim.engine.SimState  ; includes signature for the start() method
@@ -18,8 +18,13 @@
     :methods [[getYard [] sim.field.continuous.Continuous2D]
               [getBuddies [] sim.field.network.Network]
               [getNumStudents [] int]
+              [setNumStudents [int] void]
               [getForceToSchoolMultiplier [] double]
-              [getRandomMultiplier [] double]]
+              [setForceToSchoolMultiplier [double] void]
+              [getRandomMultiplier [] double]
+              [setRandomMultiplier [double] void]
+              [domRandomMultiplier [] sim.util.Interval]
+              [getAgitationDistribution [] "[D"]]
     :state instanceState
     :init init-instance-state
     :main true)) 
@@ -36,12 +41,21 @@
 (defn -getYard [this] (:yard (.instanceState this)))
 (defn -getBuddies [this] (:buddies (.instanceState this)))
 (defn -getNumStudents [this] @(:num-students (.instanceState this)))
+(defn -setNumStudents [this newval] (when (> newval 0) (reset! (:num-students (.instanceState this)) newval)))
 (defn -getForceToSchoolMultiplier [this] @(:force-to-school-multiplier (.instanceState this)))
+(defn -setForceToSchoolMultiplier [this newval] (when (>= newval 0.0) (reset! (:force-to-school-multiplier (.instanceState this)) newval)))
 (defn -getRandomMultiplier [this] @(:random-multiplier (.instanceState this)))
+(defn -setRandomMultiplier [this newval] (when (>= newval 0.0) (reset! (:random-multiplier (.instanceState this)) newval)))
+(defn -domRandomMultiplier [this] (Interval. 0.0 100.0))
 
 
 (declare find-other-student add-random-edge!)
 
+(defn -getAgitationDistribution
+  [this]
+  (into-array double 
+              (map #(.getAgitation %)
+                   (.getAllNodes (.getBuddies this)))))
 
 (defn -main
   [& args]
