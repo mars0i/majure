@@ -48,14 +48,14 @@
 (defn -setRandomMultiplier [this newval] (when (>= newval 0.0) (reset! (:random-multiplier (.instanceState this)) newval)))
 (defn -domRandomMultiplier [this] (Interval. 0.0 100.0))
 
-
-(declare find-other-student add-random-edge!)
-
 (defn -getAgitationDistribution
   [this]
   (into-array double 
               (map #(.getAgitation %)
                    (.getAllNodes (.getBuddies this)))))
+
+
+(declare find-other-student add-random-edge!)
 
 (defn -main
   [& args]

@@ -9,7 +9,7 @@
     :extends sim.display.GUIState
     :main true
     :exposes {state {:get getState}}  ; make accessors for fields in superclass
-    :exposes-methods {start superStart, quit superQuit, init superInit}
+    :exposes-methods {start superStart, quit superQuit, init superInit, getInspector superGetInspector}
     :methods [[getDisplay [] sim.display.Display2D]
               [setDisplay [sim.display.Display2D] void]
               [getDisplayFrame [] javax.swing.JFrame]
@@ -38,6 +38,14 @@
 (defn -getYardPortrayal [this] (:yard-portrayal (.instanceState this)))
 (defn -getBuddiesPortrayal [this] (:buddies-portrayal (.instanceState this)))
 
+(defn getSimulationInspectedObject [this] (.state this))
+
+(defn getInspector
+  [this]
+  (let [inspector (.superGetInspector this)]
+    (.setVolatile inspector true)
+    inspector))
+
 ;;;;;;;;;;;;;;;;;;;;
 
 (defn -main
@@ -48,7 +56,6 @@
 
 
 (defn -getName [this] "Student Schoolyard Cliques") ; override method in super
-
 
 (defn -start
   [this]
