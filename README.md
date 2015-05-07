@@ -70,6 +70,14 @@ there.
 For notes and tips on the source code, see "Notes and tips" below, and
 the README.md files in the numbered subdirectories.
 
+(A small note about the common ailment *parenthephobia*: Even those who
+learned Lisp in school sometimes suffer from this due to lack of the
+following salutary information; As long as you (a) become familiar
+with proper Lisp code formatting, (b) use an editor that matches
+parentheses, and (c) use an editor that will automatically reformat
+Lisp code for you, parentheses are easy to manage.  There's no need to
+fear them.)
+
 --------------------------------------------
 
 ## Thoughts:
@@ -213,13 +221,3 @@ Clojure.  *Caveat emptor*.
   are needed for the charting functionality introduced in section 2.8.
   These additional jar files come from libraries.tar.gz or libraries.zip,
   available on the MASON site.
-
-* Here's a small note about the common disease *parenthephobia*,
-  prevalent among those who don't use regularly use Lisps, such as
-  Clojure.  Even those who have programmed in Lisp sometimes suffer from
-  this debilitating ailment as a result of instructors
-  who failed to provide the following essential information: As long as
-  you (a) become familiar with proper Lisp code formatting, (b) use an
-  editor that matches parentheses, and (c) use an editor that will
-  automatically reformat Lisp code for you, parentheses are easy to
-  manage.  Don't be afraid of them!
