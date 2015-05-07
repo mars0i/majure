@@ -70,13 +70,13 @@ there.
 For notes and tips on the source code, see "Notes and tips" below, and
 the README.md files in the numbered subdirectories.
 
-(A small note about the common ailment *parenthephobia*: Even those who
-learned Lisp in school sometimes suffer from this due to lack of the
-following salutary information: As long as you (a) become familiar
-with proper Lisp code formatting, (b) use an editor that matches
-parentheses, and (c) use an editor that will automatically reformat
-Lisp code for you, parentheses are easy to manage.  There's no need to
-fear them.)
+(A small note about the common ailment *parenthephobia*. Even those
+who learned Lisp in school sometimes suffer from this due to lack of
+innoculation with the following salutary information: As long as you
+(a) become familiar with proper Lisp code formatting, (b) use an
+editor that matches parentheses, and (c) use an editor that will
+automatically reformat Lisp code for you, parentheses are easy to
+manage.  There's no need to fear them.)
 
 --------------------------------------------
 
