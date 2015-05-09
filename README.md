@@ -39,6 +39,10 @@ source.  As it turns out, each additional experiment required additional
 Clojure-Java interoperability facilities, so following the sequence from
 version 1 to version 3 may be useful for learning about interop.
 
+### 0:
+
+All-Java version.  Copied from manual (through section 2.8) with small changes in formatting.
+
 ### 1:
 
 Replaces Student.java with Student.clj, i.e. reimplements the `Student`
@@ -59,6 +63,13 @@ Starting from experiment 3, replaces StudentsWithUI.java with
 StudentsWithUI.clj.  This is an all-Clojure version of the students app.
 In this version I used Clojure's `proxy` as well as `gen-class` in order
 to create Java classes.
+
+### 0plus, 3plus:
+
+These are like 0 and 3, respectively, but include chapter 2 code from
+after section 2.8.  It seems useful to keep the <= 2.8 sections around
+because they're simpler.
+
 
 ##### Note:
 

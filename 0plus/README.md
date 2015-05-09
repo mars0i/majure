@@ -12,7 +12,7 @@ MASON manual for its license.
 
 ----------
 
-This is version 3, but with additions to the source files to reflect
+This is version 0, but with additions to the source files to reflect
 material after section 2.8 of the manual.
 
 See README.md in the root of this git repository and the README.md files in
