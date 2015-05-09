@@ -15,7 +15,8 @@
     :extends sim.engine.SimState  ; includes signature for the start() method
     :exposes-methods {start superStart} ; alias method start() in superclass. (Don't name it 'super-start'. Use a Java name.)
 
-    ; NOTE some accessors named "git" instead of "get": JavaBean-named fields get pulled into inspector, and I want to prevent that in some cases.
+    ; NOTE some accessors named "git" instead of "get": JavaBean-named fields get pulled into inspector,
+    ; and I want to prevent that in some cases.  (Nothing to do with git the version control tool.)
     :exposes {random {:get gitRandom}, schedule {:get gitSchedule}}
     :methods [[gitYard [] sim.field.continuous.Continuous2D]
               [gitBuddies [] sim.field.network.Network]
