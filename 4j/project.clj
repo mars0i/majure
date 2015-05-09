@@ -11,13 +11,8 @@
                    "resources/mason.18.jar"
                    "resources/portfolio.jar"]
   :dependencies [[org.clojure/clojure "1.6.0"]]
-  :main students.StudentsWithUI ; default action with 'lein run'
+  :main students.StudentsWithUI
+  :source-paths ["src/clojure"]
+  :java-source-paths ["src/java"]
+)
 
-  ;; See https://github.com/technomancy/leiningen/blob/master/doc/MIXED_PROJECTS.md
-  :profiles {:comp1 {:source-paths ["src/pre/clojure"]               ; see compile.sh
-                        :aot [students.Student students.Students] } 
-             :comp2 {:source-paths ["src/clojure"]                   ; see compile.sh
-                       :java-source-paths ["src/java"]
-                       :aot [students.core] 
-                     }
-            })

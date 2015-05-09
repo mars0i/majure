@@ -47,7 +47,7 @@ public class StudentsWithUI extends GUIState {
 		Students students = (Students) state;
 
 		//yardPortrayal.setField(students.yard);
-		yardPortrayal.setField(students.getYard()); // Clojure doesn't seem to be able to make multiple public instance vars
+		yardPortrayal.setField(students.yard); // Clojure doesn't seem to be able to make multiple public instance vars
 
 		//yardPortrayal.setPortrayalForAll(new OvalPortrayal2D(new Color(200, 35, 75), 1.25)); // Marshall's experiments
 		yardPortrayal.setPortrayalForAll(new OvalPortrayal2D(){
@@ -63,7 +63,7 @@ public class StudentsWithUI extends GUIState {
 
 
 		//buddiesPortrayal.setField(new SpatialNetwork2D(students.yard, students.buddies));
-		buddiesPortrayal.setField(new SpatialNetwork2D(students.getYard(), students.getBuddies())); // Clojure doesn't seem to be able to make multiple public instance vars
+		buddiesPortrayal.setField(new SpatialNetwork2D(students.yard, students.buddies)); // Clojure doesn't seem to be able to make multiple public instance vars
 		buddiesPortrayal.setPortrayalForAll(new SimpleEdgePortrayal2D()); // original version
 		// buddiesPortrayal.setPortrayalForAll(new SimpleEdgePortrayal2D(new Color(80, 60, 150), null)); // Marshall's experiments
 
