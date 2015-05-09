@@ -38,13 +38,13 @@
 (defn -getYardPortrayal [this] (:yard-portrayal (.instanceState this)))
 (defn -getBuddiesPortrayal [this] (:buddies-portrayal (.instanceState this)))
 
-(defn getSimulationInspectedObject [this] (.state this))
+(defn -getSimulationInspectedObject [this] (.state this))
 
-(defn getInspector
+(defn -getInspector
   [this]
-  (let [inspector (.superGetInspector this)]
-    (.setVolatile inspector true)
-    inspector))
+  (let [i (.superGetInspector this)]
+    (.setVolatile i true)
+    i))
 
 ;;;;;;;;;;;;;;;;;;;;
 
