@@ -13,10 +13,12 @@
   (:gen-class
     :name students.Students
     :extends sim.engine.SimState  ; includes signature for the start() method
-    :exposes {random {:get getRandom}, schedule {:get getSchedule}}  ; make accessors for fields in superclass
     :exposes-methods {start superStart} ; alias method start() in superclass. (Don't name it 'super-start'. Use a Java name.)
-    :methods [[getYard [] sim.field.continuous.Continuous2D]
-              [getBuddies [] sim.field.network.Network]
+
+    ; NOTE some accessors named "git" instead of "get": JavaBean-named fields get pulled into inspector, and I want to prevent that in some cases.
+    :exposes {random {:get gitRandom}, schedule {:get gitSchedule}}
+    :methods [[gitYard [] sim.field.continuous.Continuous2D]
+              [gitBuddies [] sim.field.network.Network]
               [getNumStudents [] int]
               [setNumStudents [int] void]
               [getForceToSchoolMultiplier [] double]
@@ -25,6 +27,7 @@
               [setRandomMultiplier [double] void]
               [domRandomMultiplier [] sim.util.Interval]
               [getAgitationDistribution [] "[D"]]
+
     :state instanceState
     :init init-instance-state
     :main true)) 
@@ -38,8 +41,10 @@
            :force-to-school-multiplier (atom 0.01)
            :random-multiplier (atom 0.1)}])
 
-(defn -getYard [this] (:yard (.instanceState this)))
-(defn -getBuddies [this] (:buddies (.instanceState this)))
+(declare find-other-student add-random-edge!)
+
+(defn -gitYard [this] (:yard (.instanceState this)))
+(defn -gitBuddies [this] (:buddies (.instanceState this)))
 (defn -getNumStudents [this] @(:num-students (.instanceState this)))
 (defn -setNumStudents [this newval] (when (> newval 0) (reset! (:num-students (.instanceState this)) newval)))
 (defn -getForceToSchoolMultiplier [this] @(:force-to-school-multiplier (.instanceState this)))
@@ -50,12 +55,9 @@
 
 (defn -getAgitationDistribution
   [this]
-  (into-array double 
-              (map #(.getAgitation %)
-                   (.getAllNodes (.getBuddies this)))))
-
-
-(declare find-other-student add-random-edge!)
+  (double-array
+    (map #(.getAgitation %)
+         (.getAllNodes (.gitBuddies this)))))
 
 (defn -main
   [& args]
@@ -66,12 +68,12 @@
 (defn -start
   [this]
   (.superStart this)
-  (let [yard (.getYard this)
+  (let [yard (.gitYard this)
         yard-width (.getWidth yard)
         yard-height (.getHeight yard)
-        buddies (.getBuddies this)
-        random (.getRandom this)
-        schedule (.getSchedule this)
+        buddies (.gitBuddies this)
+        random (.gitRandom this)
+        schedule (.gitSchedule this)
         students (repeatedly (.getNumStudents this) #(Student.))]
     (.clear yard)
     (.clear buddies)

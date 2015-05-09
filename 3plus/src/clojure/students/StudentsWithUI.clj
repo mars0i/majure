@@ -14,8 +14,8 @@
               [setDisplay [sim.display.Display2D] void]
               [getDisplayFrame [] javax.swing.JFrame]
               [setDisplayFrame [javax.swing.JFrame] void]
-              [getYardPortrayal [] sim.portrayal.continuous.ContinuousPortrayal2D]
-              [getBuddiesPortrayal [] sim.portrayal.network.NetworkPortrayal2D]
+              [gitYardPortrayal [] sim.portrayal.continuous.ContinuousPortrayal2D]
+              [gitBuddiesPortrayal [] sim.portrayal.network.NetworkPortrayal2D]
               [setupPortrayals [] void]]
     :state instanceState         ; superclass already has a variable named "state"
     :init init-instance-state))  ; we define a MASON function named "init" below
@@ -35,8 +35,8 @@
 (defn -setDisplay [this newval] (reset! (:display (.instanceState this)) newval))
 (defn -getDisplayFrame [this] @(:display-frame (.instanceState this)))
 (defn -setDisplayFrame [this newval] (reset! (:display-frame (.instanceState this)) newval))
-(defn -getYardPortrayal [this] (:yard-portrayal (.instanceState this)))
-(defn -getBuddiesPortrayal [this] (:buddies-portrayal (.instanceState this)))
+(defn -gitYardPortrayal [this] (:yard-portrayal (.instanceState this)))
+(defn -gitBuddiesPortrayal [this] (:buddies-portrayal (.instanceState this)))
 
 (defn -getSimulationInspectedObject [this] (.state this))
 
@@ -66,11 +66,11 @@
 (defn -setupPortrayals
   [this]
   (let [students (.getState this)
-        yard-portrayal (.getYardPortrayal this)
-        buddies-portrayal (.getBuddiesPortrayal this)
+        yard-portrayal (.gitYardPortrayal this)
+        buddies-portrayal (.gitBuddiesPortrayal this)
         display (.getDisplay this)]
     (doto yard-portrayal
-      (.setField (.getYard students))
+      (.setField (.gitYard students))
       (.setPortrayalForAll (proxy [OvalPortrayal2D] []
                              (draw [student graphics info]
                                (let [agitation-shade (min 255 (int 
@@ -79,7 +79,7 @@
                                        (Color. agitation-shade 0 (- 255 agitation-shade)))
                                  (proxy-super draw student graphics info))))))
     (doto buddies-portrayal
-      (.setField (SpatialNetwork2D. (.getYard students) (.getBuddies students)))
+      (.setField (SpatialNetwork2D. (.gitYard students) (.gitBuddies students)))
       (.setPortrayalForAll (SimpleEdgePortrayal2D.)))
     (doto display
       (.reset )
@@ -102,8 +102,8 @@
     (.setDisplay this display)
     (doto display
       (.setClipping false)
-      (.attach (.getBuddiesPortrayal this) "Buddies")
-      (.attach (.getYardPortrayal this) "Yard"))
+      (.attach (.gitBuddiesPortrayal this) "Buddies")
+      (.attach (.gitYardPortrayal this) "Yard"))
     ;; set up display frame:
     (.setDisplayFrame this display-frame)
     (.registerFrame controller display-frame)
@@ -134,5 +134,5 @@
 ;      (.setTitle display-frame "Schoolyard Display")
 ;      (.registerFrame controller display-frame)
 ;      (.setVisible display-frame true)
-;      (.attach display (.getBuddiesPortrayal this) "Buddies")
-;      (.attach display (.getYardPortrayal this) "Yard"))))
+;      (.attach display (.gitBuddiesPortrayal this) "Buddies")
+;      (.attach display (.gitYardPortrayal this) "Yard"))))
