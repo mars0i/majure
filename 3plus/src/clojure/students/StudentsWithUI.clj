@@ -40,6 +40,7 @@
 
 (defn -getSimulationInspectedObject [this] (.state this))
 
+;; Override super fn to set it as volatile
 (defn -getInspector
   [this]
   (let [i (.superGetInspector this)]
