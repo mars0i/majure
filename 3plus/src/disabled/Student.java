@@ -29,6 +29,8 @@ public class Student implements Steppable {
 	double enemiesCloser = 10.0; // WAY too close to my enemies
 	public double getAgitation() {return friendsClose + enemiesCloser;}
 
+	public String toString() {return "[" + System.identityHashCode(this) + "] agitation: " + getAgitation();}
+
 	public void step(SimState state) {
 		Students students = (Students) state; // I think the cast is to allow the compiler to accept Student member refs
 

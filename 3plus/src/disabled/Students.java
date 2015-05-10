@@ -16,24 +16,18 @@ public class Students extends SimState {
 	public double randomMultiplier = 0.1;
 
 	public int getNumStudents() {return numStudents;}
-
 	public void setNumStudents(int val) {if (val > 0) numStudents = val;}
-
 	public double getForceToSchoolMultiplier() {return forceToSchoolMultiplier;}
-
 	public void setForceToSchoolMultiplier(double val) {
 		if (forceToSchoolMultiplier >= 0.0) forceToSchoolMultiplier = val;
 	}
-
 	public double getRandomMultiplier() {return randomMultiplier;}
-
 	public void setRandomMultiplier(double val) {
 		if (randomMultiplier >= 0.0) randomMultiplier = val;
 	}
-
 	public Object domRandomMultiplier() {return new sim.util.Interval(0.0, 100.0);}
-
-	public double[] getAgitationDistribution() {
+	public double[] getAgitationDistribution()
+	{
 		Bag students = buddies.getAllNodes();
 		double[] distro = new double[students.numObjs];
 		for(int i = 0; i < students.numObjs; i++)
