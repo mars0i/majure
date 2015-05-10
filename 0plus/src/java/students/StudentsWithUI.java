@@ -50,17 +50,22 @@ public class StudentsWithUI extends GUIState {
 		yardPortrayal.setField(students.yard); // Clojure doesn't seem to be able to make multiple public instance vars
 
 		//yardPortrayal.setPortrayalForAll(new OvalPortrayal2D(new Color(200, 35, 75), 1.25)); // Marshall's experiments
-		yardPortrayal.setPortrayalForAll(new OvalPortrayal2D(){
-			public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-				Student student = (Student)object;
-				// red means high agitation, i.e. a lot of forces acting on student; blue means low activation
-				int agitationShade = (int) (student.getAgitation() * 255 / 10.0);
-				if (agitationShade > 255) agitationShade = 255;
-				paint = new Color(agitationShade, 0, 255 - agitationShade);
-				super.draw(object, graphics, info);
-			}
-		});
-
+		yardPortrayal.setPortrayalForAll(
+			new MovablePortrayal2D(
+				new CircledPortrayal2D(
+					new LabelledPortrayal2D(
+						new OvalPortrayal2D(){
+							public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
+								Student student = (Student)object;
+								// red means high agitation, i.e. a lot of forces acting on student; blue means low activation
+								int agitationShade = (int) (student.getAgitation() * 255 / 10.0);
+								if (agitationShade > 255) agitationShade = 255;
+								paint = new Color(agitationShade, 0, 255 - agitationShade);
+								super.draw(object, graphics, info);
+							} // draw
+						}, // OvalPortrayal2D anon. subclass
+						5.0, null, Color.black, true), // LabeledPortrayal2D
+					0, 5.0, Color.green, true))); // CircledPortrayal2D (+ MovablePortrayal2D)
 
 		//buddiesPortrayal.setField(new SpatialNetwork2D(students.yard, students.buddies));
 		buddiesPortrayal.setField(new SpatialNetwork2D(students.yard, students.buddies)); // Clojure doesn't seem to be able to make multiple public instance vars
