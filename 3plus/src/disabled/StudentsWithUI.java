@@ -46,10 +46,8 @@ public class StudentsWithUI extends GUIState {
 	public void setupPortrayals() {
 		Students students = (Students) state;
 
-		//yardPortrayal.setField(students.yard);
-		yardPortrayal.setField(students.yard); // Clojure doesn't seem to be able to make multiple public instance vars
+		yardPortrayal.setField(students.yard);
 
-		//yardPortrayal.setPortrayalForAll(new OvalPortrayal2D(new Color(200, 35, 75), 1.25)); // Marshall's experiments
 		yardPortrayal.setPortrayalForAll(
 			new MovablePortrayal2D(
 				new CircledPortrayal2D(
