@@ -1,7 +1,7 @@
 (ns students.StudentsWithUI
   (:import [sim.portrayal.continuous ContinuousPortrayal2D]
            [sim.portrayal.network NetworkPortrayal2D SpatialNetwork2D SimpleEdgePortrayal2D]
-           [sim.portrayal.simple OvalPortrayal2D]
+           [sim.portrayal.simple OvalPortrayal2D LabelledPortrayal2D CircledPortrayal2D MovablePortrayal2D]
            [sim.display Console Display2D]
            [java.awt Color])
   (:gen-class
@@ -71,15 +71,19 @@
         buddies-portrayal (.gitBuddiesPortrayal this)
         display (.getDisplay this)
         extended-oval-portayal (proxy [OvalPortrayal2D] []
-                                  (draw [student graphics info]
-                                    (let [agitation-shade (min 255 (int 
-                                                                     (* (.getAgitation student) (/ 255 10.0))))]
-                                      (set! (.-paint this)  ; paint var in OvalPortrayal2D; 'this' is auto-captured by proxy
-                                            (Color. agitation-shade 0 (- 255 agitation-shade)))
-                                      (proxy-super draw student graphics info))))]
+                                 (draw [student graphics info]
+                                   (let [agitation-shade (min 255 (int 
+                                                                    (* (.getAgitation student) (/ 255 10.0))))]
+                                     (set! (.-paint this)  ; paint var in OvalPortrayal2D; 'this' is auto-captured by proxy
+                                           (Color. agitation-shade 0 (- 255 agitation-shade)))
+                                     (proxy-super draw student graphics info))))]
     (doto yard-portrayal 
       (.setField (.gitYard students))
-      (.setPortrayalForAll extended-oval-portayal))
+      (.setPortrayalForAll 
+        (-> extended-oval-portayal 
+          (LabelledPortrayal2D. 5.0 nil Color/black true)
+          (CircledPortrayal2D. 0 5.0 Color/green true)
+          (MovablePortrayal2D.))))
     (doto buddies-portrayal
       (.setField (SpatialNetwork2D. (.gitYard students) (.gitBuddies students)))
       (.setPortrayalForAll (SimpleEdgePortrayal2D.)))
