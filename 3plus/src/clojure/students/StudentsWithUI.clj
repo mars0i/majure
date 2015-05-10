@@ -69,16 +69,17 @@
   (let [students (.getState this)
         yard-portrayal (.gitYardPortrayal this)
         buddies-portrayal (.gitBuddiesPortrayal this)
-        display (.getDisplay this)]
-    (doto yard-portrayal
+        display (.getDisplay this)
+        extended-oval-portayal (proxy [OvalPortrayal2D] []
+                                  (draw [student graphics info]
+                                    (let [agitation-shade (min 255 (int 
+                                                                     (* (.getAgitation student) (/ 255 10.0))))]
+                                      (set! (.-paint this)  ; paint var in OvalPortrayal2D; 'this' is auto-captured by proxy
+                                            (Color. agitation-shade 0 (- 255 agitation-shade)))
+                                      (proxy-super draw student graphics info))))]
+    (doto yard-portrayal 
       (.setField (.gitYard students))
-      (.setPortrayalForAll (proxy [OvalPortrayal2D] []
-                             (draw [student graphics info]
-                               (let [agitation-shade (min 255 (int 
-                                                                (* (.getAgitation student) (/ 255 10.0))))]
-                                 (set! (.-paint this)  ; paint var in OvalPortrayal2D; 'this' is auto-captured by proxy
-                                       (Color. agitation-shade 0 (- 255 agitation-shade)))
-                                 (proxy-super draw student graphics info))))))
+      (.setPortrayalForAll extended-oval-portayal))
     (doto buddies-portrayal
       (.setField (SpatialNetwork2D. (.gitYard students) (.gitBuddies students)))
       (.setPortrayalForAll (SimpleEdgePortrayal2D.)))
