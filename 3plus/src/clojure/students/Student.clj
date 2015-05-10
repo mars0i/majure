@@ -31,6 +31,11 @@
   [this]
   @(:agitation (.state this)))
 
+;; override super
+(defn -toString
+  [this]
+  (str "[" (System/identityHashCode this) "] agitation: " (.getAgitation this)))
+
 (defn -step
   "Clojure version of step function required by interface Steppable,
   based on code on p. 27 of the Mason Manual v18.
