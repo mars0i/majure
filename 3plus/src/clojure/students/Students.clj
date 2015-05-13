@@ -89,6 +89,8 @@
         that this] ; proxy below will capture 'this', but we want it to be able to refer to this this, too.
     (when (.isTempering this)
       (.setRandomMultiplier this +tempering-initial-random-multiplier+)
+      ;; This is a hack to cause a global effect on every tick:
+      ;; We make a special "agent" whose job it is to change the class global:
       (.scheduleRepeating schedule Schedule/EPOCH 1
                           (proxy [Steppable] []
                             (step [state]
