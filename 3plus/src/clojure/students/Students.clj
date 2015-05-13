@@ -9,7 +9,8 @@
   (:import [students Student]
            [sim.field.continuous Continuous2D]
            [sim.field.network Network]
-           [sim.util Double2D Interval])
+           [sim.util Double2D Interval]
+           [sim.engine Steppable Schedule])
   (:gen-class
     :name students.Students
     :extends sim.engine.SimState  ; includes signature for the start() method
@@ -27,12 +28,18 @@
               [getRandomMultiplier [] double]
               [setRandomMultiplier [double] void]
               [domRandomMultiplier [] sim.util.Interval]
+              [isTempering [] boolean]
+              [setTempering [boolean] void]
               [getAgitationDistribution [] "[D"]]
 
     :state instanceState
     :init init-instance-state
     :main true)) 
 
+;; The corresponding Java vars for these aren't declared static, but I'm going to
+;; treat them that way since they're all uppercase, no code reassigns them.
+(def ^:const +tempering-cut-down+ 0.99)
+(def ^:const +tempering-initial-random-multiplier+ 10.0)
 
 (defn -init-instance-state
   [seed]
@@ -40,7 +47,8 @@
            :buddies (Network. false)
            :num-students (atom 50)
            :force-to-school-multiplier (atom 0.01)
-           :random-multiplier (atom 0.1)}])
+           :random-multiplier (atom 0.1)
+           :tempering (atom true)}])
 
 (declare find-other-student add-random-edge!)
 
@@ -53,6 +61,8 @@
 (defn -getRandomMultiplier [this] @(:random-multiplier (.instanceState this)))
 (defn -setRandomMultiplier [this newval] (when (>= newval 0.0) (reset! (:random-multiplier (.instanceState this)) newval)))
 (defn -domRandomMultiplier [this] (Interval. 0.0 100.0))
+(defn -isTempering [this] @(:tempering (.instanceState this)))
+(defn -setTemering [this newval] (reset! (:random-multiplier (.instanceState this)) newval))
 
 (defn -getAgitationDistribution
   [this]
@@ -75,7 +85,17 @@
         buddies (.gitBuddies this)
         random (.gitRandom this)
         schedule (.gitSchedule this)
-        students (repeatedly (.getNumStudents this) #(Student.))]
+        students (repeatedly (.getNumStudents this) #(Student.))
+        that this] ; proxy below will capture 'this', but we want it to be able to refer to this this, too.
+    (when (.isTempering this)
+      (.setRandomMultiplier this +tempering-initial-random-multiplier+)
+      (.scheduleRepeating schedule Schedule/EPOCH 1
+                          (proxy [Steppable] []
+                            (step [state]
+                              (when (.isTempering that)
+                                (.setRandomMultiplier that 
+                                                      (* (.getRandomMultiplier that)
+                                                         +tempering-cut-down+)))))))
     (.clear yard)
     (.clear buddies)
     ;; first for-loop in Students.java--create students:
