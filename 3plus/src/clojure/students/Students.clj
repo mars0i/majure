@@ -85,8 +85,7 @@
         buddies (.gitBuddies this)
         random (.gitRandom this)
         schedule (.gitSchedule this)
-        students (repeatedly (.getNumStudents this) #(Student.))
-        that this] ; proxy below will capture 'this', but we want it to be able to refer to this this, too.
+        students (repeatedly (.getNumStudents this) #(Student.))]
     (when (.isTempering this)
       (.setRandomMultiplier this +tempering-initial-random-multiplier+)
       ;; This is a hack to cause a global effect on every tick:
@@ -94,9 +93,9 @@
       (.scheduleRepeating schedule Schedule/EPOCH 1
                           (proxy [Steppable] []
                             (step [state]
-                              (when (.isTempering that)
-                                (.setRandomMultiplier that 
-                                                      (* (.getRandomMultiplier that)
+                              (when (.isTempering state)
+                                (.setRandomMultiplier state 
+                                                      (* (.getRandomMultiplier state)
                                                          +tempering-cut-down+)))))))
     (.clear yard)
     (.clear buddies)

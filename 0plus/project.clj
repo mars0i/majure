@@ -14,5 +14,5 @@
   :main students.StudentsWithUI
   :source-paths ["src/clojure"]
   :java-source-paths ["src/java"]
-)
-
+  :profiles {:withgui {:main students.StudentsWithUI} ; execute this with 'lein with-profile withgui run'
+             :nogui   {:main students.Students} })      ; execute this with 'lein with-profile nogui run'
