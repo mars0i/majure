@@ -15,7 +15,9 @@ MASON manual for its license.
 This is a version 3plus, but with an attempt to optimize the code.
 3opt2 goes deeper than 3opt by splitting Students into Students and
 AltState.  This allows more type hinting because it avoids a cyclic
-dependency.
+dependency.  However, this breaks the model reporting in the GUI, which
+assumes that the data it's looking for is in the main SimState object,
+i.e. the Students instance.
 
 Note that replacing the proxy class in `step` in Students.clj with a
 gen-class version (TemperingSteppable) doesn't seem to make a

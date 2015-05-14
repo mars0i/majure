@@ -2,8 +2,10 @@
 ;;; is distributed under the Gnu General Public License version 3.0 as
 ;;; specified in the file LICENSE.
 
-;;; Clojure version of the Students class described in the tutorial in
-;;; chapter 2 of the Mason Manual v18, by Sean Luke.
+;;; This class holds the data that was formerly in the Students class.
+;;; Splitting this out avoids a cyclic dependency that was made it impossible
+;;; to add some type hints.
+;;; (However, it interferes with the model reporting in the GUI.)
 
 ;(set! *warn-on-reflection* true)
 
