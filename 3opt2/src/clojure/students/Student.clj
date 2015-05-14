@@ -51,7 +51,7 @@
   is an instance of students.Students, which extends sim.engine.SimState."
   [^students.Student this students]
   ;; Note that this code is functional until the last step.
-  (let [^AltState alt-state (.gitAltState students)
+  (let [^AltState alt-state (.gitAltState ^students.Students students)
         ^Continuous2D yard (.gitYard alt-state)                  ; dimensions of the yard. a Continuous2D
         ^Double2D curr-loc (.getObjectLocation yard this) ; my location in the yard. a Double2D (Luke says might be more efficient to also store loc in agent)
         curr-x (.-x curr-loc)
@@ -82,7 +82,7 @@
   strength of tendency to wander.
   (See 'add a bit of randomness', p. 18 top, p. 27 bottom.)"
   [students]
-  (* ^double (.getRandomMultiplier (.gitAltState students))
+  (* ^double (.getRandomMultiplier ^AltState (.gitAltState ^students.Students students))
      (- (.. ^sim.engine.SimState students random (nextDouble)) 0.5))) ; random is from superclass of Students
 
 

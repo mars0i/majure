@@ -8,7 +8,7 @@
 ;(set! *warn-on-reflection* true)
 
 (ns students.Students
-  (:import [students Student AltState TemperingSteppable]
+  (:import [students Student AltState] ; TemperingSteppable]
            [sim.field.continuous Continuous2D]
            [sim.field.network Network]
            [sim.util Double2D Interval]

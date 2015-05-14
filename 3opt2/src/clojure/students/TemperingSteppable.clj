@@ -16,7 +16,7 @@
 
 (defn -step
   [^students.TemperingSteppable this state]
-  (let [^AltState alt-state (.gitAltState state)]
+  (let [^AltState alt-state (.gitAltState ^students.Students state)]
     (when (.isTempering alt-state)
       (.setRandomMultiplier alt-state (* (.getRandomMultiplier alt-state)
                                          +tempering-cut-down+)))))
