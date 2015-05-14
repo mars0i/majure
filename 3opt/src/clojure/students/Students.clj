@@ -40,8 +40,9 @@
 
 ;; The corresponding Java vars for these aren't declared static, but I'm going to
 ;; treat them that way since they're all uppercase, no code reassigns them.
-(def ^:const +tempering-cut-down+ 0.99)
 (def ^:const +tempering-initial-random-multiplier+ 10.0)
+
+(def ^:const +tempering-cut-down+ 0.99) ; note during experimentation also defined in another file
 
 (defn -init-instance-state
   [seed]
@@ -54,17 +55,18 @@
 
 (declare find-other-student add-random-edge!)
 
-(defn -gitYard [this] (:yard (.instanceState this)))
-(defn -gitBuddies [this] (:buddies (.instanceState this)))
-(defn -getNumStudents [this] @(:num-students (.instanceState this)))
-(defn -setNumStudents [this newval] (when (> newval 0) (reset! (:num-students (.instanceState this)) newval)))
-(defn -getForceToSchoolMultiplier [this] @(:force-to-school-multiplier (.instanceState this)))
-(defn -setForceToSchoolMultiplier [this newval] (when (>= newval 0.0) (reset! (:force-to-school-multiplier (.instanceState this)) newval)))
-(defn -getRandomMultiplier [this] @(:random-multiplier (.instanceState this)))
-(defn -setRandomMultiplier [this newval] (when (>= newval 0.0) (reset! (:random-multiplier (.instanceState this)) newval)))
+;; You'd think that type hints wouldn't help here, since they're in the signature above:
+(defn -gitYard [this] (:yard (.instanceState ^students.Students this)))
+(defn -gitBuddies [this] (:buddies (.instanceState ^students.Students this)))
+(defn -getNumStudents [this] @(:num-students (.instanceState ^students.Students this)))
+(defn -setNumStudents [this newval] (when (> newval 0) (reset! (:num-students (.instanceState ^students.Students this)) newval)))
+(defn -getForceToSchoolMultiplier [this] @(:force-to-school-multiplier (.instanceState ^students.Students this)))
+(defn -setForceToSchoolMultiplier [this newval] (when (>= newval 0.0) (reset! (:force-to-school-multiplier (.instanceState ^students.Students this)) newval)))
+(defn -getRandomMultiplier [this] @(:random-multiplier (.instanceState ^students.Students this)))
+(defn -setRandomMultiplier [this newval] (when (>= newval 0.0) (reset! (:random-multiplier (.instanceState ^students.Students this)) newval)))
 (defn -domRandomMultiplier [this] (Interval. 0.0 100.0))
-(defn -isTempering [this] @(:tempering (.instanceState this)))
-(defn -setTempering [this newval] (reset! (:random-multiplier (.instanceState this)) newval))
+(defn -isTempering [this] @(:tempering (.instanceState ^students.Students this)))
+(defn -setTempering [this newval] (reset! (:random-multiplier (.instanceState ^students.Students this)) newval))
 
 (defn -getAgitationDistribution
   [this]
@@ -87,18 +89,21 @@
         buddies (.gitBuddies this)
         random (.gitRandom this)
         schedule (.gitSchedule this)
-        students (repeatedly (.getNumStudents this) #(Student.))]
+        students (repeatedly (.getNumStudents this) #(Student.))
+        that this] ; proxy below will capture 'this', but we want it to be able to refer to this this, too.
     (when (.isTempering this)
       (.setRandomMultiplier this +tempering-initial-random-multiplier+)
       ;; This is a hack to cause a global effect on every tick:
       ;; We make a special "agent" whose job it is to change the class global:
-      (.scheduleRepeating schedule Schedule/EPOCH 1
-                          (proxy [Steppable] []
-                            (step [state]
-                              (when (.isTempering state)
-                                (.setRandomMultiplier state 
-                                                      (* (.getRandomMultiplier state)
-                                                         +tempering-cut-down+)))))))
+      (.scheduleRepeating schedule Schedule/EPOCH 1 
+                          (students.TemperingSteppable.) ; gen-class version
+                          ;(proxy [Steppable] []           ; proxy version
+                          ;  (step [^students.Students state]
+                          ;    (when (.isTempering state)
+                          ;      (.setRandomMultiplier state 
+                          ;                            (* (.getRandomMultiplier state)
+                          ;                               +tempering-cut-down+)))))
+                          ))
     (.clear yard)
     (.clear buddies)
     ;; first for-loop in Students.java--create students:
