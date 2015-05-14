@@ -5,6 +5,8 @@
 ;;; Clojure version of the Students class described in the tutorial in
 ;;; chapter 2 of the Mason Manual v18, by Sean Luke.
 
+(set! *warn-on-reflection* true)
+
 (ns students.Students
   (:import [students Student]
            [sim.field.continuous Continuous2D]
@@ -62,7 +64,7 @@
 (defn -setRandomMultiplier [this newval] (when (>= newval 0.0) (reset! (:random-multiplier (.instanceState this)) newval)))
 (defn -domRandomMultiplier [this] (Interval. 0.0 100.0))
 (defn -isTempering [this] @(:tempering (.instanceState this)))
-(defn -setTemering [this newval] (reset! (:random-multiplier (.instanceState this)) newval))
+(defn -setTempering [this newval] (reset! (:random-multiplier (.instanceState this)) newval))
 
 (defn -getAgitationDistribution
   [this]
