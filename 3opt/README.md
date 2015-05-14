@@ -1,4 +1,4 @@
-MASON tutorial: Replacing Java with Clojure, v. 3plus
+MASON tutorial: Replacing Java with Clojure, v. 3opt
 ====
 
 **See README.md in the root of this git repository for a general overview
@@ -12,11 +12,12 @@ MASON manual for its license.
 
 ----------
 
-This is version 3plus, but with an attempt to optimize the code.
-material after section 2.8 of the manual.
+This is like version 3plus, but with an attempt to optimize the code,
+mainly by adding type hints.
 
-See README.md in the root of this git repository and the README.md files in
-1/ and 2/ for additional information.
+Note that replacing the proxy class in `step` in Students.clj with a
+gen-class version (TemperingSteppable) doesn't seem to make a
+difference in speed, and actually introduces a new cyclic dependency.
 
 ----------
 
