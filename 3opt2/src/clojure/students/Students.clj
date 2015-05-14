@@ -8,7 +8,7 @@
 ;(set! *warn-on-reflection* true)
 
 (ns students.Students
-  (:import [students Student]
+  (:import [students Student AltState TemperingSteppable]
            [sim.field.continuous Continuous2D]
            [sim.field.network Network]
            [sim.util Double2D Interval]
@@ -17,23 +17,10 @@
     :name students.Students
     :extends sim.engine.SimState  ; includes signature for the start() method
     :exposes-methods {start superStart} ; alias method start() in superclass. (Don't name it 'super-start'. Use a Java name.)
-
     ; NOTE some accessors named "git" instead of "get": JavaBean-named fields get pulled into inspector,
     ; and I want to prevent that in some cases.  (Nothing to do with git the version control tool.)
     :exposes {random {:get gitRandom}, schedule {:get gitSchedule}}
-    :methods [[gitYard [] sim.field.continuous.Continuous2D]
-              [gitBuddies [] sim.field.network.Network]
-              [getNumStudents [] int]
-              [setNumStudents [int] void]
-              [getForceToSchoolMultiplier [] double]
-              [setForceToSchoolMultiplier [double] void]
-              [getRandomMultiplier [] double]
-              [setRandomMultiplier [double] void]
-              [domRandomMultiplier [] sim.util.Interval]
-              [isTempering [] boolean]
-              [setTempering [boolean] void]
-              [getAgitationDistribution [] "[D"]]
-
+    :methods [[gitAltState [] students.AltState]]
     :state instanceState
     :init init-instance-state
     :main true)) 
@@ -46,63 +33,43 @@
 
 (defn -init-instance-state
   [seed]
-  [[seed] {:yard (Continuous2D. 1.0 100 100)
-           :buddies (Network. false)
-           :num-students (atom 50)
-           :force-to-school-multiplier (atom 0.01)
-           :random-multiplier (atom 0.1)
-           :tempering (atom true)}])
+  [[seed] {:alt-state (AltState.)}])
 
 (declare find-other-student add-random-edge!)
 
 ;; You'd think that type hints wouldn't help here, since they're in the signature above:
-(defn -gitYard [this] (:yard (.instanceState ^students.Students this)))
-(defn -gitBuddies [this] (:buddies (.instanceState ^students.Students this)))
-(defn -getNumStudents [this] @(:num-students (.instanceState ^students.Students this)))
-(defn -setNumStudents [this newval] (when (> newval 0) (reset! (:num-students (.instanceState ^students.Students this)) newval)))
-(defn -getForceToSchoolMultiplier [this] @(:force-to-school-multiplier (.instanceState ^students.Students this)))
-(defn -setForceToSchoolMultiplier [this newval] (when (>= newval 0.0) (reset! (:force-to-school-multiplier (.instanceState ^students.Students this)) newval)))
-(defn -getRandomMultiplier [this] @(:random-multiplier (.instanceState ^students.Students this)))
-(defn -setRandomMultiplier [this newval] (when (>= newval 0.0) (reset! (:random-multiplier (.instanceState ^students.Students this)) newval)))
-(defn -domRandomMultiplier [this] (Interval. 0.0 100.0))
-(defn -isTempering [this] @(:tempering (.instanceState ^students.Students this)))
-(defn -setTempering [this newval] (reset! (:random-multiplier (.instanceState ^students.Students this)) newval))
-
-(defn -getAgitationDistribution
-  [this]
-  (double-array
-    (map #(.getAgitation %)
-         (.getAllNodes (.gitBuddies this)))))
+(defn -gitAltState ^AltState [this] (:alt-state (.instanceState ^students.Students this)))
 
 (defn -main
   [& args]
   (sim.engine.SimState/doLoop students.Students (into-array String args))
   (System/exit 0))
 
-
 (defn -start
   [this]
   (.superStart this)
-  (let [yard (.gitYard this)
+  (let [alt-state (.gitAltState this)
+        yard (.gitYard alt-state)
         yard-width (.getWidth yard)
         yard-height (.getHeight yard)
-        buddies (.gitBuddies this)
+        buddies (.gitBuddies alt-state)
         random (.gitRandom this)
         schedule (.gitSchedule this)
-        students (repeatedly (.getNumStudents this) #(Student.))
+        students (repeatedly (.getNumStudents alt-state) #(Student.))
         that this] ; proxy below will capture 'this', but we want it to be able to refer to this this, too.
-    (when (.isTempering this)
-      (.setRandomMultiplier this +tempering-initial-random-multiplier+)
+    (when (.isTempering alt-state)
+      (.setRandomMultiplier alt-state +tempering-initial-random-multiplier+)
       ;; This is a hack to cause a global effect on every tick:
       ;; We make a special "agent" whose job it is to change the class global:
       (.scheduleRepeating schedule Schedule/EPOCH 1 
-                          (students.TemperingSteppable.) ; gen-class version
-                          ;(proxy [Steppable] []           ; proxy version
-                          ;  (step [^students.Students state]
-                          ;    (when (.isTempering state)
-                          ;      (.setRandomMultiplier state 
-                          ;                            (* (.getRandomMultiplier state)
-                          ;                               +tempering-cut-down+)))))
+                          ;(TemperingSteppable.) ; gen-class version
+                          (proxy [Steppable] []           ; proxy version
+                            (step [^students.Students state]
+                              (let [^AltState alt-state (.gitAltState state)]
+                                (when (.isTempering alt-state)
+                                  (.setRandomMultiplier alt-state 
+                                                        (* (.getRandomMultiplier alt-state)
+                                                           +tempering-cut-down+))))))
                           ))
     (.clear yard)
     (.clear buddies)

@@ -8,7 +8,8 @@
 ;(set! *warn-on-reflection* true)
 
 (ns students.Student
-  (:import [sim.util Double2D MutableDouble2D]
+  (:import [students AltState]
+           [sim.util Double2D MutableDouble2D]
            [sim.field.continuous Continuous2D]
            [sim.field.network Network Edge])
   (:gen-class
@@ -50,7 +51,8 @@
   is an instance of students.Students, which extends sim.engine.SimState."
   [^students.Student this students]
   ;; Note that this code is functional until the last step.
-  (let [^Continuous2D yard (.gitYard students)                  ; dimensions of the yard. a Continuous2D
+  (let [^AltState alt-state (.gitAltState students)
+        ^Continuous2D yard (.gitYard alt-state)                  ; dimensions of the yard. a Continuous2D
         ^Double2D curr-loc (.getObjectLocation yard this) ; my location in the yard. a Double2D (Luke says might be more efficient to also store loc in agent)
         curr-x (.-x curr-loc)
         curr-y (.-y curr-loc)
@@ -58,13 +60,13 @@
         indiv-force-x (+ (wander-force-coord students)        ; 'add a bit of randomness' (p. 18 top,  p. 27 bottom)
                          (teacher-force-coord curr-x          ; 'add in a vector to the "teacher"' (p. 18 top,  p. 27 bottom)
                                               (.-width yard)
-                                              students)) 
+                                              alt-state)) 
         indiv-force-y (+ (wander-force-coord students)        ; see previous note
                          (teacher-force-coord curr-y          ; see previous note
                                               (.-height yard)
-                                              students))
+                                              alt-state))
         ;; buddy forces from attraction and repulsion to/from other students:
-        [buddy-force-x buddy-force-y agitation] (collect-buddy-forces students this)  ; 'Go through my buddies and determine how much I want to be near them' (for-loop, p. 27 middle)
+        [buddy-force-x buddy-force-y agitation] (collect-buddy-forces alt-state this)  ; 'Go through my buddies and determine how much I want to be near them' (for-loop, p. 27 middle)
         state (.state this)]
 
     ;; Now finish with all of the imperative code in one place:
@@ -74,6 +76,16 @@
                                    (+ curr-y indiv-force-y buddy-force-y)))))
 
 
+(defn ^double wander-force-coord
+  "Returns a student's random wandering force in one dimension (x or y).
+  students is passed to get our RNG and a global multiplier determining
+  strength of tendency to wander.
+  (See 'add a bit of randomness', p. 18 top, p. 27 bottom.)"
+  [students]
+  (* ^double (.getRandomMultiplier (.gitAltState students))
+     (- (.. ^sim.engine.SimState students random (nextDouble)) 0.5))) ; random is from superclass of Students
+
+
 (defn ^double teacher-force-coord
   "Returns a student's force toward center of yard in one
   dimension (x or y).  coord is student's previous x or y coordinate.
@@ -81,18 +93,9 @@
   its center.  students is passed to get the global multiplier determining
   strength of tendency toward center.
   (See 'add in a vector to the \"teacher\"', p. 18 top, p. 27 bottom.)"
-  [^double coord ^double yard-dim students]
-  (* ^double (.getForceToSchoolMultiplier students)
+  [^double coord ^double yard-dim ^AltState alt-state]
+  (* ^double (.getForceToSchoolMultiplier alt-state)
      (- (* 0.5 yard-dim) coord)))
-
-(defn ^double wander-force-coord
-  "Returns a student's random wandering force in one dimension (x or y).
-  students is passed to get our RNG and a global multiplier determining
-  strength of tendency to wander.
-  (See 'add a bit of randomness', p. 18 top, p. 27 bottom.)"
-  [students]
-  (* ^double (.getRandomMultiplier students)
-     (- (.. ^sim.engine.SimState students random (nextDouble)) 0.5))) ; random is from superclass of Students
 
 
 (defn collect-buddy-forces
@@ -101,10 +104,10 @@
   SimState object for this simulation.  me is the current Student.
   (In the MASON manual v. 18, see 'Go through my buddies and determine how much
   I want to be near them': for-loop, p. 27 middle.)"
-  [students ^students.Student me]
-  (reduce (partial buddy-force-add (.gitYard students) me)
+  [^AltState alt-state ^students.Student me]
+  (reduce (partial buddy-force-add (.gitYard alt-state) me)
           [0.0 0.0 0.0]   ; initial sums of x and y components, length
-          ^Collection (.getEdges ^Network (.gitBuddies students) me nil))) ; don't use .. since it doesn't seem to allow proper type hinting
+          ^Collection (.getEdges ^Network (.gitBuddies alt-state) me nil))) ; don't use .. since it doesn't seem to allow proper type hinting
 
 
 ;; I explored separating out the reduce-oriented summing aspect of this function

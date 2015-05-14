@@ -74,6 +74,7 @@
 (defn -setupPortrayals
   [this]
   (let [students (.getState this)
+        alt-state (.gitAltState students)
         yard-portrayal (.gitYardPortrayal this)
         buddies-portrayal (.gitBuddiesPortrayal this)
         display (.getDisplay this)
@@ -85,14 +86,14 @@
                                            (Color. agitation-shade 0 (- 255 agitation-shade)))
                                      (proxy-super draw student graphics info))))]
     (doto yard-portrayal 
-      (.setField (.gitYard students))
+      (.setField (.gitYard alt-state))
       (.setPortrayalForAll 
         (-> extended-oval-portayal 
           (LabelledPortrayal2D. 5.0 nil Color/black true)
           (CircledPortrayal2D. 0 5.0 Color/green true)
           (MovablePortrayal2D.))))
     (doto buddies-portrayal
-      (.setField (SpatialNetwork2D. (.gitYard students) (.gitBuddies students)))
+      (.setField (SpatialNetwork2D. (.gitYard alt-state) (.gitBuddies alt-state)))
       (.setPortrayalForAll (SimpleEdgePortrayal2D.)))
     (doto display
       (.reset )
@@ -133,19 +134,3 @@
   (doto this
     (.setDisplayFrame nil)
     (.setDisplay nil)))
-
-
-;; Earlier (working) version with order of operations following original Java code:
-;(defn -init
-;  [this controller] ; controller is called c in Java version
-;  (.superInit this controller)
-;  (let [display (Display2D. 600 600 this)]
-;    (.setDisplay this display)
-;    (.setClipping display false)
-;    (let [display-frame (.createFrame display)] ; can this be moved before setClipping?
-;      (.setDisplayFrame this display-frame)
-;      (.setTitle display-frame "Schoolyard Display")
-;      (.registerFrame controller display-frame)
-;      (.setVisible display-frame true)
-;      (.attach display (.gitBuddiesPortrayal this) "Buddies")
-;      (.attach display (.gitYardPortrayal this) "Yard"))))

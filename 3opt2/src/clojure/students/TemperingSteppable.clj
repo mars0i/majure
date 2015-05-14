@@ -6,7 +6,7 @@
 
 (ns students.TemperingSteppable
   (:import [sim.engine Steppable]
-           [students Students])
+           [students AltState])
   (:gen-class
     :name students.TemperingSteppable
     :implements [sim.engine.Steppable]))
@@ -15,7 +15,8 @@
 (def ^:const +tempering-cut-down+ 0.99) ; note during experimentation also defined in another file
 
 (defn -step
-  [^students.TemperingSteppable this ^Students state]
-  (when (.isTempering state)
-    (.setRandomMultiplier state (* (.getRandomMultiplier state)
-                                   +tempering-cut-down+))))
+  [^students.TemperingSteppable this state]
+  (let [^AltState alt-state (.gitAltState state)]
+    (when (.isTempering alt-state)
+      (.setRandomMultiplier alt-state (* (.getRandomMultiplier alt-state)
+                                         +tempering-cut-down+)))))

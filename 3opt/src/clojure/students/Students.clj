@@ -96,13 +96,13 @@
       ;; This is a hack to cause a global effect on every tick:
       ;; We make a special "agent" whose job it is to change the class global:
       (.scheduleRepeating schedule Schedule/EPOCH 1 
-                          (students.TemperingSteppable.) ; gen-class version
-                          ;(proxy [Steppable] []           ; proxy version
-                          ;  (step [^students.Students state]
-                          ;    (when (.isTempering state)
-                          ;      (.setRandomMultiplier state 
-                          ;                            (* (.getRandomMultiplier state)
-                          ;                               +tempering-cut-down+)))))
+                          ;(students.TemperingSteppable.) ; gen-class version
+                          (proxy [Steppable] []           ; proxy version
+                            (step [^students.Students state]
+                              (when (.isTempering state)
+                                (.setRandomMultiplier state 
+                                                      (* (.getRandomMultiplier state)
+                                                         +tempering-cut-down+)))))
                           ))
     (.clear yard)
     (.clear buddies)
