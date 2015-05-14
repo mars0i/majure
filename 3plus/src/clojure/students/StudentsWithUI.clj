@@ -1,3 +1,10 @@
+;;; This software is copyright 2015 by Marshall Abrams, and
+;;; is distributed under the Gnu General Public License version 3.0 as
+;;; specified in the file LICENSE.
+
+;;; Clojure version of the Students class described in the tutorial in
+;;; chapter 2 of the Mason Manual v18, by Sean Luke.
+
 (ns students.StudentsWithUI
   (:import [sim.portrayal.continuous ContinuousPortrayal2D]
            [sim.portrayal.network NetworkPortrayal2D SpatialNetwork2D SimpleEdgePortrayal2D]
