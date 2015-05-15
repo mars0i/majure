@@ -50,8 +50,6 @@
        :random-multiplier (atom 0.1)
        :tempering (atom true)}])
 
-(declare find-other-student add-random-edge!)
-
 ;; You'd think that type hints wouldn't help here, since they're in the signature above:
 (defn -gitYard [this] (:yard (.instanceState ^students.AltState this)))
 (defn -gitBuddies [this] (:buddies (.instanceState ^students.AltState this)))

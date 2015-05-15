@@ -49,19 +49,20 @@
   an instance of Student; it will be passed implicity when called from
   Java, should be passed explicitly from Clojure code.  Second argument
   is an instance of students.Students, which extends sim.engine.SimState."
-  [^students.Student this students]
+  [^students.Student this ^students.Students students]
   ;; Note that this code is functional until the last step.
-  (let [^AltState alt-state (.gitAltState ^students.Students students)
+  (let [^AltState alt-state (.gitAltState students)
+        rng (.random students)
         ^Continuous2D yard (.gitYard alt-state)                  ; dimensions of the yard. a Continuous2D
         ^Double2D curr-loc (.getObjectLocation yard this) ; my location in the yard. a Double2D (Luke says might be more efficient to also store loc in agent)
         curr-x (.-x curr-loc)
         curr-y (.-y curr-loc)
         ;; individual forces: student's internal tendencies without regard to buddies:
-        indiv-force-x (+ (wander-force-coord students)        ; 'add a bit of randomness' (p. 18 top,  p. 27 bottom)
+        indiv-force-x (+ (wander-force-coord alt-state (.nextDouble rng)) ; 'add a bit of randomness' (p. 18 top,  p. 27 bottom)
                          (teacher-force-coord curr-x          ; 'add in a vector to the "teacher"' (p. 18 top,  p. 27 bottom)
                                               (.-width yard)
                                               alt-state)) 
-        indiv-force-y (+ (wander-force-coord students)        ; see previous note
+        indiv-force-y (+ (wander-force-coord alt-state (.nextDouble rng))        ; see previous note
                          (teacher-force-coord curr-y          ; see previous note
                                               (.-height yard)
                                               alt-state))
@@ -78,13 +79,9 @@
 
 (defn ^double wander-force-coord
   "Returns a student's random wandering force in one dimension (x or y).
-  students is passed to get our RNG and a global multiplier determining
-  strength of tendency to wander.
   (See 'add a bit of randomness', p. 18 top, p. 27 bottom.)"
-  [students]
-  (* ^double (.getRandomMultiplier ^AltState (.gitAltState ^students.Students students))
-     (- (.. ^sim.engine.SimState students random (nextDouble)) 0.5))) ; random is from superclass of Students
-
+  [^AltState alt-state ^double rand-num]
+  (* ^double (.getRandomMultiplier alt-state) (- rand-num 0.5)))
 
 (defn ^double teacher-force-coord
   "Returns a student's force toward center of yard in one
@@ -94,7 +91,7 @@
   strength of tendency toward center.
   (See 'add in a vector to the \"teacher\"', p. 18 top, p. 27 bottom.)"
   [^double coord ^double yard-dim ^AltState alt-state]
-  (* ^double (.getForceToSchoolMultiplier alt-state)
+  (* (.getForceToSchoolMultiplier alt-state)
      (- (* 0.5 yard-dim) coord)))
 
 
@@ -126,7 +123,7 @@
   representing the force (to another student) that we are adding in this time.
   (In the MASON manual v. 18, see 'Go through my buddies and determine how much
   I want to be near them': for-loop, p. 27 middle.)"
-  [^Continuous2D yard ^students.Student me [acc-x acc-y acc-agit] ^Edge edge]
+  [^Continuous2D yard ^students.Student me [^double acc-x ^double acc-y ^double acc-agit] ^Edge edge]
   (let [buddiness (.info edge)
         my-loc (.getObjectLocation yard me)
         buddy-loc (.getObjectLocation yard (.getOtherNode edge me)) ; buddy = him in java
@@ -134,12 +131,12 @@
                                       (* buddiness (- (.-y buddy-loc) (.-y my-loc))))
         length (.length forceVector)]
     ;; Modify a forceVector to scale vector coords if necessary:
-    (if (>= buddiness 0)
+    (if (>= buddiness 0.0)
       (when (> length +max-force+) ; the further I am from her the more I want to go to her
         (.resize forceVector +max-force+))
       (if (> length +max-force+) ; the nearer I am to her the more I want to get away from her, up to a limit
         (.resize forceVector 0.0)
-        (when (> length 0)
+        (when (> length 0.0)
           (.resize forceVector (- +max-force+ length)))))
     ;; We're done using forceVector to resize vector; return a Clojure data structure:
     ;; We add resized vector data to what's been accumulated so far by reduce.

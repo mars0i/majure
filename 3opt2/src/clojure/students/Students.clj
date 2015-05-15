@@ -73,10 +73,10 @@
                           ))
     (.clear yard)
     (.clear buddies)
-    ;; first for-loop in Students.java--create students:
+    ;; first for-loop in Students.java--create students, add them to buddies:
     (doseq [student students
-            :let[x-loc (+ (* 0.5 yard-width)  (.nextDouble random) -0.5)
-                 y-loc (+ (* 0.5 yard-height) (.nextDouble random) -0.5)]]
+            :let [x-loc (+ (* 0.5 yard-width)  (.nextDouble random) -0.5)
+                  y-loc (+ (* 0.5 yard-height) (.nextDouble random) -0.5)]]
       (.setObjectLocation yard student (Double2D. x-loc y-loc))
       (.addNode buddies student)
       (.scheduleRepeating schedule student))
