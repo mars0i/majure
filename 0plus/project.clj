@@ -11,6 +11,7 @@
                    "resources/mason.18.jar"
                    "resources/portfolio.jar"]
   :dependencies [[org.clojure/clojure "1.6.0"]]
+  ;:dependencies [[org.clojure/clojure "1.7.0-beta3"]]
   :main students.StudentsWithUI
   :source-paths ["src/clojure"]
   :java-source-paths ["src/java"]
