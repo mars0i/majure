@@ -8,6 +8,7 @@
 ;;; (However, it interferes with the model reporting in the GUI.)
 
 ;(set! *warn-on-reflection* true)
+;(set! *unchecked-math* true)
 
 (ns students.AltState
   (:import [students AltState]

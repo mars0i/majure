@@ -6,6 +6,7 @@
 ;;; chapter 2 of the Mason Manual v18, by Sean Luke.
 
 ;(set! *warn-on-reflection* true)
+;(set! *unchecked-math* true)
 
 (ns students.Student
   (:import [students AltState]
