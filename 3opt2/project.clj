@@ -14,7 +14,13 @@
   :dependencies [[org.clojure/clojure "1.7.0-beta3"]]
   :main students.StudentsWithUI ; default action with 'lein run'
   :source-paths ["src/clojure"]
+  :jvm-opts ["-Xmx2g"]
   :aot [students.AltState students.Student students.Students students.TemperingSteppable students.StudentsWithUI]
   :profiles {:withgui {:main students.StudentsWithUI} ; execute this with 'lein with-profile withgui run'
              :nogui   {:main students.Students} })      ; execute this with 'lein with-profile nogui run'
 
+  ;:jvm-opts ["-Xmx2g"]
+  ; jvm-opts ["-Xms1g"]
+  ;:jvm-opts ["-Dclojure.compiler.disable-locals-clearing=true"] ; ???: FASTER, and may be useful to debuggers. see https://groups.google.com/forum/#!msg/clojure/8a1FjNvh-ZQ/DzqDz4oKMj0J
+  ;:jvm-opts ["-XX:+TieredCompilation" "-XX:TieredStopAtLevel=1"] ; setting this to 1 will produce faster startup but will disable extra optimization of long-running processes
+  ;:jvm-opts ["-XX:TieredStopAtLevel=4"] ; more optimization (?)
