@@ -46,12 +46,12 @@
   (sim.engine.SimState/doLoop students.Students (into-array String args))
   (System/exit 0))
 
-;; NASTY HACK
+;; NASTY HACK.  See:
+;; http://stackoverflow.com/questions/30251692/how-to-aot-compile-gen-class-classes-with-cyclic-type-hints
+;; http://stackoverflow.com/questions/20053260/forward-declaring-a-var-from-another-namespace-in-clojure
 (ns students.Student)
 (declare new-student)
 (ns students.Students)
-
-(def yo (student.Student/new-student))
 
 (defn -start
   [this]
@@ -63,7 +63,6 @@
         buddies (.gitBuddies alt-state)
         random (.gitRandom this)
         schedule (.gitSchedule this)
-        students (repeatedly (.getNumStudents alt-state) nil)
         that this] ; proxy below will capture 'this', but we want it to be able to refer to this this, too.
     (when (.isTempering alt-state)
       (.setRandomMultiplier alt-state +tempering-initial-random-multiplier+)
@@ -81,17 +80,20 @@
                           ))
     (.clear yard)
     (.clear buddies)
-    ;; first for-loop in Students.java--create students, add them to buddies:
-    (doseq [student students
-            :let [x-loc (+ (* 0.5 yard-width)  (.nextDouble random) -0.5)
-                  y-loc (+ (* 0.5 yard-height) (.nextDouble random) -0.5)]]
-      (.setObjectLocation yard student (Double2D. x-loc y-loc))
-      (.addNode buddies student)
-      (.scheduleRepeating schedule student))
-    ;; second for-loop in Students.java--create links between students:
-    (doseq [student students]
-      (add-random-edge! buddies random  1.0 students student)
-      (add-random-edge! buddies random -1.0 students student))))
+    (let [students (repeatedly (.getNumStudents alt-state) #(students.Student/Student.))
+          ;students (repeatedly (.getNumStudents alt-state) students.Student/new-student
+          ]
+      ;; first for-loop in Students.java--create students, add them to buddies:
+      (doseq [student students
+              :let [x-loc (+ (* 0.5 yard-width)  (.nextDouble random) -0.5)
+                    y-loc (+ (* 0.5 yard-height) (.nextDouble random) -0.5)]]
+        (.setObjectLocation yard student (Double2D. x-loc y-loc))
+        (.addNode buddies student)
+        (.scheduleRepeating schedule student))
+      ;; second for-loop in Students.java--create links between students:
+      (doseq [student students]
+        (add-random-edge! buddies random  1.0 students student)
+        (add-random-edge! buddies random -1.0 students student)))))
 
 
 (defn add-random-edge!
