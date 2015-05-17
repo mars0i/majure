@@ -15,7 +15,7 @@
   :main students.StudentsWithUI ; default action with 'lein run'
   :source-paths ["src/clojure"]
   :jvm-opts ["-Xmx2g"]
-  :aot [students.AltState students.Student students.Students students.TemperingSteppable students.StudentsWithUI]
+  :aot [students.AltState students.Students students.Student students.TemperingSteppable students.StudentsWithUI]
   :profiles {:withgui {:main students.StudentsWithUI} ; execute this with 'lein with-profile withgui run'
              :nogui   {:main students.Students} })      ; execute this with 'lein with-profile nogui run'
 

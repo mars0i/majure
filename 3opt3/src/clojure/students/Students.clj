@@ -9,7 +9,7 @@
 ;(set! *unchecked-math* true)
 
 (ns students.Students
-  (:import [students Student AltState] ; TemperingSteppable]
+  (:import [students AltState] ; TemperingSteppable]
            [sim.field.continuous Continuous2D]
            [sim.field.network Network]
            [sim.util Double2D Interval]
@@ -46,6 +46,13 @@
   (sim.engine.SimState/doLoop students.Students (into-array String args))
   (System/exit 0))
 
+;; NASTY HACK
+(ns students.Student)
+(declare new-student)
+(ns students.Students)
+
+(def yo (student.Student/new-student))
+
 (defn -start
   [this]
   (.superStart this)
@@ -56,7 +63,7 @@
         buddies (.gitBuddies alt-state)
         random (.gitRandom this)
         schedule (.gitSchedule this)
-        students (repeatedly (.getNumStudents alt-state) #(Student.))
+        students (repeatedly (.getNumStudents alt-state) nil)
         that this] ; proxy below will capture 'this', but we want it to be able to refer to this this, too.
     (when (.isTempering alt-state)
       (.setRandomMultiplier alt-state +tempering-initial-random-multiplier+)
