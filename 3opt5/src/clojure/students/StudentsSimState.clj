@@ -44,8 +44,9 @@
 
 (defn -main
   [& args]
-  (sim.engine.SimState/doLoop students.Students (into-array String args))
-  (System/exit 0))
+  (let [sim-state students.StudentSimState (into-array String args)]
+    (sim.engine.SimState/doLoop sim-state))
+  (System/exit 0)
 
 (defn -start
   [this]
@@ -74,7 +75,6 @@
                           ))
     (.clear yard)
     (.clear buddies)))
-
 
 (defn -gitStudents ^java.util.Collection [this] (students.Students/get-students))
 
