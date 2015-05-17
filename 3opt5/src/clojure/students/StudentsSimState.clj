@@ -23,6 +23,7 @@
     :exposes {random {:get gitRandom}, schedule {:get gitSchedule}}
     :methods [[gitAltState [] students.AltState]
               [gitStudents [] java.util.Collection]]
+    :constructors {[java.util.Collection] []}
     :state instanceState
     :init init-instance-state
     :main true)) 
@@ -34,8 +35,12 @@
 (def ^:const +tempering-cut-down+ 0.99) ; note during experimentation also defined in another file
 
 (defn -init-instance-state
-  [seed]
-  [[seed] {:alt-state (AltState.)}])
+  "students should be a java.util.Collection.
+  Do not type-hint it with any more specificity."
+  [students]
+  (let [alt-state (AltState.)]
+    (.setStudents students)
+    [[] {:alt-state alt-state}]))
 
 (declare find-other-student add-random-edge!)
 
