@@ -47,10 +47,10 @@
 ;; You'd think that type hints wouldn't help here, since they're in the signature above:
 (defn -gitAltState ^AltState [this] (:alt-state (.instanceState ^students.Students this)))
 
+;; All of the initialization happens in start(), which is called before starting the Schedule to begin looping.
 (defn -main
   [& args]
-  (let [sim-state students.StudentSimState (into-array String args)]
-    (sim.engine.SimState/doLoop sim-state))
+  (sim.engine.SimState/doLoop sim-state (into-array String args)
   (System/exit 0)
 
 (defn -start
