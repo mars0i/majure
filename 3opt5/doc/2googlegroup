@@ -29,16 +29,21 @@ scheduler that repeatedly calls step() in every agent that's registered
 with it.
 
 The agents have to interact with each other, and the way that they find
-out about eachothers' states is through the the SimState object that's passed to
-step().  The type hint that I delete and restore is the second one here:
+out about eachothers' states is through the the SimState object that's
+passed to step().  (An alternative would be to have each Student
+maintain a collection of all other Students.  This is messier, and
+cyclic--it's just not cyclic with respect to types.)
+
+The type hint that I delete and restore is the second one here:
 
 (defn -step [^students.Student this ^students.StudentsSimState students]
 
 I know that cyclic dependencies are considered harmful in the Clojure
 world, and I can understand that they *can* lead to confusion.  But
 MASON's organization seems perfectly reasonable for an agent-based
-simulation intended for use with Java.  There are no Clojure ABM
-libraries, and it's reasonable for me to want to use MASON with Clojure.
+simulation intended for use with Java, even if I might have done things
+differently.  There are no Clojure ABM libraries, so it's reasonable to
+want to use MASON with Clojure.
 
 Clojure lets me do this using gen-class (and occasional use of proxy),
 and in fact there is no problem at all with cyclic dependencies if I
