@@ -1,7 +1,12 @@
-I'm using MASON, a library for agent-based simulations that's written in
-Java.  gen-class allows me to write Clojure "classes" that
-extend/implement the classes provided by MASON.  The resulting code is
-more Java-esque and less Clojurely than I'd like, but it works.
+I've started using MASON, a library for agent-based simulations written
+in Java.  Using gen-class to follow the MASON model works pretty well, even
+if the result is somewhat "Java-esque" Clojure.
+
+The Java classes require cyclic dependencies.  For the simulation with
+which I'm experimenting, the cyclic dependency is no problem if I let
+Clojure figure out the types at runtime, but I can get an 85X speedup
+if I add type hints, after a bit of code reorganization to avoid all
+cyclic type dependencies ... except one.
 
 However, in the example I'm exploring, a simple Clojure simulation is
 170 times slower than the same simulation in pure Java.  If I carefully
