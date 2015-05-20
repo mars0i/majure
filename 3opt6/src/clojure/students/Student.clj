@@ -14,13 +14,16 @@
            [sim.field.continuous Continuous2D]
            [sim.field.network Network Edge]))
 
-(declare teacher-force-coord wander-force-coord collect-buddy-forces buddy-force-add)
+(declare make-student teacher-force-coord wander-force-coord collect-buddy-forces buddy-force-add)
 
 (def ^:const +max-force+ 3.0)
 
-(defn make-student []
-  (let [student-state {:agitation (atom 0.0)}]
-    (reify sim.engine.Steppable
+;(defn make-student []
+;  (let [student-state {:agitation (atom 0.0)}]
+;    ;(reify sim.engine.Steppable                 ; fails at compile time because getAgitation isn't in the interface
+;    (proxy [sim.engine.Steppable] []             ; compiles, but fails at runtime because getAgitation isn't in the interface
+;(defrecord Student [student-state] sim.engine.Steppable ; fails at compile time because getAgitation isn't in the interface
+(deftype Student [student-state] sim.engine.Steppable ; fails at compile time because getAgitation isn't in the interface
       (step [this students]
         ;; Note that this code is functional until the last step.
         (let [^AltState alt-state (.gitAltState students)
@@ -45,13 +48,16 @@
           (.setObjectLocation yard this    ; modify location for me in yard in students (end of step(), p. 18 top, p. 27 bottom):
                               (Double2D. (+ curr-x indiv-force-x buddy-force-x)
                                          (+ curr-y indiv-force-y buddy-force-y)))))
+      (toString [this] (str "[" (System/identityHashCode this) "] agitation: " (.getAgitation this)))
       (getAgitation [this] @(:agitation student-state))
-      )))
+      );))
 
-;; override super
-(defn -toString
-  [this]
-  (str "[" (System/identityHashCode this) "] agitation: " (.getAgitation this)))
+
+(defn make-student []
+;  (let [student-state {:agitation (atom 0.0)}]
+;    ;(reify sim.engine.Steppable                 ; almost works, but getAgitation isn't in the interface so doesn't compile
+;    (proxy [sim.engine.Steppable] []            ; compiles, but fails at runtime because getAgitation isn't in the interface
+  (Student. {:agitation (atom 0.0)}))
 
 
 (defn ^double wander-force-coord
@@ -78,7 +84,7 @@
   SimState object for this simulation.  me is the current Student.
   (In the MASON manual v. 18, see 'Go through my buddies and determine how much
   I want to be near them': for-loop, p. 27 middle.)"
-  [^AltState alt-state ^students.Student me]
+  [^AltState alt-state me]
   (reduce (partial buddy-force-add (.gitYard alt-state) me)
           [0.0 0.0 0.0]   ; initial sums of x and y components, length
           ^Collection (.getEdges ^Network (.gitBuddies alt-state) me nil))) ; don't use .. since it doesn't seem to allow proper type hinting
@@ -100,7 +106,7 @@
   representing the force (to another student) that we are adding in this time.
   (In the MASON manual v. 18, see 'Go through my buddies and determine how much
   I want to be near them': for-loop, p. 27 middle.)"
-  [^Continuous2D yard ^students.Student me [^double acc-x ^double acc-y ^double acc-agit] ^Edge edge]
+  [^Continuous2D yard me [^double acc-x ^double acc-y ^double acc-agit] ^Edge edge]
   (let [buddiness (.info edge)
         my-loc (.getObjectLocation yard me)
         buddy-loc (.getObjectLocation yard (.getOtherNode edge me)) ; buddy = him in java
