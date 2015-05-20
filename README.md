@@ -39,6 +39,9 @@ source.  As it turns out, each additional experiment required additional
 Clojure-Java interoperability facilities, so following the sequence from
 version 1 to version 3 may be useful for learning about interop.
 
+**Note: Some of these have been moved to the the *intermediate* directory.
+There are also newer experiments in *nonworking* and in this directory.**
+
 ### 0:
 
 All-Java version.  Copied from manual (through section 2.8) with small changes in formatting.
