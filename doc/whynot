@@ -17,5 +17,5 @@ what's in the interface, and I find that:
 	compiles getAgitation isn't found at runtime--because it's not
 	in the Steppable interface, I guess.
 
-	.. Question: What if I define a new interface? Can I "extend" an
-	interface?
+. Question: What if I define a new interface? Can I "extend" an interface?
+  Answer: Yes. gen-interface.  This works.
