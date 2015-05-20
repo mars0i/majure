@@ -9,7 +9,7 @@
 ;(set! *unchecked-math* true)
 
 (ns students.Students
-  (:import [students Students AltState] ; TemperingSteppable]
+  (:import [students Student AltState] ; TemperingSteppable]
            [sim.field.continuous Continuous2D]
            [sim.field.network Network]
            [sim.util Double2D Interval]
