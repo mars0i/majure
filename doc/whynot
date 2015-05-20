@@ -1,0 +1,21 @@
+whynot:
+Why I can't do it using method X:
+
+
+. According to the flowchart, you need gen-class to add methods beyond
+what's in the interface, and I find that:
+
+	.. Can't use reify to make students.Student because in addition to
+	implementing Steppable's step method, I need to provide getAgitation.
+	It's not in the Steppable interface, so it won't compile.
+
+	.. Can't use defrecord for the same reason.
+
+	.. Can't use deftype for the same reason.
+
+	.. Can't use proxy to make students.Student because although it
+	compiles getAgitation isn't found at runtime--because it's not
+	in the Steppable interface, I guess.
+
+	.. Question: What if I define a new interface? Can I "extend" an
+	interface?
