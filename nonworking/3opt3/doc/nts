@@ -1,0 +1,20 @@
+AltStudents uses Student
+StudentSimState uses AltStudents
+Student contains step() which by definition is passed a SimState
+and needs to read from StudentSimState
+which contains the needed reference to AltState.
+But what if I put a ref to AltState in each student?
+
+student needs global state from altstate
+simstate needs to call something that makes the students.
+
+
+simstate doesn't need to know about students.
+but it needs to know a way to get to students
+since that's how each student gets info about the other students
+unless each student knows how
+
+
+note an alternative might be to not calculate positions and forces
+object-orientedly in each student do it at the field level or something.
+
