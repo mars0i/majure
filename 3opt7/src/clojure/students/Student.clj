@@ -18,12 +18,18 @@
 
 (def ^:const +max-force+ 3.0)
 
+(gen-interface
+  :name students.SteppableStudent
+  :extends [sim.engine.Steppable]
+  :methods [[getAgitation [] double]])
+
 (defn make-student []
   (let [student-state {:agitation (atom 0.0)}]
 ;    (reify sim.engine.Steppable                 ; fails at compile time because getAgitation isn't in the interface
+    (reify students.SteppableStudent
 ;    (proxy [sim.engine.Steppable] []             ; compiles, but fails at runtime because getAgitation isn't in the interface
 ;(defrecord Student [student-state] sim.engine.Steppable ; fails at compile time because getAgitation isn't in the interface
-(deftype Student [student-state] sim.engine.Steppable ; fails at compile time because getAgitation isn't in the interface
+;(deftype Student [student-state] sim.engine.Steppable ; fails at compile time because getAgitation isn't in the interface
       (step [this students]
         ;; Note that this code is functional until the last step.
         (let [^AltState alt-state (.gitAltState students)
@@ -53,8 +59,8 @@
       )))
 
 
-(defn make-student []
-  (Student. {:agitation (atom 0.0)}))
+;(defn make-student []
+;  (Student. {:agitation (atom 0.0)}))
 
 
 (defn ^double wander-force-coord
