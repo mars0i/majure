@@ -4,7 +4,7 @@
 
 ;;; Clojure version of the Student class described in the tutorial in
 ;;; chapter 2 of the Mason Manual v18, by Sean Luke.
-;;; DEFRECORD VERSION
+;;; GEN-CLASS VERSION
 
 ;(set! *warn-on-reflection* true)
 ;(set! *unchecked-math* true)
@@ -13,50 +13,70 @@
   (:import [students AltState]
            [sim.util Double2D MutableDouble2D]
            [sim.field.continuous Continuous2D]
-           [sim.field.network Network Edge]))
+           [sim.field.network Network Edge])
+  (:gen-class
+    :name students.Student
+    :implements [sim.engine.Steppable]   ; includes signature for the step method
+    :methods [[getAgitation [] double]]
+    :state state  ; returns instance agitation data
+    :init init))  ; inits instance agitation data
 
-(declare make-student teacher-force-coord wander-force-coord collect-buddy-forces buddy-force-add)
+(declare teacher-force-coord wander-force-coord collect-buddy-forces buddy-force-add)
 
 (def ^:const +max-force+ 3.0)
 
-;; Define interface that extends Steppable, adding Student-specific methods.
-(gen-interface
-  :name students.SteppableStudent
-  :extends [sim.engine.Steppable]
-  :methods [;[step [students.Student] void] ; won't compile
-            [getAgitation [] double]])
-(import [students SteppableStudent])
+;; In the tutorial, friendsClose and enemiesCloser are separate, and incremented 
+;; separately, but they're treated identically, and there's no reason not to combined
+;; into a var agitation.
 
-(defrecord Student [student-state] students.SteppableStudent
-  (step [this students]
-    ;; Note that this code is functional until the last step.
-    (let [^AltState alt-state (.gitAltState students)
-          rng (.random students)
-          ^Continuous2D yard (.gitYard alt-state)                  ; dimensions of the yard. a Continuous2D
-          ^Double2D curr-loc (.getObjectLocation yard this) ; my location in the yard. a Double2D (Luke says might be more efficient to also store loc in agent)
-          curr-x (.-x curr-loc)
-          curr-y (.-y curr-loc)
-          ;; individual forces: student's internal tendencies without regard to buddies:
-          indiv-force-x (+ (wander-force-coord alt-state (.nextDouble rng)) ; 'add a bit of randomness' (p. 18 top,  p. 27 bottom)
-                           (teacher-force-coord curr-x          ; 'add in a vector to the "teacher"' (p. 18 top,  p. 27 bottom)
-                                                (.-width yard)
-                                                alt-state)) 
-          indiv-force-y (+ (wander-force-coord alt-state (.nextDouble rng))        ; see previous note
-                           (teacher-force-coord curr-y          ; see previous note
-                                                (.-height yard)
-                                                alt-state))
-          ;; buddy forces from attraction and repulsion to/from other students:
-          [buddy-force-x buddy-force-y agitation] (collect-buddy-forces alt-state this)]  ; 'Go through my buddies and determine how much I want to be near them' (for-loop, p. 27 middle)
-      ;; Now finish with all of the imperative code in one place:
-      (reset! (:agitation student-state) agitation)   ; (p. 31: friendsClose, enemiesCloser)
-      (.setObjectLocation yard this    ; modify location for me in yard in students (end of step(), p. 18 top, p. 27 bottom):
-                          (Double2D. (+ curr-x indiv-force-x buddy-force-x)
-                                     (+ curr-y indiv-force-y buddy-force-y)))))
-  (toString [this] (str "[" (System/identityHashCode this) "] agitation: " (.getAgitation this)))
-  (getAgitation [this] @(:agitation student-state)))
+(defn -init
+  []
+  [[] {:agitation (atom 0.0)}])
 
-(defn make-student []
-  (Student. {:agitation (atom 0.0)}))
+(defn -getAgitation
+  "Returns sum of agitation values from instance state."
+  [^students.Student this]
+  @(:agitation (.state this)))
+
+;; override super
+(defn -toString
+  [this]
+  (str "[" (System/identityHashCode this) "] agitation: " (.getAgitation this)))
+
+(defn -step
+  "Clojure version of step function required by interface Steppable,
+  based on code on p. 27 of the Mason Manual v18.
+  Updates the location of this student based on locations of other
+  students and \"buddy\" relationships to them.  First argument is
+  an instance of Student; it will be passed implicity when called from
+  Java, should be passed explicitly from Clojure code.  Second argument
+  is an instance of students.Students, which extends sim.engine.SimState."
+  [^students.Student this ^students.Students students]
+  ;; Note that this code is functional until the last step.
+  (let [^AltState alt-state (.gitAltState students)
+        rng (.random students)
+        ^Continuous2D yard (.gitYard alt-state)                  ; dimensions of the yard. a Continuous2D
+        ^Double2D curr-loc (.getObjectLocation yard this) ; my location in the yard. a Double2D (Luke says might be more efficient to also store loc in agent)
+        curr-x (.-x curr-loc)
+        curr-y (.-y curr-loc)
+        ;; individual forces: student's internal tendencies without regard to buddies:
+        indiv-force-x (+ (wander-force-coord alt-state (.nextDouble rng)) ; 'add a bit of randomness' (p. 18 top,  p. 27 bottom)
+                         (teacher-force-coord curr-x          ; 'add in a vector to the "teacher"' (p. 18 top,  p. 27 bottom)
+                                              (.-width yard)
+                                              alt-state)) 
+        indiv-force-y (+ (wander-force-coord alt-state (.nextDouble rng))        ; see previous note
+                         (teacher-force-coord curr-y          ; see previous note
+                                              (.-height yard)
+                                              alt-state))
+        ;; buddy forces from attraction and repulsion to/from other students:
+        [buddy-force-x buddy-force-y agitation] (collect-buddy-forces alt-state this)  ; 'Go through my buddies and determine how much I want to be near them' (for-loop, p. 27 middle)
+        state (.state this)]
+
+    ;; Now finish with all of the imperative code in one place:
+    (reset! (:agitation state) agitation)   ; (p. 31: friendsClose, enemiesCloser)
+    (.setObjectLocation yard this    ; modify location for me in yard in students (end of step(), p. 18 top, p. 27 bottom):
+                        (Double2D. (+ curr-x indiv-force-x buddy-force-x)
+                                   (+ curr-y indiv-force-y buddy-force-y)))))
 
 
 (defn ^double wander-force-coord
@@ -83,7 +103,7 @@
   SimState object for this simulation.  me is the current Student.
   (In the MASON manual v. 18, see 'Go through my buddies and determine how much
   I want to be near them': for-loop, p. 27 middle.)"
-  [^AltState alt-state me]
+  [^AltState alt-state ^students.Student me]
   (reduce (partial buddy-force-add (.gitYard alt-state) me)
           [0.0 0.0 0.0]   ; initial sums of x and y components, length
           ^Collection (.getEdges ^Network (.gitBuddies alt-state) me nil))) ; don't use .. since it doesn't seem to allow proper type hinting
@@ -105,7 +125,7 @@
   representing the force (to another student) that we are adding in this time.
   (In the MASON manual v. 18, see 'Go through my buddies and determine how much
   I want to be near them': for-loop, p. 27 middle.)"
-  [^Continuous2D yard me [^double acc-x ^double acc-y ^double acc-agit] ^Edge edge]
+  [^Continuous2D yard ^students.Student me [^double acc-x ^double acc-y ^double acc-agit] ^Edge edge]
   (let [buddiness (.info edge)
         my-loc (.getObjectLocation yard me)
         buddy-loc (.getObjectLocation yard (.getOtherNode edge me)) ; buddy = him in java

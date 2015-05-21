@@ -4,6 +4,7 @@
 
 ;;; Clojure version of the Student class described in the tutorial in
 ;;; chapter 2 of the Mason Manual v18, by Sean Luke.
+;;; REIFY VERSION
 
 ;(set! *warn-on-reflection* true)
 ;(set! *unchecked-math* true)
@@ -22,8 +23,7 @@
 (gen-interface
   :name students.SteppableStudent
   :extends [sim.engine.Steppable]
-  :methods [;[step [students.Student] void] ; won't compile
-            [getAgitation [] double]])
+  :methods [[getAgitation [] double]]) ;[step [students.Student] void] ; won't compile
 (import [students SteppableStudent])
 
 (defn make-student []

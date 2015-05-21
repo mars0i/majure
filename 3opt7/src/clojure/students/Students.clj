@@ -64,14 +64,14 @@
       ;; This is a hack to cause a global effect on every tick:
       ;; We make a special "agent" whose job it is to change the class global:
       (.scheduleRepeating schedule Schedule/EPOCH 1 
-                          ;(TemperingSteppable.) ; gen-class version
-                          (proxy [Steppable] []           ; proxy version
-                            (step [^students.Students state]
+                          ;(students.TemperingSteppable.)                                   ; gen-class version
+                          (proxy [Steppable] [] (step [^students.Students state]           ; proxy version
+                          ;(reify Steppable (step [this state]                              ; reify version
                               (let [^AltState alt-state (.gitAltState state)]
-                                (when (.isTempering alt-state)
-                                  (.setRandomMultiplier alt-state 
-                                                        (* (.getRandomMultiplier alt-state)
-                                                           +tempering-cut-down+))))))
+                               (when (.isTempering alt-state)
+                                 (.setRandomMultiplier alt-state 
+                                                       (* (.getRandomMultiplier alt-state)
+                                                          +tempering-cut-down+))))))
                           ))
     (.clear yard)
     (.clear buddies)

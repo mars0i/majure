@@ -4,6 +4,7 @@
 
 ;;; Clojure version of the Student class described in the tutorial in
 ;;; chapter 2 of the Mason Manual v18, by Sean Luke.
+;;; PROXY VERSION
 
 ;(set! *warn-on-reflection* true)
 ;(set! *unchecked-math* true)

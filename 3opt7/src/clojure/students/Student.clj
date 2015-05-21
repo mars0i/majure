@@ -4,6 +4,7 @@
 
 ;;; Clojure version of the Student class described in the tutorial in
 ;;; chapter 2 of the Mason Manual v18, by Sean Luke.
+;;; DEFRECORD VERSION
 
 ;(set! *warn-on-reflection* true)
 ;(set! *unchecked-math* true)
@@ -26,7 +27,7 @@
             [getAgitation [] double]])
 (import [students SteppableStudent])
 
-(deftype Student [student-state] students.SteppableStudent
+(defrecord Student [agitation] students.SteppableStudent
   (step [this students]
     ;; Note that this code is functional until the last step.
     (let [^AltState alt-state (.gitAltState students)
@@ -47,12 +48,12 @@
           ;; buddy forces from attraction and repulsion to/from other students:
           [buddy-force-x buddy-force-y agitation] (collect-buddy-forces alt-state this)]  ; 'Go through my buddies and determine how much I want to be near them' (for-loop, p. 27 middle)
       ;; Now finish with all of the imperative code in one place:
-      (reset! (:agitation student-state) agitation)   ; (p. 31: friendsClose, enemiesCloser)
+      (reset! (:agitation this) agitation)   ; (p. 31: friendsClose, enemiesCloser)
       (.setObjectLocation yard this    ; modify location for me in yard in students (end of step(), p. 18 top, p. 27 bottom):
                           (Double2D. (+ curr-x indiv-force-x buddy-force-x)
                                      (+ curr-y indiv-force-y buddy-force-y)))))
   (toString [this] (str "[" (System/identityHashCode this) "] agitation: " (.getAgitation this)))
-  (getAgitation [this] @(:agitation student-state)))
+  (getAgitation [this] @(:agitation this)))
 
 (defn make-student []
   (Student. {:agitation (atom 0.0)}))
