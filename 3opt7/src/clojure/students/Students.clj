@@ -57,7 +57,7 @@
         buddies (.gitBuddies alt-state)
         random (.gitRandom this)
         schedule (.gitSchedule this)
-        students (repeatedly (.getNumStudents alt-state) stu/make-student)
+        students (repeatedly (.getNumStudents alt-state) #(stu/make-student))
         that this] ; proxy below will capture 'this', but we want it to be able to refer to this this, too.
     (when (.isTempering alt-state)
       (.setRandomMultiplier alt-state +tempering-initial-random-multiplier+)

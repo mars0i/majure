@@ -26,35 +26,36 @@
             [getAgitation [] double]])
 (import [students SteppableStudent])
 
+(defrecord Student [student-state] students.SteppableStudent
+  (step [this students]
+    ;; Note that this code is functional until the last step.
+    (let [^AltState alt-state (.gitAltState students)
+          rng (.random students)
+          ^Continuous2D yard (.gitYard alt-state)                  ; dimensions of the yard. a Continuous2D
+          ^Double2D curr-loc (.getObjectLocation yard this) ; my location in the yard. a Double2D (Luke says might be more efficient to also store loc in agent)
+          curr-x (.-x curr-loc)
+          curr-y (.-y curr-loc)
+          ;; individual forces: student's internal tendencies without regard to buddies:
+          indiv-force-x (+ (wander-force-coord alt-state (.nextDouble rng)) ; 'add a bit of randomness' (p. 18 top,  p. 27 bottom)
+                           (teacher-force-coord curr-x          ; 'add in a vector to the "teacher"' (p. 18 top,  p. 27 bottom)
+                                                (.-width yard)
+                                                alt-state)) 
+          indiv-force-y (+ (wander-force-coord alt-state (.nextDouble rng))        ; see previous note
+                           (teacher-force-coord curr-y          ; see previous note
+                                                (.-height yard)
+                                                alt-state))
+          ;; buddy forces from attraction and repulsion to/from other students:
+          [buddy-force-x buddy-force-y agitation] (collect-buddy-forces alt-state this)]  ; 'Go through my buddies and determine how much I want to be near them' (for-loop, p. 27 middle)
+      ;; Now finish with all of the imperative code in one place:
+      (reset! (:agitation student-state) agitation)   ; (p. 31: friendsClose, enemiesCloser)
+      (.setObjectLocation yard this    ; modify location for me in yard in students (end of step(), p. 18 top, p. 27 bottom):
+                          (Double2D. (+ curr-x indiv-force-x buddy-force-x)
+                                     (+ curr-y indiv-force-y buddy-force-y)))))
+  (toString [this] (str "[" (System/identityHashCode this) "] agitation: " (.getAgitation this)))
+  (getAgitation [this] @(:agitation student-state)))
+
 (defn make-student []
-  (let [student-state {:agitation (atom 0.0)}]
-    (reify students.SteppableStudent
-      (step [this students]
-        ;; Note that this code is functional until the last step.
-        (let [^AltState alt-state (.gitAltState students)
-              rng (.random students)
-              ^Continuous2D yard (.gitYard alt-state)                  ; dimensions of the yard. a Continuous2D
-              ^Double2D curr-loc (.getObjectLocation yard this) ; my location in the yard. a Double2D (Luke says might be more efficient to also store loc in agent)
-              curr-x (.-x curr-loc)
-              curr-y (.-y curr-loc)
-              ;; individual forces: student's internal tendencies without regard to buddies:
-              indiv-force-x (+ (wander-force-coord alt-state (.nextDouble rng)) ; 'add a bit of randomness' (p. 18 top,  p. 27 bottom)
-                               (teacher-force-coord curr-x          ; 'add in a vector to the "teacher"' (p. 18 top,  p. 27 bottom)
-                                                    (.-width yard)
-                                                    alt-state)) 
-              indiv-force-y (+ (wander-force-coord alt-state (.nextDouble rng))        ; see previous note
-                               (teacher-force-coord curr-y          ; see previous note
-                                                    (.-height yard)
-                                                    alt-state))
-              ;; buddy forces from attraction and repulsion to/from other students:
-              [buddy-force-x buddy-force-y agitation] (collect-buddy-forces alt-state this)]  ; 'Go through my buddies and determine how much I want to be near them' (for-loop, p. 27 middle)
-          ;; Now finish with all of the imperative code in one place:
-          (reset! (:agitation student-state) agitation)   ; (p. 31: friendsClose, enemiesCloser)
-          (.setObjectLocation yard this    ; modify location for me in yard in students (end of step(), p. 18 top, p. 27 bottom):
-                              (Double2D. (+ curr-x indiv-force-x buddy-force-x)
-                                         (+ curr-y indiv-force-y buddy-force-y)))))
-      (toString [this] (str "[" (System/identityHashCode this) "] agitation: " (.getAgitation this)))
-      (getAgitation [this] @(:agitation student-state)))))
+  (Student. {:agitation (atom 0.0)}))
 
 
 (defn ^double wander-force-coord

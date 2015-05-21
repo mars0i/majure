@@ -22,14 +22,13 @@
 (gen-interface
   :name students.SteppableStudent
   :extends [sim.engine.Steppable]
-  :methods [;[step [students.Student] void] ; won't compile
-            [getAgitation [] double]])
+  :methods [[getAgitation [] double]])
 (import [students SteppableStudent])
 
 (defn make-student []
   (let [student-state {:agitation (atom 0.0)}]
-    (reify students.SteppableStudent
-      (step [this students]
+    (proxy [SteppableStudent] []
+      (step [^students.Students students]
         ;; Note that this code is functional until the last step.
         (let [^AltState alt-state (.gitAltState students)
               rng (.random students)
