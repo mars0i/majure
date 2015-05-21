@@ -19,3 +19,8 @@ what's in the interface, and I find that:
 
 . Question: What if I define a new interface? Can I "extend" an interface?
   Answer: Yes. gen-interface.  This works.
+
+	.. However, this methods seems to make it impossible to specialize
+	step on Students rather than SimState.  Is that correct?  This method
+	is giving a speed of about 1/3 that of 3opt2 which uses gen-class
+	but requires a little two-step for compiling.
