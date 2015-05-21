@@ -12,7 +12,7 @@
                    "resources/portfolio.jar"]
   ;:dependencies [[org.clojure/clojure "1.6.0"]]
   :dependencies [[org.clojure/clojure "1.7.0-beta3"]]
-  :main students.StudentsWithUI ; default action with 'lein run'
+  :main students.Students ; default action with 'lein run'
   :source-paths ["src/clojure"]
   :jvm-opts ["-Xmx2g"]
   :aot [students.AltState students.Student students.Students students.TemperingSteppable students.StudentsWithUI]
