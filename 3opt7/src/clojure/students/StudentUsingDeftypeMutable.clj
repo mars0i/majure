@@ -42,9 +42,10 @@
 ;;
 ;(deftype Student [^:unsynchronized-mutable agitation] students.SteppableStudent
 (deftype Student [^:volatile-mutable agitation] students.SteppableStudent
-  (step [this students]
-    ;; Note that this code is functional until the last step.
-    (let [^AltState alt-state (.gitAltState students)
+  (step [this state]
+    ;; Note that this code is functional until the last few steps.
+    (let [students ^students.Students state
+          ^AltState alt-state (.gitAltState students)
           rng (.random students)
           ^Continuous2D yard (.gitYard alt-state)                  ; dimensions of the yard. a Continuous2D
           ^Double2D curr-loc (.getObjectLocation yard this) ; my location in the yard. a Double2D (Luke says might be more efficient to also store loc in agent)

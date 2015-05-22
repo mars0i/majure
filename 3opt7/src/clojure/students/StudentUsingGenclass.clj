@@ -33,6 +33,8 @@
   []
   [[] {:agitation (atom 0.0)}])
 
+(defn make-student [] (students.Student.))
+
 (defn -getAgitation
   "Returns sum of agitation values from instance state."
   [^students.Student this]

@@ -30,7 +30,7 @@
   (let [student-state {:agitation (atom 0.0)}]
     (proxy [SteppableStudent] []
       (step [^students.Students students]
-        ;; Note that this code is functional until the last step.
+        ;; Note that this code is functional until the last few steps.
         (let [^AltState alt-state (.gitAltState students)
               rng (.random students)
               ^Continuous2D yard (.gitYard alt-state)                  ; dimensions of the yard. a Continuous2D
