@@ -12,7 +12,7 @@
                    "resources/portfolio.jar"]
   ;:dependencies [[org.clojure/clojure "1.6.0"]]
   :dependencies [[org.clojure/clojure "1.7.0-RC1"]]
-  :main students.StudentsWithUI
+  :main students.Students
   :source-paths ["src/clojure"]
   :java-source-paths ["src/java"]
   :jvm-opts ["-Xmx2g"]
