@@ -15,6 +15,6 @@
   :main students.StudentsWithUI ; default action with 'lein run'
   :source-paths ["src/clojure"]
   :aot [students.Student students.Students students.StudentsWithUI]
-  :profiles {:withgui {:main students.StudentsWithUI} ; execute this with 'lein with-profile withgui run'
+  :profiles {:gui     {:main students.StudentsWithUI} ; execute this with 'lein with-profile withgui run'
              :nogui   {:main students.Students} })      ; execute this with 'lein with-profile nogui run'
 

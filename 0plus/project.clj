@@ -16,8 +16,8 @@
   :source-paths ["src/clojure"]
   :java-source-paths ["src/java"]
   :jvm-opts ["-Xmx2g"]
-  :profiles {:withgui {:main students.StudentsWithUI} ; execute this with 'lein with-profile withgui run'
-             :nogui   {:main students.Students} })      ; execute this with 'lein with-profile nogui run'
+  :profiles {:gui   {:main students.StudentsWithUI} ; execute this with 'lein with-profile gui run'
+             :nogui {:main students.Students} })      ; execute this with 'lein with-profile nogui run'
 
   ;:jvm-opts ["-Xmx2g"]
   ; jvm-opts ["-Xms1g"]

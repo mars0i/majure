@@ -16,7 +16,7 @@
   :source-paths ["src/clojure"]
   :jvm-opts ["-Xmx2g"]
   :aot [students.Students students.TemperingSteppable students.StudentsWithUI]
-  :profiles {:withgui {:main students.StudentsWithUI} ; execute this with 'lein with-profile withgui run'
+  :profiles {:gui     {:main students.StudentsWithUI} ; execute this with 'lein with-profile gui     run'
              :nogui   {:main students.Students} })      ; execute this with 'lein with-profile nogui run'
 
   ;:jvm-opts ["-Xmx2g"]
