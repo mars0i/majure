@@ -158,6 +158,7 @@
 
 (def ^:const +max-force+ 3.0)
 
+;; Note definterface and defprotocol don't allow inheritance, so we need gen-interface.
 (gen-interface
   :name students.SteppableStudent
   :extends [sim.engine.Steppable]
@@ -190,8 +191,9 @@
       (.setObjectLocation yard this    ; modify location for me in yard in students (end of step(), p. 18 top, p. 27 bottom):
                           (Double2D. (+ curr-x indiv-force-x buddy-force-x)
                                      (+ curr-y indiv-force-y buddy-force-y)))))
-  (toString [this] (str "[" (System/identityHashCode this) "] agitation: " (.getAgitation this)))
-  (getAgitation [this] @(.agitation this)))
+  (getAgitation [this] @(.agitation this))
+  (toString [this] (str "[" (System/identityHashCode this) "] agitation: " (.getAgitation this))))
+
 
 (defn make-student [] (Student. (atom 0.0)))
 
