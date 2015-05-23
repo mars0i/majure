@@ -59,3 +59,10 @@ Uses deftype for Students (deftype and reify were tied for fastest).
 Optimized, and the normal compilation process works.  i.e. `lein clean`,
 `lein compile` works.
 
+#### 3opt9:
+
+Following a suggestion by Tassilo Horn at
+https://groups.google.com/d/msg/clojure/cQyqQxEjXDc/Rs0ncM5bHcoJ ,
+replaces `gen-interface` with a simpler call to `defprotocol`, which is
+then used to separate different methods by interfaces in `deftype
+students`.  This is just as fast as (or a little faster than?) 3opt8.
