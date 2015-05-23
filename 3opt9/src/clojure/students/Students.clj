@@ -82,7 +82,7 @@
 (defn -getAgitationDistribution
   [^students.Students this]
   (double-array
-    (map #(.getAgitation %)
+    (map (fn [node] (.getAgitation node)) ; why can't I type hint node as Student?
          (.getAllNodes (.gitBuddies this)))))
 
 ;; The next several functions only run during initialization, so type hints wouldn't have much effect.
@@ -128,7 +128,6 @@
       (add-random-edge! buddies random  1.0 students student)
       (add-random-edge! buddies random -1.0 students student))))
 
-;; type hints don't seem to help
 (defn add-random-edge!
   "Adds an edge with random absolute weight, with sign, to buddies 
   from student to a randomly chosen element in students"
