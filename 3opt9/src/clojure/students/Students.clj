@@ -157,13 +157,6 @@
 
 (def ^:const +max-force+ 3.0)
 
-;; Note definterface and defprotocol don't allow inheritance, so we need gen-interface.
-;(gen-interface
-;  :name students.SteppableStudent
-;  :extends [sim.engine.Steppable]
-;  :methods [[getAgitation [] double]]) ;[step [students.Student] void] ; won't compile
-;(import [students SteppableStudent])
-
 (defprotocol StudentMethods (getAgitation [this]))
 ;(definterface StudentMethods (^double getAgitation []))
 
