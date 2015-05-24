@@ -1,7 +1,6 @@
-3opt7
+3opt8
 ====
 
 Experiments using methods other than `gen-class` to define the
-`Student` class(es), with `gen-interface` to define a new interface
-that includes `getAgitation`.  cf. ../doc/whynot .
-
+`Student` class(es), with `gen-interface` and `deftype` inside the
+Students namespace.
