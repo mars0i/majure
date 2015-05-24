@@ -226,7 +226,9 @@
 
 
 ;; I explored separating out the reduce-oriented summing aspect of this function
-;; into a separate wrapper, but it made the code more difficult to understand.
+;; into a separate wrapper--i.e. in theory it ought to be possible to separate the
+;; the addition to the accumulated quantities from the rest of the calculation--but 
+;; it made the code more difficult to understand.
 ;; Note this imperatively modifies the MutableDouble2D forceVector, but it's
 ;; a fresh instance and doesn't leave this function.  Thus from the point
 ;; of view of functions using this one, this is purely functional, and we
