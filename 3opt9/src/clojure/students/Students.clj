@@ -10,7 +10,7 @@
 ;;; The Student class is defined in the second half of the file using gen-interface and deftype.
 ;;; There's also an inner class to Students that may be defined with proxy or reify.
 
-(set! *warn-on-reflection* true)
+;(set! *warn-on-reflection* true)
 ;(set! *unchecked-math* true)
 
 (ns students.Students
