@@ -212,15 +212,6 @@
   (* (.getForceToSchoolMultiplier students)
      (- (* 0.5 yard-dim) coord)))
 
-;; EXPERIMENT
-(defn transduce-helper [f]
-  (fn 
-    ([] (f))    
-    ([coll] (f coll))    
-    ([coll input] (f coll input))))
-(def treduce (partial transduce transduce-helper))
-
-
 (defn collect-buddy-forces
   "Returns summed forces in x and y dimensions, and summed vector lengths of
   to attraction/repulsion vectors toward other students.  students is the 
