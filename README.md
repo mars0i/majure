@@ -66,3 +66,8 @@ https://groups.google.com/d/msg/clojure/cQyqQxEjXDc/Rs0ncM5bHcoJ ,
 replaces `gen-interface` with a simpler call to `defprotocol`, which is
 then used to separate different methods by interfaces in `deftype
 students`.  This is just as fast as (or a little faster than?) 3opt8.
+
+#### 3opt10
+
+Based on 3opt9, but adds a small optimization to the buddy forces
+calculation.  This seems to speed up simulations by 1-8%.
