@@ -10,7 +10,7 @@
 ;;; The Student class is defined in the second half of the file using gen-interface and deftype.
 ;;; There's also an inner class to Students that may be defined with proxy or reify.
 
-;(set! *warn-on-reflection* true)
+(set! *warn-on-reflection* true)
 ;(set! *unchecked-math* true)
 
 (ns students.Students
@@ -212,6 +212,14 @@
   (* (.getForceToSchoolMultiplier students)
      (- (* 0.5 yard-dim) coord)))
 
+;; EXPERIMENT
+(defn transduce-helper [f]
+  (fn 
+    ([] (f))    
+    ([coll] (f coll))    
+    ([coll input] (f coll input))))
+(def treduce (partial transduce transduce-helper))
+
 
 (defn collect-buddy-forces
   "Returns summed forces in x and y dimensions, and summed vector lengths of
@@ -222,7 +230,7 @@
   [^Students students ^Student me]
   (reduce (partial buddy-force-add (.gitYard students) me)
           [0.0 0.0 0.0]   ; initial sums of x and y components, length
-          ^Collection (.getEdges ^Network (.gitBuddies students) me nil))) ; don't use .. since it doesn't seem to allow proper type hinting
+          (.getEdges ^Network (.gitBuddies students) me nil))) ; don't use .. since it doesn't seem to allow proper type hinting
 
 
 ;; I explored separating out the reduce-oriented summing aspect of this function
