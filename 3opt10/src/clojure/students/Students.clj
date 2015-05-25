@@ -213,6 +213,11 @@
      (- (* 0.5 yard-dim) coord)))
 
 
+;; TODO: ? Rather than processing edges, process nodes at the other end of edges.  Then we don't have to pass me.
+;; Question: Why is that better? 
+;;
+;; This version gets me's location once, and passes it to buddy-force-add,
+;; rather than letting buddy-force-add get the location over and over again.
 (defn collect-buddy-forces
   "Returns summed forces in x and y dimensions, and summed vector lengths of
   to attraction/repulsion vectors toward other students.  students is the 
@@ -226,10 +231,12 @@
             (.getEdges ^Network (.gitBuddies students) me nil)))) ; don't use .. since it doesn't seem to allow proper type hinting
 
 
-;; I explored separating out the reduce-oriented summing aspect of this function
+;; This version designed to work with new version of collect-buddy-forces above.
+;;
+;; (I explored separating out the reduce-oriented summing aspect of this function
 ;; into a separate wrapper--i.e. in theory it ought to be possible to separate the
 ;; the addition to the accumulated quantities from the rest of the calculation--but 
-;; it made the code more difficult to understand.
+;; it made the code more difficult to understand.)
 ;; Note this imperatively modifies the MutableDouble2D forceVector, but it's
 ;; a fresh instance and doesn't leave this function.  Thus from the point
 ;; of view of functions using this one, this is purely functional, and we
