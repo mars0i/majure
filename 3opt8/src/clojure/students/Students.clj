@@ -76,7 +76,7 @@
 (defn -setRandomMultiplier [^students.Students this ^double newval] (when (>= newval 0.0) (reset! (:random-multiplier (.instanceState this)) newval)))
 (defn -domRandomMultiplier ^Interval [^students.Students this] (Interval. 0.0 100.0))
 (defn -isTempering ^java.lang.Boolean [^students.Students this] @(:tempering (.instanceState this)))
-(defn -setTempering [^students.Students this ^java.lang.Boolean newval] (reset! (:random-multiplier (.instanceState this)) newval))
+(defn -setTempering [^students.Students this ^java.lang.Boolean newval] (reset! (:tempering (.instanceState this)) newval))
 
 ;; more type hints don't seem to help
 (defn -getAgitationDistribution
