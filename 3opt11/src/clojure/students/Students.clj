@@ -38,7 +38,7 @@
               [domRandomMultiplier [] sim.util.Interval]
               [isTempering [] boolean]
               [setTempering [boolean] void]
-              [getAgitationDistribution [] "[D"]]
+              [getAgitationDistribution [] "[D"]] ; SEE end of file
     :state instanceState
     :init init-instance-state
     :main true)) 
@@ -55,20 +55,31 @@
 
 (def ^:const +tempering-cut-down+ 0.99) ; note during experimentation also defined in another file
 
+(definterface InstanceStateMethods
+  (getNumStudents [] long)
+  (setNumStudents [long] void)
+  (getForceToSchoolMultiplier [] double)
+  (setForceToSchoolMultiplier [double] void)
+  (getRandomMultiplier [] double)
+  (setRandomMultiplier [double] void)
+  (getTempering [] java.lang.Boolean)
+  (setTempering [java.lang.Boolean] void))
+
 (deftype InstanceState [yard
                         buddies
                         ^:volatile-mutable numStudents
-                        ^:volatile-mutable forceToSchoolMultipler
+                        ^:volatile-mutable forceToSchoolMultiplier
                         ^:volatile-mutable randomMultiplier
                         ^:volatile-mutable tempering]
+  InstanceStateMethods
   (getNumStudents [this] numStudents)
-  (setNumStudents [this ^long newval] (set! numStudents newval))
+  (setNumStudents [this newval] (set! numStudents newval))
   (getForceToSchoolMultiplier [this] forceToSchoolMultiplier)
-  (setForceToSchoolMultiplier [this ^double newval] (set! forceToSchoolMultiplier newval))
+  (setForceToSchoolMultiplier [this newval] (set! forceToSchoolMultiplier newval))
   (getRandomMultiplier [this] randomMultiplier)
-  (setRandomMultiplier [this ^double newval] (set! randomMultiplier newval))
+  (setRandomMultiplier [this newval] (set! randomMultiplier newval))
   (getTempering [this] tempering)
-  (setTempering [this ^java.lang.Boolean newval] (set! tempering newval)))
+  (setTempering [this newval] (set! tempering newval)))
 
 (defn -init-instance-state
   [seed]
@@ -81,24 +92,20 @@
 
 ;; You'd think that type hints on this wouldn't help here, since they're in the signature above, but they do.
 ;; It's not clear whether the other type hints help--not much, in any event.
-(defn -gitYard ^Continuous2D [^students.Students this] (.yard (.instanceState this)))
-(defn -gitBuddies ^Network [^students.Students this] (.buddies (.instanceState this)))
-(defn -getNumStudents ^long [^students.Students this] (.getNumStudents (.instanceState this)))
-(defn -setNumStudents [^students.Students this ^long newval] (when (> newval 0) (set! (.setNumStudents (.instanceState this)) newval)))
-(defn -getForceToSchoolMultiplier ^double [^students.Students this] (.getForceToSchoolMultipler (.instanceState this)))
-(defn -setForceToSchoolMultiplier [^students.Students this ^double newval] (when (>= newval 0.0) (set! (.setForceToSchoolMultipler (.instanceState this)) newval)))
-(defn -getRandomMultiplier ^double [^students.Students this] (.setRandomMultiplier (.instanceState this)))
-(defn -setRandomMultiplier [^students.Students this ^double newval] (when (>= newval 0.0) (set! (.setRandomMultiplier (.instanceState this)) newval)))
-(defn -domRandomMultiplier ^Interval [^students.Students this] (Interval. 0.0 100.0))
-(defn -isTempering ^java.lang.Boolean [^students.Students this] (.getTempering (.instanceState this)))
-(defn -setTempering [^students.Students this ^java.lang.Boolean newval] (set! (.setTempering (.instanceState this)) newval))
+(defn -gitYard ^Continuous2D [^Students this] (.yard ^InstanceState (.instanceState this)))
+(defn -gitBuddies ^Network [^Students this] (.buddies ^InstanceState (.instanceState this)))
+(defn -getNumStudents ^long [^Students this] (.getNumStudents ^InstanceState (.instanceState this)))
+(defn -setNumStudents [^Students this ^long newval] (when (> newval 0) (.setNumStudents ^InstanceState (.instanceState this) newval)))
+(defn -getForceToSchoolMultiplier ^double [^Students this] (.getForceToSchoolMultiplier ^InstanceState (.instanceState this)))
+(defn -setForceToSchoolMultiplier [^Students this ^double newval] (when (>= newval 0.0) (.setForceToSchoolMultiplier ^InstanceState (.instanceState this) newval)))
+(defn -getRandomMultiplier ^double [^Students this] (.getRandomMultiplier ^InstanceState (.instanceState this)))
+(defn -setRandomMultiplier [^Students this ^double newval] (when (>= newval 0.0) (.setRandomMultiplier ^InstanceState (.instanceState this) newval)))
+(defn -domRandomMultiplier ^Interval [^Students this] (Interval. 0.0 100.0))
+(defn -isTempering ^java.lang.Boolean [^Students this] (.getTempering ^InstanceState (.instanceState this)))
+(defn -setTempering [^Students this ^java.lang.Boolean newval] (.setTempering ^InstanceState (.instanceState this) newval))
 
-;; more type hints don't seem to help
-(defn -getAgitationDistribution
-  [^students.Students this]
-  (double-array
-    (map (fn [node] (.getAgitation node)) ; why can't I type hint node as Student?
-         (.getAllNodes (.gitBuddies this)))))
+;; -getAgitationDistribution: See end of file.
+
 
 ;; The next several functions only run during initialization, so type hints wouldn't have much effect.
 
@@ -108,7 +115,7 @@
   (System/exit 0))
 
 (defn -start
-  [this]
+  [^Students this]
   (.superStart this)
   (let [yard (.gitYard this)
         yard-width (.getWidth yard)
@@ -285,3 +292,14 @@
     [(+ acc-x (.-x forceVector)) ; x component of vector
      (+ acc-y (.-y forceVector)) ; y component of vector
      (+ acc-agit (.length forceVector))])) ; recompute length after possible resize (p. 31, friendsClose, enemiesCloser)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Students (not Student) METHOD
+;; We put it here so that we can type hint node as a Student
+(defn -getAgitationDistribution
+  [^students.Students this]
+  (double-array
+    (map (fn [^Student node] (.getAgitation node)) ; why can't I type hint node as Student?
+         (.getAllNodes (.gitBuddies this)))))

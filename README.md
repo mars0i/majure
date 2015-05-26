@@ -71,3 +71,24 @@ students`.  This is just as fast as (or a little faster than?) 3opt8.
 
 Based on 3opt9, but adds a small optimization to the buddy forces
 calculation.  This seems to speed up simulations by 1-8%.
+
+#### 3opt11
+
+Based on 3opt10, but uses `deftype InstanceState` with
+`:volatile-mutable` on fields that are supposed to be mutable, rather
+rather using a map with atoms for those fields.  This is 5% to 12%
+faster than 3opt10.
+
+NOTE: `:volatile-mutable` is supposed to be too dangerous for use by
+anyone but an expert (which I am not).  However, I believe that it's
+safe for single-threaded use outside of lazy contexts, which is how
+I'm using it.  But I need to investigate further to be sure.
+
+A drawback is that one has to define methods to access these fields, an
+interface for them, and then wrapper methods--i.e. the methods on the
+Students object.  So you have to give similar signatures three times!
+If I can use deftype alone, without gen-class, that will ameliorate teh
+problem.
+
+(Also, I finally succeeded in type hinting node as Student in
+getAgitationDistribution.)
