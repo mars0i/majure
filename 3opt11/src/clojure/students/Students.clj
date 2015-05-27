@@ -124,18 +124,16 @@
         random (.gitRandom this)     ; type hint doesn't help
         schedule (.gitSchedule this)
         students (repeatedly (.getNumStudents this) #(make-student))
-        ^students.Students that this] ; proxy below will capture 'this', but we want it to be able to refer to this this, too.
+        ^students.Students that this] ; In reify below, clarify we're not referring to its own 'this'.
     (when (.isTempering this)
       (.setRandomMultiplier this +tempering-initial-random-multiplier+)
-      ;; This is a hack to cause a global effect on every tick: We make a special "agent" whose job it is to change the class global:
+      ;; Hack to cause a global effect every tick: Make an "agent" whose job it is to change the class global:
       (.scheduleRepeating schedule Schedule/EPOCH 1 
-                          ;(students.TemperingSteppable.)      ; gen-class version
-                          ;(proxy [Steppable] [] (step [state]  ; proxy version
-                          (reify Steppable (step [this state] ; reify version
+                          (reify Steppable
+                            (step [_ _]
                               (when (.isTempering that)
-                                (.setRandomMultiplier that (* (.getRandomMultiplier that)
-                                                              +tempering-cut-down+)))))
-                          ))
+                                (.setRandomMultiplier that (* (.getRandomMultiplier that)  ; replacing this with a dedicated scale multiplier method doesn't increase speed
+                                                              +tempering-cut-down+)))))))
     (.clear yard)
     (.clear buddies)
     ;; first for-loop in Students.java--create students, add them to buddies:
@@ -179,8 +177,8 @@
 
 (def ^:const +max-force+ 3.0)
 
-(defprotocol StudentMethods (getAgitation [this]))
-;(definterface StudentMethods (^double getAgitation []))
+;(defprotocol StudentMethods (getAgitation [this]))
+(definterface StudentMethods (^double getAgitation []))
 
 (deftype Student [agitation]
   Steppable
