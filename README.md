@@ -92,3 +92,9 @@ problem.
 
 (Also, I finally succeeded in type hinting node as Student in
 getAgitationDistribution.)
+
+#### 3opt12
+
+Like 3opt10, but uses a record rather than a map in the gen-class state
+variable.  This doesn't seem to be significantly faster than 3opt10.
+3opt11 is faster.
