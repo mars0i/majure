@@ -106,3 +106,13 @@ Like 3opt12, in that it uses a record, but rather than using atoms as in
 that must be mutable.  These arrays are stored in fields in the record.
 Speed is similar to the atoms versions, i.e.  not faster than 3opt11
 (which is the one that uses deftype with :volatile-mutable).
+
+#### 3opt14
+
+Unlike the preceding few versions, there is no `defrecord` or `deftype`
+in the instance state system.  Instead, there's just a single `Object`
+array.  This is at least as fast as 3opt11, the mutable `deftype`
+version.  Maybe slightly faster?  Kind of a PITA, though, with index
+constants for each variable, and hand-boxing numbers when using `aset`.
+(On the other hand, it doesn't require four--count 'em!--signatures for
+every accessor, as the 3opt11 does.)
