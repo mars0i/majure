@@ -98,3 +98,11 @@ getAgitationDistribution.)
 Like 3opt10, but uses a record rather than a map in the gen-class state
 variable.  This doesn't seem to be significantly faster than 3opt10.
 3opt11 is faster.
+
+#### 3opt13
+
+Like 3opt12, in that it uses a record, but rather than using atoms as in
+3opt12 and 3opt10 and below, it uses typed (Java) arrays to hold data
+that must be mutable.  These arrays are stored in fields in the record.
+Speed is similar to the atoms versions, i.e.  not faster than 3opt11
+(which is the one that uses deftype with :volatile-mutable).
