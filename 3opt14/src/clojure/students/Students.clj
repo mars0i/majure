@@ -5,13 +5,14 @@
 ;;; Clojure version of the Students and Student class described in the tutorial in
 ;;; chapter 2 of the Mason Manual v18, by Sean Luke.
 ;;; This version makes some state mutable by storing it in Java arrays.
+;;; (Man this is funky--reminds one of C.)
 
 ;;; NOTE:
 ;;; In this version, the Students class is defined using gen-class in the namespace specification.
 ;;; The Student class is defined in the second half of the file using gen-interface and deftype.
 ;;; There's also an inner class to Students that may be defined with proxy or reify.
 
-;(set! *warn-on-reflection* true)
+(set! *warn-on-reflection* true)
 ;(set! *unchecked-math* true)
 
 (ns students.Students
@@ -78,61 +79,51 @@
                          true])])                    ; tempering
 
 ;; You'd think that type hints on 'this' wouldn't help here, since they're in the signature above, but they do.
+;; Note I use 'git' rather than 'get' when we don't want the UI to find the accessor by reflection.
+
 (defn -gitYard ^Continuous2D
   [^Students this]
-  (:yard (.instanceState this)))
+  (aget ^objects (.instanceState this) +yard-idx+))
 
 (defn -gitBuddies ^Network
   [^Students this]
-  (:buddies (.instanceState this)))
+  (aget ^objects (.instanceState this) +buddies-idx+))
 
 (defn -getNumStudents
   ^long [^Students this]
-  (aget ^longs (:longz (.instanceState this))
-        +longz-num-students-idx+))
+  (aget ^objects (.instanceState this) +num-students-idx+))
 
 (defn -setNumStudents
   [^Students this ^long newval]
   (when (> newval 0)
-    (aset-long (:longz (.instanceState this))
-               +longz-num-students-idx+
-               newval)))
+    (aset ^objects (.instanceState this) +num-students-idx+ (Long. newval))))   ;; TODO IS THIS THE RIGHT THING: Wrapping the primitive in a boxer object?
 
 (defn -getForceToSchoolMultiplier
   ^double [^Students this]
-  (aget ^doubles (:doublez (.instanceState this))
-        +doublez-force-to-school-multiplier-idx+))
+  (aget ^objects (.instanceState this) +force-to-school-multiplier-idx+))
 
 (defn -setForceToSchoolMultiplier
   [^Students this ^double newval]
   (when (>= newval 0.0)
-    (aset-double (:doublez (.instanceState this))
-                 +doublez-force-to-school-multiplier-idx+
-                 newval)))
+    (aset ^objects (.instanceState this) +force-to-school-multiplier-idx+ (Double. newval))))
 
 (defn -getRandomMultiplier
   ^double [^Students this]
-  (aget ^doubles (:doublez (.instanceState this))
-        +doublez-random-multiplier-idx+))
+  (aget ^objects (.instanceState this) +random-multiplier-idx+))
 
 (defn -setRandomMultiplier
   [^Students this ^double newval]
   (when (>= newval 0.0)
-    (aset-double (:doublez (.instanceState this))
-          +doublez-random-multiplier-idx+
-          newval)))
+    (aset ^objects (.instanceState this) +random-multiplier-idx+ (Double. newval))))
 
 ;; "isTempering" rather than "getTempering" to tell the UI to handle it differently (using reflection).
 (defn -isTempering
   ^java.lang.Boolean [^Students this]
-  (aget ^booleans (:booleanz (.instanceState this))
-        +booleanz-tempering-idx+))
+  (aget ^objects (.instanceState this) +tempering-idx+))
 
 (defn -setTempering
   [^Students this ^java.lang.Boolean newval]
-  (aset-boolean (:booleanz (.instanceState this))
-                +booleanz-tempering-idx+
-                newval))
+    (aset ^objects (.instanceState this) +tempering-idx+ (Boolean. newval)))
 
 (defn -domRandomMultiplier
   ^Interval [^Students this]
