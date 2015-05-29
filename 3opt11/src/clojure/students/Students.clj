@@ -4,6 +4,8 @@
 
 ;;; Clojure version of the Students and Student class described in the tutorial in
 ;;; chapter 2 of the Mason Manual v18, by Sean Luke.
+;;; 
+;;; This version uses deftype with :volatile-mutable.
 
 ;;; NOTE:
 ;;; In this version, the Students class is defined using gen-class in the namespace specification.
