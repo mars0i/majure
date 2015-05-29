@@ -75,6 +75,8 @@ Based on 3opt10, but uses `deftype InstanceState` with
 rather using a map with atoms for those fields.  This is 5% to 12%
 faster than 3opt10.
 
+*SEE ALSO 3opt15.*
+
 NOTE: `:volatile-mutable` is supposed to be too dangerous for use by
 anyone but an expert (which I am not).  However, I believe that it's
 safe for single-threaded use outside of lazy contexts, which is how
@@ -112,3 +114,11 @@ version.  Maybe slightly faster?  Kind of a PITA, though, with index
 constants for each variable, and hand-boxing numbers when using `aset`.
 On the other hand, it doesn't require four signatures (count 'em!) for
 every accessor, as the 3opt11 version does.
+
+#### 3opt15
+
+Exactly the same as 3opt11, but using `:unsynchronized-mutable` rather
+than `:volatile-mutable`.  About the same speed as 3opt11: Running
+them simultaneously on a machine with sufficient cores, sometimes one
+wins, sometimes the other does, but the difference is no more than 3%.
+faster, it's only by one or two percentage point on average.
