@@ -44,10 +44,6 @@ Optimized, mainly using gen-class, but a funny "two-step"
 compilation process is required.  See notes in that directory and in
 doc.
 
-#### 3opt6:
-
-Non-working experiments with methods other than gen-class.
-
 #### 3opt7:
 
 Experiments using something other than gen-class for the Student class.
@@ -114,5 +110,5 @@ in the instance state system.  Instead, there's just a single `Object`
 array.  This is at least as fast as 3opt11, the mutable `deftype`
 version.  Maybe slightly faster?  Kind of a PITA, though, with index
 constants for each variable, and hand-boxing numbers when using `aset`.
-(On the other hand, it doesn't require four--count 'em!--signatures for
-every accessor, as the 3opt11 does.)
+On the other hand, it doesn't require four signatures (count 'em!) for
+every accessor, as the 3opt11 version does.
