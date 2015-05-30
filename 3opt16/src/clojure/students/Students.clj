@@ -103,7 +103,6 @@
                           true)])
 
 ;; You'd think that type hints on this wouldn't help here, since they're in the signature above, but they do.
-;; It's not clear whether the other type hints help--not much, in any event.
 (defn -gitYard ^Continuous2D [^Students this] (.yard ^InstanceState (.instanceState this)))
 (defn -gitBuddies ^Network [^Students this] (.buddies ^InstanceState (.instanceState this)))
 (defn -getNumStudents ^long [^Students this] (.getNumStudents ^InstanceState (.instanceState this)))
