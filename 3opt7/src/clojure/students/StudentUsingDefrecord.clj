@@ -23,8 +23,7 @@
 (gen-interface
   :name students.SteppableStudent
   :extends [sim.engine.Steppable]
-  :methods [;[step [students.Student] void] ; won't compile
-            [getAgitation [] double]])
+  :methods [[getAgitation [] double]]) ;[step [students.Student] void] ; won't compile
 (import [students SteppableStudent])
 
 (defrecord Student [agitation] students.SteppableStudent
