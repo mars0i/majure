@@ -57,15 +57,35 @@
 
 (def ^:const +tempering-cut-down+ 0.99) ; note during experimentation also defined in another file
 
-(definterface InstanceStateMethods
-  (getNumStudents [] long)
-  (setNumStudents [long] void)
-  (getForceToSchoolMultiplier [] double)
-  (setForceToSchoolMultiplier [double] void)
-  (getRandomMultiplier [] double)
-  (setRandomMultiplier [double] void)
-  (getTempering [] java.lang.Boolean)
-  (setTempering [java.lang.Boolean] void))
+;(defprotocol InstanceStateMethods
+;  (getNumStudents ^long [this])
+;  (setNumStudents ^void [this ^long newval])
+;  (getForceToSchoolMultiplier ^double [this])
+;  (setForceToSchoolMultiplier ^void [this ^double newval])
+;  (getRandomMultiplier ^double [this])
+;  (setRandomMultiplier ^void [this ^double newval])
+;  (getTempering ^java.lang.Boolean [this])
+;  (setTempering ^void [this ^java.lang.Boolean newval]))
+
+(defprotocol InstanceStateMethods
+  (getNumStudents [this])
+  (setNumStudents [this newval])
+  (getForceToSchoolMultiplier [this])
+  (setForceToSchoolMultiplier ^void [this newval])
+  (getRandomMultiplier [this])
+  (setRandomMultiplier [this newval])
+  (getTempering [this])
+  (setTempering ^void [this newval]))
+
+;(definterface InstanceStateMethods
+;  (getNumStudents [] long)
+;  (setNumStudents [long] void)
+;  (getForceToSchoolMultiplier [] double)
+;  (setForceToSchoolMultiplier [double] void)
+;  (getRandomMultiplier [] double)
+;  (setRandomMultiplier [double] void)
+;  (getTempering [] java.lang.Boolean)
+;  (setTempering [java.lang.Boolean] void))
 
 (deftype InstanceState [yard
                         buddies
@@ -173,7 +193,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; THE Student CLASS
-;; Extends Steppable, adding Student-specific methods.
+;; Implements Steppable, adding Student-specific methods.
 
 ;; Here type hints matter; the step() function is called for each Student on each timestep.
 
