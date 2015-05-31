@@ -14,11 +14,14 @@ I mention.)
 
 ### Students
 
-There are three classes defined in the Students simulation:
+There are four classes defined in the Students simulation:
 
 * `Students`, which extends `SimState`
 * `Student`, which implements `Steppable`
 * An inner FIXME
+* `StudentsUI`
+
+
 
 
 ### Classes
