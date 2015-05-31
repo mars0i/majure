@@ -29,5 +29,4 @@ hint via let as in the reify version.  That also requires the two-step.
 added via a let binding, again requiring the two-step.
 
 * The deftype version that uses a mutable field has exactly the same
-speed profile as the nonmutable version.  (So since mutable fields are
-considered dangerous, I should not use this version.)
+speed profile as the nonmutable version.

@@ -47,6 +47,7 @@ doc.
 #### 3opt7:
 
 Experiments using something other than gen-class for the Student class.
+*Look at this version to compare different ways of defining classes.*
 Still requires the odd "two-step" compilation process.  Optimized.
 
 #### 3opt8:

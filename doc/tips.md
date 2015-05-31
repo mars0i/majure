@@ -5,6 +5,12 @@ Things I've learned that are relevant to using MASON with Clojure from
 experimenting with different ways to implement the Students example in
 Clojure, and other tips.
 
+These notes are not intended to be self-explanatory to someone who's
+unfamiliar with Clojure, or unfamiliar with MASON, or even unfamiliar
+with Java.  (But you can, of course, nevertheless use them to figure out
+what you want to learn more about if you're unfamiliar with something
+I mention.)
+
 
 ### Classes
 
@@ -16,10 +22,18 @@ Note that there are five ways to make classes in Clojure:
 * `proxy`
 * `gen-class`
 
+(The *3opt7* version of my Students-in-Clojure program contains
+files illustrating alternative ways of defining the `Student` class
+using each of these options.  See docs/3opt7.md for discussion of their
+speed differences.)
+
 `defrecord` is commonplace in Clojure so, other things being equal, it
 should perhaps be preferred.  Other things are not always equal, though.
+`deftype` is similar, and in the 3opt7 tests, it was a lot faster than
+`defrecord`.  (I'm a little bit surprised at that.  I wonder if I didn't
+use `defrecord` in the best possible way.)
 
-Only `deftype` allows multiple mutable fields, using the
+Only `deftype` allows *multiple* mutable fields, using the
 `:unsyncronized-mutable` or `:volatile-mutable` keywords.
 
 Only `proxy` and `gen-class` allow you to inherit from an existing class
@@ -28,27 +42,31 @@ interfaces.  However, `proxy` is potentially the slowest of the five
 methods, and it's more limited than `gen-class` in many ways.  I think
 that `proxy` is unlikely to be a good choice for use with MASON if you
 want optimal speed.  You can use `reify` instead, for example, to create
-a Clojure equivalent of an inner class.  Neither `reify` nor `proxy` has
-built in ways to store state, but you can use closures to have state
-associated with a `reify` or `proxy` object.
+a Clojure equivalent of an inner class, if the class doesn't need to
+inherit.  Neither `reify` nor `proxy` has built-in ways to store state,
+though you may be able to use a closure, perhaps using atoms or some
+other reference type, to associate state with a `reify` or `proxy`
+object.
 
 `gen-class` is most flexible of the ways to create Clojure classes.
-I use it to subclass `SimState`.
+I use it to subclass `SimState`.  I don't think `proxy` can do
+everything needed for this use.
 
 However, `gen-class` only allows a single mutable field.
 
-To get multiple mutable fields with `gen-class`, or with `defrecord`,
-you can use one of Clojure's reference types.  For example, to have
-mutable state with `gen-class`, you can store Clojure atoms in a Clojure
-`defrecord` objects that's stored in the state variable, or store a
-`deftype` object with mutable fields, in the state variable.  There are
-other options, but those seem the best.  `deftype` with mutable fields
-was a little bit faster than `defrecord` with atoms; I used `deftype` to
-go from 50% of Java speed to 60% of Java speed.  (Using `deftype` for this
-purpose is very verbose, though--I ended up with four similar signatures
-for each field.  If I find I really need this extra speed, maybe I'll write
-some kind of macro to generate the code.  This is a little tricky to
-do with type hints.)
+To get an effect like multiple mutable fields with `gen-class`, or
+with `defrecord`, you can use one of Clojure's reference types.  For
+example, to have mutable state with `gen-class`, you can store Clojure
+atoms in a Clojure `defrecord` objects that's stored in the state
+variable, or store a `deftype` object with mutable fields, in the
+state variable.  There are other options, but those seem the best. 
+`deftype` with mutable fields was a little bit faster than `defrecord`
+with atoms; I used `deftype` to go from 50% of Java speed to 60% of
+Java speed.  (Using `deftype` for this purpose is very verbose,
+though--I ended up with four similar signatures for each field.  If I
+find I really need this extra speed, maybe I'll write some kind of
+macro to generate the code.  This is a little tricky to do with type
+hints.)
 
 There is usually no problem with using fields inherited from a
 superclass defined in Java from within the same Clojure class definition
@@ -74,10 +92,12 @@ to be equally fast--and `defprotocol` is potentially more convenient.
 ### Type hints
 
 Type hints make a *huge* difference in speed, when used to avoid
-reflection.  I try to restrict them to use in and near parameter lists,
-but sometimes I've needed to stick them in the middle of a function's
-code.  Sometimes you can avoid type hints using `definterface` or
-`gen-interface` (and maybe `defprotocol`--I'm not sure).
+reflection.  `(set! *warn-on-reflection* true)` will turn on reflection
+compilation warnings.  I try to restrict type hints to use in and near
+parameter lists, but sometimes I've needed to stick them in the middle
+of a function's code.  Sometimes you can avoid type hints using
+`definterface` or `gen-interface` (and maybe `defprotocol`--I'm not
+sure).
 
 
 ### Cyclic dependencies
