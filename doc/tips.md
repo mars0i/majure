@@ -1,32 +1,51 @@
 tips.md
 ====
+Marshall Abrams
 
 Things I've learned that are relevant to using MASON with Clojure from
 experimenting with different ways to implement the Students example in
 Clojure, and other tips.
 
-These notes are not intended to be self-explanatory to someone who's
+My goal was to see what's involved in writing a MASON simulation using
+only Clojure by using Clojure to rewrite the Students simulation in
+chapter 2 of the v18 MASON manual.  In my "majure" git repo, there are
+several versions--each exploring different ways of writing the Students
+simulation.
+
+(These notes aren't intended to be self-explanatory to someone who's
 unfamiliar with Clojure, or unfamiliar with MASON, or even unfamiliar
-with Java.  (But you can, of course, nevertheless use them to figure out
+with Java.  But you can, of course, nevertheless use them to figure out
 what you want to learn more about if you're unfamiliar with something
 I mention.)
+
+Note that while Clojure emphasizes pure functional programming, MASON is
+designed for routine use of mutable data structures.  I didn't try to
+fight this aspect of MASON, but I did try to make it clear in my code
+what parts were purely functional and what parts were not.  It's
+important to have a clear view of this distinction; otherwise mixing
+with Clojure's lazy sequences are likely to cause problems at some
+point.
 
 
 ### Students
 
 There are four classes defined in the Students simulation:
 
-* `Students`, which extends `SimState`
-* `Student`, which implements `Steppable`
-* An inner FIXME
-* `StudentsUI`
+* `Student`, which implements `sim.engine.Steppable`
+* `Students`, which extends `sim.engine.SimState`
+* `StudentsWithUI`, which extends `sim.display.GUIState`.
+* An inner class in `Students`, which implements `Steppable`.
 
-
+I tried out various methods to define these classes in Clojure.
+In the end, I settled on using the `gen-class` macro to define
+`Students` and `StudentsWithUI`, `deftype` to define `Students`, and
+`reify` to define the inner class.  Other options are possible for the
+last two cases.  See below for details.
 
 
 ### Classes
 
-Note that there are five ways to make classes in Clojure:
+There are five ways to make classes in Clojure:
 
 * `defrecord`
 * `deftype`
@@ -34,10 +53,10 @@ Note that there are five ways to make classes in Clojure:
 * `proxy`
 * `gen-class`
 
-(The *3opt7* version of my Students-in-Clojure program contains
+The *3opt7* version of my Students-in-Clojure program contains
 files illustrating alternative ways of defining the `Student` class
 using each of these options.  See docs/3opt7.md for discussion of their
-speed differences.)
+speed differences.
 
 `defrecord` is commonplace in Clojure so, other things being equal, it
 should perhaps be preferred.  Other things are not always equal, though.
@@ -45,48 +64,66 @@ should perhaps be preferred.  Other things are not always equal, though.
 `defrecord`.  (I'm a little bit surprised at that.  I wonder if I didn't
 use `defrecord` in the best possible way.)
 
-Only `deftype` allows *multiple* mutable fields, using the
-`:unsyncronized-mutable` or `:volatile-mutable` keywords.
-
-Only `proxy` and `gen-class` allow you to inherit from an existing class
-such as `SimState`.  The other macros only allow you to implement
-interfaces.  However, `proxy` is potentially the slowest of the five
+All of the five class creation macros allow implementing interfaces.
+but only `proxy` and `gen-class` allow you to extend a class (such as
+`SimState`).  However, `proxy` is potentially the slowest of the five
+methods, because it uses an extra level of indirection to execute
 methods, and it's more limited than `gen-class` in many ways.  I think
 that `proxy` is unlikely to be a good choice for use with MASON if you
 want optimal speed.  You can use `reify` instead, for example, to create
 a Clojure equivalent of an inner class, if the class doesn't need to
-inherit.  Neither `reify` nor `proxy` has built-in ways to store state,
-though you may be able to use a closure, perhaps using atoms or some
-other reference type, to associate state with a `reify` or `proxy`
+extend a class. Neither `reify` nor `proxy` has built-in ways to store
+state, though you may be able to use a closure, perhaps with atoms or
+some other reference type, to associate state with a `reify` or `proxy`
 object.
 
-`gen-class` is most flexible of the ways to create Clojure classes.
-I use it to subclass `SimState`.  I don't think `proxy` can do
-everything needed for this use.
+Note that I tried using `reify`, `proxy`, and `gen-class` to define the
+inner class in `Students`.  They were all equally fast.  I suspect that
+the `proxy` version was no slower simply because this class doesn't do
+much.  But maybe `proxy` is faster than I think.
 
-However, `gen-class` only allows a single mutable field.
+Overall, `gen-class` is the most flexible way to create classes in
+Clojure.  I used it define `Students`, subclassing `SimState`, and to
+define `StudentsWithUI`, subclassing `GUIState`.  I don't think `proxy`
+can do everything needed for these classes.
 
-To get an effect like multiple mutable fields with `gen-class`, or
-with `defrecord`, you can use one of Clojure's reference types.  For
+### Mutable state
+
+Only `deftype` allows *multiple* mutable fields, using the
+`:unsyncronized-mutable` or `:volatile-mutable` keywords.  (There is a
+scary warning about these options in the docstring for `deftype`, but my
+understanding is that these options are unproblematic as long as you're
+not going to have multiple threads accessing the same field.)
+
+`gen-class` only allows a single mutable "state" field.
+
+One way to get an effect like multiple mutable fields with `gen-class`, or
+with `defrecord`, is to use one of Clojure's reference types.  For
 example, to have mutable state with `gen-class`, you can store Clojure
 atoms in a Clojure `defrecord` objects that's stored in the state
-variable, or store a `deftype` object with mutable fields, in the
-state variable.  There are other options, but those seem the best. 
-`deftype` with mutable fields was a little bit faster than `defrecord`
-with atoms; I used `deftype` to go from 50% of Java speed to 60% of
-Java speed.  (Using `deftype` for this purpose is very verbose,
-though--I ended up with four similar signatures for each field.  If I
-find I really need this extra speed, maybe I'll write some kind of
-macro to generate the code.  This is a little tricky to do with type
-hints.)
+variable.
 
-There is usually no problem with using fields inherited from a
+Another alternative is to store a `deftype` object  with mutable
+fields in the state variable.  There are other options, but those seem
+the best.  `deftype` with mutable fields was a little bit faster than
+`defrecord` with atoms; I used `deftype` to go from 50% of Java speed
+to 60% of Java speed.  (Using `deftype` for this purpose is very
+verbose, though--I ended up with four similar signatures for each
+field.  If I find I really need this extra speed, maybe I'll write
+some kind of macro to generate the code.  This is a little tricky to
+do with type hints.)
+
+Another alternative is to stored data in the state field using Java
+arrays, which you can create in Clojure using functions such as
+`make-array` and `double-array`.
+
+Note that there's no problem with using fields inherited from a
 superclass defined in Java from within the same Clojure class definition
-(probably: the same namespace).  They can be accessed as if they were Java
-methods called from Clojure, i.e. with expressions such as `(.random
-students)` to get the random number generator defined in the SimState
-superclass of the `Students`.  You can modify these instance variables
-using `set!`.
+(probably: the same namespace).  They can be accessed as if they were
+Java methods called from Clojure, i.e. with expressions such as
+`(.random students)` to get the random number generator defined in the
+SimState superclass of the `Students`.  You can modify these instance
+variables using `set!`.
 
 
 ### Interfaces
@@ -97,8 +134,21 @@ The are three ways to define interfaces:
 * `definterface`
 * `gen-interface`
 
-For use with MASON, it probably doesn't matter which you use--they seem
-to be equally fast--and `defprotocol` is potentially more convenient.
+For use with MASON, it probably doesn't matter whether you use
+`defprotocol` or `definterface`.  `definterface` requires that you use
+type specifications, but if you add type hints to `defprotocol`.  A
+`definterface` definition is easier to read than a `defprotocol`
+definition with type hints, but `defprotocol` provides more conveniences
+for use with Clojure.  Actually, though, taking the type hints off of
+defprotocol didn't seem to slow things down.
+
+`gen-interface` allows you to extend another interface, but
+this probably isn't needed.  For example, it was easy to define
+`Student` implement both `Steppable` and an interface I defined.
+(`definterface` is a simple wrapper around `gen-interface, and it's
+probably better style to use `definterface` if you don't need
+`gen-interface`'s extra functionality.  However, unlike `gen-class`,
+`gen-interface` is simple to use.)
 
 
 ### Type hints
@@ -156,8 +206,8 @@ with Clojure sequence/list-oriented functions: `map`, `reduce`,
 with the contents of a `sim.util.Bag`.
 
 Clojure allows you to create Java arrays of primitives using
-functions such as `long-array`.  You can set values in arrays of
-primitives efficiently using functions such as `aset-long`.
+functions such as `double-array`.  You can set values in arrays of
+primitives efficiently using functions such as `aset-double`.
 You can access the values efficiently using `aset` with type hints.
 
 Many Clojure functions generate lazy sequences.  One has to be very
