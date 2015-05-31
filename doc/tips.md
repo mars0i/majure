@@ -12,6 +12,15 @@ what you want to learn more about if you're unfamiliar with something
 I mention.)
 
 
+### Students
+
+There are three classes defined in the Students simulation:
+
+* `Students`, which extends `SimState`
+* `Student`, which implements `Steppable`
+* An inner FIXME
+
+
 ### Classes
 
 Note that there are five ways to make classes in Clojure:
