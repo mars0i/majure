@@ -134,13 +134,13 @@ The are three ways to define interfaces:
 * `definterface`
 * `gen-interface`
 
-For use with MASON, it probably doesn't matter whether you use
-`defprotocol` or `definterface`.  `definterface` requires that you use
-type specifications, but if you add type hints to `defprotocol`.  A
-`definterface` definition is easier to read than a `defprotocol`
-definition with type hints, but `defprotocol` provides more conveniences
-for use with Clojure.  Actually, though, taking the type hints off of
-defprotocol didn't seem to slow things down.
+For use with MASON, it's not clear that it matters whether you use
+`defprotocol` or `definterface`.  I've gotten the same speed with both.
+`definterface` requires that you use type specifications.  Type hints
+are allowed but ignored on `defprotocol`.  `defprotocol` provides more
+conveniences for use with Clojure.  (However, if you want to use an
+interface defined in Clojure from Java, you might have to use
+`definterface`.)
 
 `gen-interface` allows you to extend another interface, but
 this probably isn't needed.  For example, it was easy to define
