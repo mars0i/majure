@@ -30,52 +30,60 @@ And Java ... is like [Elvis](http://www.mojonixon.com/lyrics/elvisiseverywhere.h
 
 ### directories:
 
-#### justJava:
+#### justJava
 
 Pure Java.  More or less copied from the manual.  I didn't copy all of the comments.
 
-#### noOptimization:
+#### noOptimization
 
 Pure Clojure, unoptimized, mainly using gen-class.  Very slow.
 
-#### alternativeStudentsClasses2step:
+#### alternativeStudentClasses2step
 
 Experiments using something other than gen-class for the Student class.
 *Look at this version to compare different ways of defining classes.*
 Still requires the odd "two-step" compilation process.  Optimized.
 
-#### 3opt8:
+#### deftypeStudentGenInterface
 
 Uses deftype for Students (deftype and reify were tied for fastest).
 Optimized, and the normal compilation process works.  i.e. `lein clean`,
-`lein compile` works.
+`lein compile` works.  This uses interface inheritance, using
+`gen-interface`, to add a method to `Student`.
 
-#### 3opt9:
+#### deftypeStudentDefprotocol
 
 Following a suggestion by Tassilo Horn at
 https://groups.google.com/d/msg/clojure/cQyqQxEjXDc/Rs0ncM5bHcoJ ,
 replaces `gen-interface` with a simpler call to `defprotocol`, which is
 then used to separate different methods by interfaces in `deftype
-students`.  This is just as fast as (or a little faster than?) 3opt8.
+students`.  This is just as fast as (or a little faster than?)
+deftypeStudentGenInterface.
 
-#### 3opt10
+NOTE: I went back and forth between using `defprotocol` and
+`definterface` in this version and the versions below.  The syntax is
+different, but there doesn't seem to be a difference in speed when used
+as part of the definition of the `Student` class.  The directories below
+are all named "...Defprotocol...", but some of them might use
+`definterface`.
 
-Based on 3opt9, but adds a small optimization to the buddy forces
-calculation.  This seems to speed up simulations by 1-8%.
+#### deftypeStudentDefprotocolWithSmallOpt
 
-#### 3opt11
+Based on deftypeStudentDefprotocol, but adds a small optimization to the
+buddy forces calculation.  This seems to speed up simulations by 1-8%.
 
-Based on 3opt10, but uses `deftype InstanceState` with
-`:volatile-mutable` on fields that are supposed to be mutable, rather
-rather using a map with atoms for those fields.  This is 5% to 12%
-faster than 3opt10.
+#### deftypeStudentDefprotocolVolatileMutable
 
-*SEE ALSO 3opt15.*
+Based on deftypeStudentDefprotocolWithSmallOpt but uses `deftype
+InstanceState` with `:volatile-mutable` on fields that are supposed to
+be mutable, rather rather using a map with atoms for those fields.  This
+is 5% to 12% faster than deftypeStudentDefprotocolWithSmallOpt.
+*SEE ALSO deftypeStudentDefprotocolUnsynchronizedMutable.*
 
 NOTE: `:volatile-mutable` is supposed to be too dangerous for use by
 anyone but an expert (which I am not).  However, I believe that it's
 safe for single-threaded use outside of lazy contexts, which is how
-I'm using it.  But I need to investigate further to be sure.
+I'm using it.
 
 A drawback is that one has to define methods to access these fields, an
 interface for them, and then wrapper methods--i.e. the methods on the
@@ -86,34 +94,36 @@ problem.
 (Also, I finally succeeded in type hinting node as Student in
 getAgitationDistribution.)
 
-#### 3opt12
+#### deftypeStudentDefprotocolUnsynchronizedMutable
 
-Like 3opt10, but uses a record rather than a map in the gen-class state
-variable.  This doesn't seem to be significantly faster than 3opt10.
-3opt11 is faster.
+Exactly the same as deftypeStudentDefprotocolVolatileMutable, but using
+`:unsynchronized-mutable` rather than `:volatile-mutable`.  About the
+same speed as deftypeStudentDefprotocolVolatileMutable: Running them
+simultaneously on a machine with sufficient cores, sometimes one wins,
+sometimes the other does, but the difference is no more than 3%.
 
-#### 3opt13
+#### deftypeStudentDefprotocolDefrecord
 
-Like 3opt12, in that it uses a record, but rather than using atoms as in
-3opt12 and 3opt10 and below, it uses typed (Java) arrays to hold data
-that must be mutable.  These arrays are stored in fields in the record.
-Speed is similar to the atoms versions, i.e.  not faster than 3opt11
-(which is the one that uses deftype with :volatile-mutable).
+Like deftypeStudentDefprotocolWithSmallOpt but uses a record rather than
+a map in the gen-class state variable.  This doesn't seem to be
+significantly faster than deftypeStudentDefprotocolWithSmallOpt.  The
+versions using mutable `deftype` fields are faster.
 
-#### 3opt14
+#### deftypeStudentDefprotocolTypedArrays
+
+Like deftypeStudentDefprotocolDefrecord in that it uses a record, but
+rather than using atoms, it uses typed (Java) arrays to hold data that
+must be mutable.  These arrays are stored in fields in the record.
+Speed is similar to the atom versions, i.e. not faster than the versions
+with mutable `deftype` fields.
+
+#### deftypeStudentDefprotocolObjectArray
 
 Unlike the preceding few versions, there is no `defrecord` or `deftype`
 in the instance state system.  Instead, there's just a single `Object`
-array.  This is at least as fast as 3opt11, the mutable `deftype`
-version.  Maybe slightly faster?  Kind of a PITA, though, with index
-constants for each variable, and hand-boxing numbers when using `aset`.
-On the other hand, it doesn't require four signatures (count 'em!) for
-every accessor, as the 3opt11 version does.
-
-#### 3opt15
-
-Exactly the same as 3opt11, but using `:unsynchronized-mutable` rather
-than `:volatile-mutable`.  About the same speed as 3opt11: Running
-them simultaneously on a machine with sufficient cores, sometimes one
-wins, sometimes the other does, but the difference is no more than 3%.
-faster, it's only by one or two percentage point on average.
+array.  This is at least as fast as the mutable `deftype` versions.
+Maybe slightly faster?  Kind of a PITA, though, with index constants for
+each variable, and needing hand-boxed numbers when using `aset` to avoid
+reflection.  On the other hand, this version doesn't require four
+signatures (count 'em!) for every accessor, as the mutable `deftype`
+versions do.
