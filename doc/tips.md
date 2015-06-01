@@ -12,20 +12,28 @@ chapter 2 of the v18 MASON manual.  In my "majure" git repo, there are
 several versions--each exploring different ways of writing the Students
 simulation.
 
-(These notes aren't intended to be self-explanatory to someone who's
+These notes aren't intended to be self-explanatory to someone who's
 unfamiliar with Clojure, or unfamiliar with MASON, or even unfamiliar
-with Java.  But you can, of course, nevertheless use them to figure out
-what you want to learn more about if you're unfamiliar with something
-I mention.)
+with Java.  You can, of course, nevertheless use them to figure out what
+you want to learn more about, if you're unfamiliar with something I
+mention.
 
 Note that while Clojure emphasizes pure functional programming, MASON is
 designed for routine use of mutable data structures.  I didn't try to
-fight this aspect of MASON, but I did try to make it clear in my code
-what parts were purely functional and what parts were not.  It's
-important to have a clear view of this distinction; otherwise mixing
-with Clojure's lazy sequences are likely to cause problems at some
-point.
+fight this aspect of MASON in my versions of the Students simulation,
+but I did try to make it clear in my code what parts were purely
+functional and what parts were not.  It's important to have a clear view
+of this distinction; otherwise mixing with Clojure's lazy sequences are
+likely to cause problems at some point.
 
+Clojure makes it trivially easy to call methods on Java classes using
+its Clojure's dot syntax.  (Example: Using `ec.util.MersenneTwisterFast`
+as a standalone random number generator in a Clojure program is easy,
+and is a good idea since Clojure's built-in random functions use Java's
+built-in random functions.)
+The notes below focus on more intimate Clojure-Java interoperability
+involving subclassing, interface implementation, defining methods that
+can be found by MASON's Java classes, and a few other tricks.
 
 ### Students
 
@@ -53,15 +61,15 @@ There are five ways to make classes in Clojure:
 * `proxy`
 * `gen-class`
 
-The *3opt7* version of my Students-in-Clojure program contains
-files illustrating alternative ways of defining the `Student` class
-using each of these options.  See docs/3opt7.md for discussion of their
-speed differences.
+The *alternativeStudentClasses2step* version of my Students-in-Clojure
+program contains files illustrating alternative ways of defining the
+`Student` class using each of these options.  See the README.me file in
+that directory for discussion of their speed differences.
 
 `defrecord` is commonplace in Clojure so, other things being equal, it
 should perhaps be preferred.  Other things are not always equal, though.
-`deftype` is similar, and in the 3opt7 tests, it was a lot faster than
-`defrecord`.
+`deftype` is similar, and in the *alternativeStudentClasses2step* tests,
+it was a lot faster than `defrecord`.
 
 All of the five class creation macros allow implementing interfaces.
 but only `proxy` and `gen-class` allow you to extend a class (such as
@@ -80,12 +88,12 @@ Note that I tried using `reify`, `proxy`, and `gen-class` to define the
 inner class in `Students`.  They were all equally fast.  I suspect that
 the `proxy` version was no slower simply because this class doesn't do
 much.  Note that `proxy` was much slower than `reify` when used to
-define the `Student` class.
+define the `Student` class in *alternativeStudentClasses2step*.
 
 Overall, `gen-class` is the most flexible way to create classes in
 Clojure.  I used it define `Students`, subclassing `SimState`, and to
 define `StudentsWithUI`, subclassing `GUIState`.  I don't think `proxy`
-can do everything needed for these classes.
+can do everything needed for these cases.
 
 ### Mutable state
 
@@ -97,21 +105,21 @@ not going to have multiple threads accessing the same field.)
 
 `gen-class` only allows a single mutable "state" field.
 
-One way to get an effect like multiple mutable fields with `gen-class`, or
-with `defrecord`, is to use one of Clojure's reference types.  For
-example, to have mutable state with `gen-class`, you can store Clojure
-atoms in a Clojure `defrecord` objects that's stored in the state
-variable.
+One way to get an effect like multiple mutable fields with `gen-class`,
+`defrecord`, or non-mutable fields with `deftype`, is to use one of
+Clojure's reference types.  For example, to have mutable state with
+`gen-class`, you can store Clojure atoms in a Clojure `defrecord`
+object that's stored in the state variable.
 
-Another alternative is to store a `deftype` object  with mutable
-fields in the state variable.  There are other options, but those seem
-the best.  `deftype` with mutable fields was a little bit faster than
-`defrecord` with atoms; I used `deftype` to go from 50% of Java speed
-to 60% of Java speed.  (Using `deftype` for this purpose is very
-verbose, though--I ended up with four similar signatures for each
-field.  If I find I really need this extra speed, maybe I'll write
-some kind of macro to generate the code.  This is a little tricky to
-do with type hints.)
+Another alternative is to store a `deftype` object  with mutable fields
+in the state variable.  `deftype` with mutable fields was a little bit
+faster than `defrecord` with atoms; I used `deftype` to go from 50% of
+Java speed to 60% of Java speed.  (Using `deftype` for this purpose is
+very verbose, though--I ended up with four similar signatures for each
+field.  It might be worth writing a macro to generate all of the
+relevant code.  This is a little tricky, though, if you want to use type
+hints--which you do, if you're goint to the trouble of using mutable
+fields with `deftype`.)
 
 Another alternative is to stored data in the state field using Java
 arrays, which you can create in Clojure using functions such as
@@ -185,7 +193,10 @@ compiled, there was no cycle, so this works.  However, when you
 recompile all of the files, you'll either get a cyclic dependency
 exception, or you will not be able to find an ordering of
 classes/namespaces in the `:aot` specification in project.clj that will
-allow you to compile all of the source files.
+allow you to compile all of the source files.  (It's even possible to
+get this effect with multiple classes in a single source file.
+Apparently, the compiler can reference a previously compiled version 
+while recompiling a source file.)
 
 
 ### Leiningen
