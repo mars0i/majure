@@ -127,3 +127,9 @@ each variable, and needing hand-boxed numbers when using `aset` to avoid
 reflection.  On the other hand, this version doesn't require four
 signatures (count 'em!) for every accessor, as the mutable `deftype`
 versions do.
+
+#### javaClojureHybrids:
+
+Contains a series of versions in which one Java class after another is replaced
+with a Clojure class.  The Clojure versions mostly use `gen-class`.  I thought
+`gen-class` was necessary for mixed Clojure-Java versions, which is probably not corret.
