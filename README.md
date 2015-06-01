@@ -30,21 +30,21 @@ And Java ... is like [Elvis](http://www.mojonixon.com/lyrics/elvisiseverywhere.h
 
 ### directories:
 
-#### 0justJava:
+#### justJava:
 
 Pure Java.  More or less copied from the manual.  I didn't copy all of the comments.
 
-#### 1noOptimization:
+#### noOptimization:
 
 Pure Clojure, unoptimized, mainly using gen-class.  Very slow.
 
-#### 3optimizedGenGlassStudents2stepCompilation:
+#### optimizedGenGlassStudents2stepCompilation:
 
 Optimized, mainly using gen-class, but a funny "two-step"
 compilation process is required.  See notes in that directory and in
 doc.
 
-#### 3opt7:
+#### optimizedAlternativeStudents2stepCompilation:
 
 Experiments using something other than gen-class for the Student class.
 *Look at this version to compare different ways of defining classes.*
