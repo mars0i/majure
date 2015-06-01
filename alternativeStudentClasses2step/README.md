@@ -1,4 +1,4 @@
-alternativeStudentClasses
+alternativeStudentClasses2step
 ====
 
 Experiments using methods other than `gen-class` to define the
