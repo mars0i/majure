@@ -38,13 +38,7 @@ Pure Java.  More or less copied from the manual.  I didn't copy all of the comme
 
 Pure Clojure, unoptimized, mainly using gen-class.  Very slow.
 
-#### optimizedGenGlassStudents2stepCompilation:
-
-Optimized, mainly using gen-class, but a funny "two-step"
-compilation process is required.  See notes in that directory and in
-doc.
-
-#### optimizedAlternativeStudents2stepCompilation:
+#### alternativeStudentsClasses:
 
 Experiments using something other than gen-class for the Student class.
 *Look at this version to compare different ways of defining classes.*
