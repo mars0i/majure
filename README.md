@@ -28,6 +28,11 @@ And Java ... is like [Elvis](http://www.mojonixon.com/lyrics/elvisiseverywhere.h
 
 --------------------------------------------
 
+See doc/tips.md for tips on using Clojure with MASON (and on
+Clojure-Java interop in general.)
+
+--------------------------------------------
+
 ### directories:
 
 #### justJava
@@ -133,3 +138,7 @@ versions do.
 Contains a series of versions in which one Java class after another is replaced
 with a Clojure class.  The Clojure versions mostly use `gen-class`.  I thought
 `gen-class` was necessary for mixed Clojure-Java versions, which is probably not corret.
+
+#### nonworking
+
+Various experiments that didn't work, but that I'm keeping around for now.
