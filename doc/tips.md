@@ -61,8 +61,7 @@ speed differences.
 `defrecord` is commonplace in Clojure so, other things being equal, it
 should perhaps be preferred.  Other things are not always equal, though.
 `deftype` is similar, and in the 3opt7 tests, it was a lot faster than
-`defrecord`.  (I'm a little bit surprised at that.  I wonder if I didn't
-use `defrecord` in the best possible way.)
+`defrecord`.
 
 All of the five class creation macros allow implementing interfaces.
 but only `proxy` and `gen-class` allow you to extend a class (such as
@@ -80,7 +79,8 @@ object.
 Note that I tried using `reify`, `proxy`, and `gen-class` to define the
 inner class in `Students`.  They were all equally fast.  I suspect that
 the `proxy` version was no slower simply because this class doesn't do
-much.  But maybe `proxy` is faster than I think.
+much.  Note that `proxy` was much slower than `reify` when used to
+define the `Student` class.
 
 Overall, `gen-class` is the most flexible way to create classes in
 Clojure.  I used it define `Students`, subclassing `SimState`, and to
