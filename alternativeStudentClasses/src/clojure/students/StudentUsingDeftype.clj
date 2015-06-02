@@ -26,7 +26,8 @@
   :methods [[getAgitation [] double]]) ;[step [students.Student] void] ; won't compile
 (import [students SteppableStudent])
 
-(deftype Student [agitation] students.SteppableStudent
+(deftype Student [agitation]
+  students.SteppableStudent
   (step [this state]
     ;; Note that this code is functional until the few last steps.
     (let [students ^students.Students state
@@ -48,12 +49,14 @@
           ;; buddy forces from attraction and repulsion to/from other students:
           [buddy-force-x buddy-force-y agit] (collect-buddy-forces alt-state this)]  ; 'Go through my buddies and determine how much I want to be near them' (for-loop, p. 27 middle)
       ;; Now finish with all of the imperative code in one place:
-      (reset! (.agitation this) agit)   ; (p. 31: friendsClose, enemiesCloser)
+      (reset! agitation agit)   ; (p. 31: friendsClose, enemiesCloser)
       (.setObjectLocation yard this    ; modify location for me in yard in students (end of step(), p. 18 top, p. 27 bottom):
                           (Double2D. (+ curr-x indiv-force-x buddy-force-x)
                                      (+ curr-y indiv-force-y buddy-force-y)))))
-  (toString [this] (str "[" (System/identityHashCode this) "] agitation: " (.getAgitation this)))
-  (getAgitation [this] @(.agitation this)))
+  (getAgitation [this] @agitation)
+  ;; Object:
+  (toString [this] (str "[" (System/identityHashCode this) "] agitation: " agitation)))
+
 
 (defn make-student [] (Student. (atom 0.0)))
 
