@@ -26,7 +26,7 @@
   :methods [[getAgitation [] double]]) ;[step [students.Student] void] ; won't compile
 (import [students SteppableStudent])
 
-(defrecord Student [^clojure.lang.Atom agitation]
+(defrecord Student [agitation]
   students.SteppableStudent
   (step [this state]
     ;; Note that this code is functional until the few last steps.
