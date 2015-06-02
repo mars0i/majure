@@ -28,12 +28,12 @@ likely to cause problems at some point.
 
 Clojure makes it trivially easy to call methods on Java classes using
 its Clojure's dot syntax.  (Example: Using `ec.util.MersenneTwisterFast`
-as a standalone random number generator in a Clojure program is easy,
-and is a good idea since Clojure's built-in random functions use Java's
-built-in random functions.)
-The notes below focus on more intimate Clojure-Java interoperability
-involving subclassing, interface implementation, defining methods that
-can be found by MASON's Java classes, and a few other tricks.
+as a standalone random number generator in a Clojure program is
+simple--and is a good idea anyway, since Clojure's built-in random
+functions use Java's built-in random functions.) The notes below focus
+on more intimate Clojure-Java interoperability involving subclassing,
+interface implementation, defining methods that can be found by MASON's
+Java classes, and a few other tricks.
 
 ### Students
 
@@ -61,14 +61,14 @@ There are five ways to make classes in Clojure:
 * `proxy`
 * `gen-class`
 
-The *alternativeStudentClasses2step* version of my Students-in-Clojure
+The *alternativeStudentClasses* version of my Students-in-Clojure
 program contains files illustrating alternative ways of defining the
 `Student` class using each of these options.  See the README.me file in
 that directory for discussion of their speed differences.
 
 `defrecord` is commonplace in Clojure so, other things being equal, it
 should perhaps be preferred.  Other things are not always equal, though.
-`deftype` is similar, and in the *alternativeStudentClasses2step* tests,
+`deftype` is similar, and in the *alternativeStudentClasses* tests,
 it was a lot faster than `defrecord`.
 
 All of the five class creation macros allow implementing interfaces.
@@ -88,7 +88,7 @@ Note that I tried using `reify`, `proxy`, and `gen-class` to define the
 inner class in `Students`.  They were all equally fast.  I suspect that
 the `proxy` version was no slower simply because this class doesn't do
 much.  Note that `proxy` was much slower than `reify` when used to
-define the `Student` class in *alternativeStudentClasses2step*.
+define the `Student` class in *alternativeStudentClasses*.
 
 Overall, `gen-class` is the most flexible way to create classes in
 Clojure.  I used it define `Students`, subclassing `SimState`, and to
