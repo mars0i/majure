@@ -111,7 +111,7 @@ structure objects used in the Students simulation, such as
 `deftype` is so much faster than `defrecord` in Students.  Since such
 hashtable lookups are common in MASON, the lesson is that if you need a
 named class that doesn't extend a class, you have to decide whether
-you'd rather have the speed of `deftype` or the the additional
+you'd rather have the speed of `deftype` or the additional
 functionality of `defrecord` (e.g. the ability to initialize new
 instances from Clojure maps).
 
