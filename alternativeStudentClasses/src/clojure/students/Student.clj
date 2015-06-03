@@ -20,17 +20,14 @@
 (def ^:const +max-force+ 3.0)
 
 ;; Define interface that extends Steppable, adding Student-specific methods.
-;(gen-interface
-;  :name students.SteppableStudent
-;  :extends [sim.engine.Steppable]
-;  :methods [[getAgitation [] double]]) ;[step [students.Student] void] ; won't compile
-;(import [students SteppableStudent])
+(gen-interface
+  :name students.SteppableStudent
+  :extends [sim.engine.Steppable]
+  :methods [[getAgitation [] double]]) ;[step [students.Student] void] ; won't compile
+(import [students SteppableStudent])
 
-(definterface StudentMethods (getAgitation [] double))
-
-(defrecord Student [^clojure.lang.Atom agitation]
-  ;students.SteppableStudent
-  sim.engine.Steppable
+(defrecord Student [agitation]
+  students.SteppableStudent
   (step [this state]
     ;; Note that this code is functional until the few last steps.
     (let [students ^students.Students state
@@ -56,7 +53,6 @@
       (.setObjectLocation yard this    ; modify location for me in yard in students (end of step(), p. 18 top, p. 27 bottom):
                           (Double2D. (+ curr-x indiv-force-x buddy-force-x)
                                      (+ curr-y indiv-force-y buddy-force-y)))))
-  StudentMethods
   (getAgitation [this] @agitation)
   ;; Object:
   (toString [this] (str "[" (System/identityHashCode this) "] agitation: " agitation)))
