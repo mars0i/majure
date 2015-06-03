@@ -1,9 +1,9 @@
 majure
 ====
 
-## Experiments with Clojure + MASON agent-based modeling library
+## Experiments with Clojure + MASON
 
-#### Experimental use of MASON from Clojure
+#### Experimental use of the MASON agent-based modeling library from Clojure
 
 These examples follow the tutorial in chapter 2 of the MASON manual v.
 18.
