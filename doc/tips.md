@@ -100,7 +100,7 @@ field access, and I see no reason to think they would differ in method
 invocation speed.  However, `defrecord` automatically defines some
 associated functions that `deftype` does not.  Among other things,
 `defrecord` defines Java `equals()` and `hashCode()` methods so that
-they will reflect the *contents* of a record's fields, and not just its
+they will reflect the contents of a record's fields, and not just its
 bare identity.  This means, for example, that two distinct records of
 the same type and the same field contents will be `=` in Clojure, while
 distinct `deftype` objects with the same contents will not.  In
@@ -119,7 +119,7 @@ instances from Clojure maps).
 ### Mutable state
 
 Only `deftype` allows *multiple* mutable fields, using the
-`:unsyncronized-mutable` or `:volatile-mutable` keywords.  (There is a
+`:unsynchronized-mutable` or `:volatile-mutable` keywords.  (There is a
 scary warning about these options in the docstring for `deftype`, but my
 understanding is that these options are unproblematic as long as you're
 not going to have multiple threads accessing the same field.)
@@ -128,9 +128,11 @@ not going to have multiple threads accessing the same field.)
 
 One way to get an effect like multiple mutable fields with `gen-class`,
 `defrecord`, or non-mutable fields with `deftype`, is to use one of
-Clojure's reference types.  For example, to have mutable state with
-`gen-class`, you can store Clojure atoms in a Clojure `defrecord`
-object that's stored in the state variable.
+Clojure's reference types.  
+
+For example, to have mutable state with `gen-class`, you can store
+Clojure atoms in a Clojure `defrecord` object that's stored in the state
+variable.
 
 Another alternative is to store a `deftype` object  with mutable fields
 in the state variable.  `deftype` with mutable fields was a little bit
@@ -139,10 +141,10 @@ Java speed to 60% of Java speed.  (Using `deftype` for this purpose is
 very verbose, though--I ended up with four similar signatures for each
 field.  It might be worth writing a macro to generate all of the
 relevant code.  This is a little tricky, though, if you want to use type
-hints--which you do, if you're goint to the trouble of using mutable
-fields with `deftype`.)
+hints--which you do, if you're going to the trouble of using mutable
+fields with `deftype` just for a small additional performance benefit.)
 
-Another alternative is to stored data in the state field using Java
+Another alternative is to store data in the state field using Java
 arrays, which you can create in Clojure using functions such as
 `make-array` and `double-array`.
 
@@ -167,9 +169,7 @@ For use with MASON, it's not clear that it matters whether you use
 `defprotocol` or `definterface`.  I've gotten the same speed with both.
 `definterface` requires that you use type specifications.  Type hints
 are allowed but ignored on `defprotocol`.  `defprotocol` provides more
-conveniences for use with Clojure.  (However, if you want to use an
-interface defined in Clojure from Java, you might have to use
-`definterface`.)
+conveniences for use with Clojure.
 
 `gen-interface` allows you to extend another interface, but
 this probably isn't needed.  For example, it was easy to define
@@ -194,19 +194,20 @@ sure).
 ### Cyclic dependencies
 
 Clojure doesn't allow compile-time cyclic dependencies between
-classes.  For example, without type hints, giving the `Students` and
+classes. For example, without type hints, giving the `Students` and
 `Student` classes their own namespaces (in separate source files, as
 usual) worked fine.  These classes refer to each other's methods and
-fields repeatedly, which is OK in Java.  It's also OK in Clojure without
-type hints; Clojure figures it all out at runtime.  However, that was
-very slow.  When you add in type hints to get rid of all reflection, you
-end up with a cyclic dependency.  My solution was to define `Student`
-using `defrecord` (or `deftype`) in the same namespace (and file) as
-`Students`, also defining an interface for `Student`'s methods.  
-(I had to place one of `Students`' methods *after* the `Student` class
-definition in order to type hint it properly.)
+fields repeatedly, which is OK in Java.  It's also OK in Clojure
+without type hints; Clojure figures it all out at runtime.  However,
+that was very slow.  When you add in type hints to get rid of all
+reflection, you end up with a compile time cyclic dependency. My
+solution was to define `Student` using `defrecord` (or `deftype`) in
+the same namespace (and file) as `Students`, also defining an
+interface for `Student`'s methods.  (I had to place one of `Students`'
+methods *after* the `Student` class definition in order to type hint
+it properly.)
 
-Be careful:  Sometimes if you modify and recompile a single Clojure
+Note: Sometimes if you modify and recompile a single Clojure
 source file, without recompiling the others, you might get away with a
 cyclic dependency.  You've fooled the compiler by adding the dependency
 of class `A` on class `B` after `B` was already compiled.  When `B` was
@@ -224,7 +225,7 @@ while recompiling a source file.)
 
 The standard way to manage Clojure projects is with Leiningen, using
 commands such as `lein compile`, `lein run`, and `lein repl`.  Among
-other things, you can use Leiningeng's project.clj file to specify
+other things, you can use Leiningen's project.clj file to specify
 libraries to be used, and the `:aot` keyword to specify that certain
 source files will be compiled, and will be compile in a certain order
 when needed.  (Some people use Maven, though.)
@@ -248,9 +249,8 @@ good idea to wrap a result in `doall` to cause a lazy sequence to be
 realized immediately.
 
 
-### Version
+### Versions
 
-Don't use an old version of Clojure, of course.  I got a roughly 2X
-speedup by using a pre-release Clojure 1.7.0 (1.7.0-RC1) rather than
-1.6.0.  Pre-release versions might not be what you want for research
-you're going to present or publish, obviously.
+Clojure is under active development.  I got a roughly 2X speedup by
+using a pre-release version of Clojure, 1.7.0-RC1, rather than Clojure
+1.6.0.
