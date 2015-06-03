@@ -28,8 +28,8 @@ And Java ... is like [Elvis](http://www.mojonixon.com/lyrics/elvisiseverywhere.h
 
 --------------------------------------------
 
-See doc/tips.md for tips on using Clojure with MASON (and on
-Clojure-Java interop in general.)
+See **doc/ClojureMASONinteropTips.md** for tips on using Clojure with
+MASON (and on Clojure-Java interop in general.)
 
 --------------------------------------------
 

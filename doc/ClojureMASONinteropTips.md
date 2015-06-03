@@ -1,4 +1,4 @@
-tips.md
+ClojureMASONinteropTips.md
 ====
 Marshall Abrams
 
