@@ -11,8 +11,8 @@ only Clojure by using Clojure to rewrite the Students simulation in
 chapter 2 of the v18 MASON manual.  In the *majure* git repo there are
 several versions of Students--each exploring different ways of writing
 the Students simulation.
-These notes aren't intended to be self-explanatory to someone who's
-unfamiliar with Clojure or unfamiliar with MASON.
+(These notes aren't intended to be self-explanatory to someone who's
+unfamiliar with Clojure or unfamiliar with MASON.)
 
 
 ### General
