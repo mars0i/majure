@@ -2,21 +2,20 @@ tips.md
 ====
 Marshall Abrams
 
-Things I've learned that are relevant to using MASON with Clojure from
+**Things I've learned that are relevant to using MASON with Clojure from
 experimenting with different ways to implement the Students example in
-Clojure, and other tips.
+Clojure, and other tips.**
 
 My goal was to see what's involved in writing a MASON simulation using
 only Clojure by using Clojure to rewrite the Students simulation in
-chapter 2 of the v18 MASON manual.  In my "majure" git repo, there are
-several versions--each exploring different ways of writing the Students
-simulation.
-
+chapter 2 of the v18 MASON manual.  In the *majure* git repo there are
+several versions of Students--each exploring different ways of writing
+the Students simulation.
 These notes aren't intended to be self-explanatory to someone who's
-unfamiliar with Clojure, or unfamiliar with MASON, or even unfamiliar
-with Java.  You can, of course, nevertheless use them to figure out what
-you want to learn more about, if you're unfamiliar with something I
-mention.
+unfamiliar with Clojure or unfamiliar with MASON.
+
+
+### General
 
 Note that while Clojure emphasizes pure functional programming, MASON is
 designed for routine use of mutable data structures.  I didn't try to
@@ -26,14 +25,12 @@ functional and what parts were not.  It's important to have a clear view
 of this distinction; otherwise mixing with Clojure's lazy sequences are
 likely to cause problems at some point.
 
-Clojure makes it trivially easy to call methods on Java classes using
-its Clojure's dot syntax.  (Example: Using `ec.util.MersenneTwisterFast`
-as a standalone random number generator in a Clojure program is
-simple--and is a good idea anyway, since Clojure's built-in random
-functions use Java's built-in random functions.) The notes below focus
-on more intimate Clojure-Java interoperability involving subclassing,
-interface implementation, defining methods that can be found by MASON's
-Java classes, and a few other tricks.
+Clojure makes it very easy to call methods on Java classes using its
+Clojure's dot syntax.  The notes below focus on less simple aspects of
+Clojure-Java interop, including more intimate Clojure-Java
+interoperability involving subclassing, interface implementation, and
+defining methods so that they can be found by MASON's Java classes.
+
 
 ### Students
 
@@ -64,12 +61,7 @@ There are five ways to make classes in Clojure:
 The *alternativeStudentClasses* version of my Students-in-Clojure
 program contains files illustrating alternative ways of defining the
 `Student` class using each of these options.  See the README.me file in
-that directory for discussion of their speed differences.
-
-`defrecord` is commonplace in Clojure so, other things being equal, it
-should perhaps be preferred.  Other things are not always equal, though.
-`deftype` is similar, and in the *alternativeStudentClasses* tests,
-it was a lot faster than `defrecord`.
+that directory for information about their speed differences.
 
 All of the five class creation macros allow implementing interfaces.
 but only `proxy` and `gen-class` allow you to extend a class (such as
@@ -91,9 +83,38 @@ much.  Note that `proxy` was much slower than `reify` when used to
 define the `Student` class in *alternativeStudentClasses*.
 
 Overall, `gen-class` is the most flexible way to create classes in
-Clojure.  I used it define `Students`, subclassing `SimState`, and to
-define `StudentsWithUI`, subclassing `GUIState`.  I don't think `proxy`
-can do everything needed for these cases.
+Clojure, but it's the most complicated method, as well.  I used it
+define `Students`, subclassing `SimState`, and to define
+`StudentsWithUI`, subclassing `GUIState`.  I don't think `proxy` can do
+everything needed for these cases.
+
+`defrecord` is routinely used in Clojure.  `deftype` provides similar
+basic functionality.  Both can be used to define a named class that
+implements interfaces, but neither can extend another class.  In my
+tests with Students, `deftype` was a lot faster than `defrecord`
+(2X-4X).
+
+The reason for the speed difference between `defrecord` and `deftype` is
+interesting.  `defrecord` and `deftype` are equally fast at (immutable)
+field access, and I see no reason to think they would differ in method
+invocation speed.  However, `defrecord` automatically defines some
+associated functions that `deftype` does not.  Among other things,
+`defrecord` defines Java `equals()` and `hashCode()` methods so that
+they will reflect the *contents* of a record's fields, and not just its
+bare identity.  This means, for example, that two distinct records of
+the same type and the same field contents will be `=` in Clojure, while
+distinct `deftype` objects with the same contents will not.  In
+addition, I believe, computing a hash code or equality for a record is
+more expensive than for a `deftype` object.  Some of the MASON data
+structure objects used in the Students simulation, such as
+`Continuous2D`, use hashtables.  I believe that's the reason that
+`deftype` is so much faster than `defrecord` in Students.  Since such
+hashtable lookups are common in MASON, the lesson is that if you need a
+named class that doesn't extend a class, you have to decide whether
+you'd rather have the speed of `deftype` or the the additional
+functionality of `defrecord` (e.g. the ability to initialize new
+instances from Clojure maps).
+
 
 ### Mutable state
 
@@ -226,9 +247,10 @@ careful with these when dealing with mutable state.  Sometimes it's a
 good idea to wrap a result in `doall` to cause a lazy sequence to be
 realized immediately.
 
+
 ### Version
 
 Don't use an old version of Clojure, of course.  I got a roughly 2X
 speedup by using a pre-release Clojure 1.7.0 (1.7.0-RC1) rather than
-1.6.0.  (Pre-release versions might not be what you want for research
-you're going to present or publish, obviously.)
+1.6.0.  Pre-release versions might not be what you want for research
+you're going to present or publish, obviously.
