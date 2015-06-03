@@ -28,7 +28,7 @@ And Java ... is like [Elvis](http://www.mojonixon.com/lyrics/elvisiseverywhere.h
 
 --------------------------------------------
 
-See **doc/ClojureMASONinteropTips.md** for tips on using Clojure with
+See [**doc/ClojureMASONinteropTips.md**](doc/ClojureMASONinteropTips.md) for tips on using Clojure with
 MASON (and on Clojure-Java interop in general.)
 
 --------------------------------------------
