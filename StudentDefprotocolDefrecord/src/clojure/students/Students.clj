@@ -162,6 +162,7 @@
 (defprotocol StudentMethods (getAgitation [this]))
 ;(definterface StudentMethods (^double getAgitation []))
 
+;(defrecord Student [agitation]
 (deftype Student [agitation]
   Steppable
   (step [this state]
