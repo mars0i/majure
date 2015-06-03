@@ -225,3 +225,10 @@ Many Clojure functions generate lazy sequences.  One has to be very
 careful with these when dealing with mutable state.  Sometimes it's a
 good idea to wrap a result in `doall` to cause a lazy sequence to be
 realized immediately.
+
+### Version
+
+Don't use an old version of Clojure, of course.  I got a roughly 2X
+speedup by using a pre-release Clojure 1.7.0 (1.7.0-RC1) rather than
+1.6.0.  (Pre-release versions might not be what you want for research
+you're going to present or publish, obviously.)
