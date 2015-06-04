@@ -14,7 +14,7 @@ the Students simulation.
 
 These notes aren't intended to be self-explanatory to someone who's
 unfamiliar with Clojure or unfamiliar with MASON, and it may be that there
-are errors below, since I'm not on expert on Clojure, Java, or MASON.
+are errors, since I'm not on expert on Clojure, Java, or MASON.
 
 
 ### General
