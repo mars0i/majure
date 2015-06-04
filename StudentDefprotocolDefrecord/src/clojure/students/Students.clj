@@ -38,7 +38,7 @@
               [domRandomMultiplier [] sim.util.Interval]
               [isTempering [] boolean]
               [setTempering [boolean] void]
-              [getAgitationDistribution [] "[D"]]
+              [getAgitationDistribution [] "[D" ]] ; that's an array of doubles
     :state instanceState
     :init init-instance-state
     :main true)) 
