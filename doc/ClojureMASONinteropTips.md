@@ -96,26 +96,27 @@ implements interfaces, but neither can extend another class.  In my
 tests with Students, `deftype` was a lot faster than `defrecord`
 (2X-4X).
 
-The reason for the speed difference between `defrecord` and `deftype` is
-interesting.  `defrecord` and `deftype` are equally fast at (immutable)
-field access, and I see no reason to think they would differ in method
-invocation speed.  However, `defrecord` automatically defines some
-associated functions that `deftype` does not.  Among other things,
-`defrecord` defines Java `equals()` and `hashCode()` methods so that
-they will reflect the contents of a record's fields, and not just its
-bare identity.  This means, for example, that two distinct records of
-the same type and the same field contents will be `=` in Clojure, while
-distinct `deftype` objects with the same contents will not.  In
-addition, I believe, computing a hash code or equality for a record is
-more expensive than for a `deftype` object.  Some of the MASON data
-structure objects used in the Students simulation, such as
-`Continuous2D`, use hashtables.  I believe that's the reason that
-`deftype` is so much faster than `defrecord` in Students.  Since such
-hashtable lookups are common in MASON, the lesson is that if you need a
-named class that doesn't extend a class, you have to decide whether
-you'd rather have the speed of `deftype` or the additional
-functionality of `defrecord` (e.g. the ability to initialize new
-instances from Clojure maps).
+The reason for the speed difference between `defrecord` and `deftype`
+is interesting.  `defrecord` and `deftype` are equally fast at
+(immutable) field access, and I see no reason to think they would
+differ in method invocation speed.  However, `defrecord` automatically
+defines some associated functions that `deftype` does not.  Among
+other things, `defrecord` defines Java `equals()` and `hashCode()`
+methods so that they will reflect the contents of a record's fields,
+and not just its bare identity.  This means, for example, that two
+distinct records of the same type and the same field contents will be
+`=` in Clojure, while distinct `deftype` objects with the same
+contents will not.  In addition, I believe, computing a hash code or
+equality for a record is more expensive than for a `deftype` object. 
+Some of the MASON data structure objects used in the Students
+simulation, such as `Continuous2D`, use hashtables.  I believe that's
+the reason that `deftype` is so much faster than `defrecord` in
+Students.  (Steven Yi and others on the Clojure Google group helped
+me to understand all  of  this.) Since such hashtable lookups are
+common in MASON, the lesson is that if you need a named class that
+doesn't extend a class, you have to decide whether you'd rather have
+the speed of `deftype` or the additional functionality of `defrecord`
+(e.g. the ability to initialize new instances from Clojure maps).
 
 
 ### Mutable state
