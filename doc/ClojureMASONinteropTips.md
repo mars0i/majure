@@ -123,13 +123,16 @@ this.
 
 ### Mutable state
 
-Only `deftype` allows *multiple* mutable fields, using the
+Only `deftype` allows mutable fields, and only using the
 `:unsynchronized-mutable` or `:volatile-mutable` keywords.  (There is a
 scary warning about these options in the docstring for `deftype`, but my
 understanding is that these options are unproblematic as long as you're
 not going to have multiple threads accessing the same field.)
 
-`gen-class` only allows a single mutable "state" field.
+(`gen-class` allows you to define a single field using the `:state`
+keyword, but it's `final` in Java terms, which is to say that it can't
+be changed after it's initialized by the function that you declare
+using the `:init` keyword.)
 
 One way to get an effect like multiple mutable fields with `gen-class`,
 `defrecord`, or non-mutable fields with `deftype`, is to use one of
