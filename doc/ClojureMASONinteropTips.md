@@ -262,3 +262,10 @@ realized immediately.
 Clojure is under active development.  I got a roughly 2X speedup by
 using a pre-release version of Clojure, 1.7.0-RC1, rather than Clojure
 1.6.0.
+
+
+### Miscellaneous
+
+In the examples in this git repo, I went overboard with providing accessors
+that would be available to Java.  For example, all of the methods named 
+"git"Something didn't need to be part of the Java class definition as such.
