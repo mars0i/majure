@@ -71,12 +71,13 @@ but only `proxy` and `gen-class` allow you to extend a class (such as
 methods, because it uses an extra level of indirection to execute
 methods, and it's more limited than `gen-class` in many ways.  I think
 that `proxy` is unlikely to be a good choice for use with MASON if you
-want optimal speed.  You can use `reify` instead, for example, to create
-a Clojure equivalent of an inner class, if the class doesn't need to
-extend a class. Neither `reify` nor `proxy` has built-in ways to store
-state, though you may be able to use a closure, perhaps with atoms or
-some other reference type, to associate state with a `reify` or `proxy`
-object.
+want optimal speed, but it might be useful in the GUI, if you don't care
+about optimal speed there.  You can use `reify` instead, for example, to
+create a Clojure equivalent of an inner class, if the class doesn't need
+to extend a class. Neither `reify` nor `proxy` has built-in ways to
+store state, though you may be able to use a closure, perhaps with atoms
+or some other reference type, to associate state with a `reify` or
+`proxy` object.
 
 Note that I tried using `reify`, `proxy`, and `gen-class` to define the
 inner class in `Students`.  They were all equally fast.  I suspect that
