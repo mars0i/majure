@@ -1,2 +1,1 @@
-java -cp `echo resources/*.jar | sed 's/ /:/g'`:/Users/marshall/.m2/repository/org/clojure/clojure/1.7.0-RC1/clojure-1.7.0-RC1.jar:target/students-0.1.0-SNAPSHOT.jar
-students.Students -time 500000 -for 500000
+java -cp `echo resources/*.jar | sed 's/ /:/g'`:/Users/marshall/.m2/repository/org/clojure/clojure/1.7.0-RC1/clojure-1.7.0-RC1.jar:target/students-0.1.0-SNAPSHOT.jar students.Students -time 500000 -for 500000
