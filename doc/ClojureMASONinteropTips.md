@@ -121,6 +121,13 @@ the ability to initialize new instances from Clojure maps).  Steven Yi
 and others on the Clojure Google group helped me to understand all  of
 this.
 
+Note, however, that if you're not using something like `Continuous2D`
+that hashes agents, you should probably use `defrecord`, because it
+makes Clojure programming a lot easier (and more fun).  If agents are
+fixed in place or moving on a discrete grid, there's no reason to
+avoid `defrecord`, as far as I can see.  (I used `defrecord` in my
+*pasta* simulation, for example.)
+
 
 ### Mutable state
 
